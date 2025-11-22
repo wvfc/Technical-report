@@ -3,7 +3,15 @@
     <color name="colorPrimary">#45132D</color>
     <color name="colorPrimaryDark">#2E0C1E</color>
     <color name="colorAccent">#007bff</color>
+
+    <!-- Fundo mais escuro pra destacar campos -->
+    <color name="backgroundLight">#E0E0E0</color>
+
+    <!-- Texto escuro -->
+    <color name="textDark">#222222</color>
+
+    <!-- Opcional: cinza para hints -->
+    <color name="hintGray">#777777</color>
+
     <color name="white">#FFFFFF</color>
-    <color name="backgroundLight">#F5F5F5</color>
-    <color name="textDark">#333333</color>
 </resources>
