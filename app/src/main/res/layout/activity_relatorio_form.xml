@@ -22,6 +22,8 @@
             android:layout_height="wrap_content"
             android:hint="Data e hora de entrada"
             android:focusable="false"
+            android:textColor="@color/textDark"
+            android:hintTextColor="@color/hintGray"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -30,6 +32,8 @@
             android:layout_height="wrap_content"
             android:hint="Data e hora de saída"
             android:focusable="false"
+            android:textColor="@color/textDark"
+            android:hintTextColor="@color/hintGray"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -37,6 +41,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Modelo da máquina"
+            android:textColor="@color/textDark"
+            android:hintTextColor="@color/hintGray"
             android:layout_marginBottom="8dp"/>
 
         <Spinner
@@ -54,6 +60,8 @@
             android:inputType="textMultiLine"
             android:minLines="3"
             android:gravity="top"
+            android:textColor="@color/textDark"
+            android:hintTextColor="@color/hintGray"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -64,6 +72,8 @@
             android:inputType="textMultiLine"
             android:minLines="3"
             android:gravity="top"
+            android:textColor="@color/textDark"
+            android:hintTextColor="@color/hintGray"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -74,6 +84,8 @@
             android:inputType="textMultiLine"
             android:minLines="3"
             android:gravity="top"
+            android:textColor="@color/textDark"
+            android:hintTextColor="@color/hintGray"
             android:layout_marginBottom="12dp"/>
 
         <Button
@@ -91,6 +103,16 @@
             android:layout_height="wrap_content"
             android:text="Salvar PDF"
             android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/white"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- BOTÃO VOLTAR -->
+        <Button
+            android:id="@+id/btnVoltar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Voltar"
+            android:backgroundTint="@android:color/darker_gray"
             android:textColor="@color/white"/>
 
     </LinearLayout>
