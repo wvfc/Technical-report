@@ -16,6 +16,8 @@
             android:layout_height="wrap_content"
             android:hint="Razão Social"
             android:inputType="textPersonName"
+            android:textColor="@color/textDark"
+            android:hintTextColor="@color/hintGray"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -24,6 +26,8 @@
             android:layout_height="wrap_content"
             android:hint="Nome Fantasia"
             android:inputType="textPersonName"
+            android:textColor="@color/textDark"
+            android:hintTextColor="@color/hintGray"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -32,6 +36,8 @@
             android:layout_height="wrap_content"
             android:hint="CNPJ/CPF"
             android:inputType="text"
+            android:textColor="@color/textDark"
+            android:hintTextColor="@color/hintGray"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -40,6 +46,8 @@
             android:layout_height="wrap_content"
             android:hint="Endereço"
             android:inputType="textPostalAddress"
+            android:textColor="@color/textDark"
+            android:hintTextColor="@color/hintGray"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -48,6 +56,8 @@
             android:layout_height="wrap_content"
             android:hint="E-mail"
             android:inputType="textEmailAddress"
+            android:textColor="@color/textDark"
+            android:hintTextColor="@color/hintGray"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -56,6 +66,8 @@
             android:layout_height="wrap_content"
             android:hint="Telefone"
             android:inputType="phone"
+            android:textColor="@color/textDark"
+            android:hintTextColor="@color/hintGray"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -64,6 +76,8 @@
             android:layout_height="wrap_content"
             android:hint="WhatsApp"
             android:inputType="phone"
+            android:textColor="@color/textDark"
+            android:hintTextColor="@color/hintGray"
             android:layout_marginBottom="16dp"/>
 
         <Button
@@ -72,6 +86,16 @@
             android:layout_height="wrap_content"
             android:text="Salvar cliente"
             android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/white"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- BOTÃO VOLTAR -->
+        <Button
+            android:id="@+id/btnVoltar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Voltar"
+            android:backgroundTint="@android:color/darker_gray"
             android:textColor="@color/white"/>
 
     </LinearLayout>
