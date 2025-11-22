@@ -37,6 +37,12 @@ class RelatorioListaActivity : AppCompatActivity() {
             i.putExtra("relatorioId", r.relatorio.id)
             startActivity(i)
         }
+
+        binding.btnVoltar.setOnClickListener {
+           finish()
+        }
+
+        
     }
 
     override fun onResume() {
