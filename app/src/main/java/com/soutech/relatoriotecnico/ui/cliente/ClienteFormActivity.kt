@@ -31,6 +31,11 @@ class ClienteFormActivity : AppCompatActivity() {
         binding.btnSalvarCliente.setOnClickListener {
             salvarCliente()
         }
+
+        binding.btnVoltar.setOnClickListener {
+            finish()
+        }
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
