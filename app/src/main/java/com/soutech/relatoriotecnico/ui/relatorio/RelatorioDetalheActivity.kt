@@ -33,6 +33,11 @@ class RelatorioDetalheActivity : AppCompatActivity() {
 
         binding.btnAbrirPdf.setOnClickListener { abrirPdf() }
         binding.btnExcluirRelatorio.setOnClickListener { excluirRelatorio() }
+
+        binding.btnAbrirPdf.setOnClickListener { abrirPdf() }
+        binding.btnExcluirRelatorio.setOnClickListener { excluirRelatorio() }
+        binding.btnVoltar.setOnClickListener { finish() }
+
     }
 
     override fun onResume() {
