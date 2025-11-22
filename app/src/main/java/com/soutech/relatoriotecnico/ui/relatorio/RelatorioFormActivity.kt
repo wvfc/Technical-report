@@ -63,6 +63,15 @@ class RelatorioFormActivity : AppCompatActivity() {
         binding.btnSalvarRelatorio.setOnClickListener {
             salvarRelatorio()
         }
+
+        binding.btnSalvarRelatorio.setOnClickListener {
+           salvarRelatorio()
+        }
+
+        binding.btnVoltar.setOnClickListener {
+          finish()
+        }
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
