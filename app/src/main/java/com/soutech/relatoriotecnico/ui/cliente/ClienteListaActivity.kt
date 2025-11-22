@@ -35,6 +35,11 @@ class ClienteListaActivity : AppCompatActivity() {
             val cliente = clientes[position]
             mostrarOpcoes(cliente)
         }
+
+        binding.btnVoltar.setOnClickListener {
+           finish()
+        }
+
     }
 
     override fun onResume() {
