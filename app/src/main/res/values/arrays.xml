@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="tipos_manutencao">
+        <item>Preventiva</item>
+        <item>Preditiva</item>
+        <item>Corretiva</item>
+        <item>Inspeção</item>
+    </string-array>
+</resources>

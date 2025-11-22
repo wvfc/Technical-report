@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundLight">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Spinner
+            android:id="@+id/spCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/edDataEntrada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Data e hora de entrada"
+            android:focusable="false"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/edDataSaida"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Data e hora de saída"
+            android:focusable="false"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/edModeloMaquina"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Modelo da máquina"
+            android:layout_marginBottom="8dp"/>
+
+        <Spinner
+            android:id="@+id/spTipoManutencao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/tipos_manutencao"
+            android:layout_marginBottom="12dp"/>
+
+        <EditText
+            android:id="@+id/edOcorrencia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ocorrência"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/edSolucao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Solução proposta"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/edPecas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Lista de peças (um item por linha)"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top"
+            android:layout_marginBottom="12dp"/>
+
+        <Button
+            android:id="@+id/btnSelecionarImagens"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Selecionar imagens"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/white"
+            android:layout_marginBottom="12dp"/>
+
+        <Button
+            android:id="@+id/btnSalvarRelatorio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Salvar PDF"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+</ScrollView>

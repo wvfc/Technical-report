@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/backgroundLight"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvCliente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cliente"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/tvTipo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tipo de manutenção"
+        android:layout_marginBottom="4dp"/>
+
+    <TextView
+        android:id="@+id/tvModelo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Modelo da máquina"
+        android:layout_marginBottom="4dp"/>
+
+    <TextView
+        android:id="@+id/tvDatas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Datas"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/btnAbrirPdf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Abrir PDF"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:layout_marginBottom="12dp"/>
+
+    <Button
+        android:id="@+id/btnExcluirRelatorio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Excluir relatório"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:textColor="@color/white"/>
+
+</LinearLayout>
