@@ -68,13 +68,12 @@
 
             <!-- Tipo de manutenção -->
             <Spinner
-                android:id="@+id/spTipoManutencao"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:entries="@array/tipos_manutencao"
-                android:background="@drawable/bg_spinner"
-                android:popupBackground="@color/white"
-                android:layout_marginBottom="16dp" />
+               android:id="@+id/spTipoManutencao"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:background="@drawable/bg_spinner"
+               android:popupBackground="@color/white"
+               android:layout_marginBottom="16dp" />
 
             <!-- Ocorrência -->
             <EditText
