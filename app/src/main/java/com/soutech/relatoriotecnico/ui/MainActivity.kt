@@ -21,8 +21,8 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         binding.btnNovoRelatorio.setOnClickListener {
-            startActivity(Intent(this, RelatorioFormActivity::class.java))
-        }
+          startActivity(Intent(this,         TipoRelatorioActivity::class.java))
+     }
 
         binding.btnHistoricoRelatorios.setOnClickListener {
             startActivity(Intent(this, RelatorioListaActivity::class.java))
