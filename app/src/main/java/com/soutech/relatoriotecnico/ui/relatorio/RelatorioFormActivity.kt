@@ -1,4 +1,3 @@
-
 package com.soutech.relatoriotecnico.ui.relatorio
 
 import android.app.DatePickerDialog
@@ -11,18 +10,26 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.soutech.relatoriotecnico.R      // <<< IMPORTANTE AQUI
+
+import com.soutech.relatoriotecnico.R
 import com.soutech.relatoriotecnico.data.AppDatabase
 import com.soutech.relatoriotecnico.data.ClienteEntity
 import com.soutech.relatoriotecnico.data.ImagemRelatorioEntity
 import com.soutech.relatoriotecnico.data.RelatorioEntity
-import com.soutech.relatoriotecnico.data.PdfGenerator
+import com.soutech.relatoriotecnico.data.PdfGenerator // se ainda estiver usando
+import com.soutech.relatoriotecnico.util.PdfUtils      // <-- IMPORTANTE
+
 import com.soutech.relatoriotecnico.databinding.ActivityRelatorioFormBinding
+
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers              // <-- IMPORTANTE
+import kotlinx.coroutines.withContext             // <-- IMPORTANTE
+
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+
 
 
 class RelatorioFormActivity : AppCompatActivity() {
