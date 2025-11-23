@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundApp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- CARD DADOS BÁSICOS -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="@color/surfaceCard"
+            android:elevation="2dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dados do atendimento (Compressor)"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textPrimary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cliente"
+                android:textColor="@color/textPrimary"
+                android:layout_marginTop="12dp" />
+
+            <Spinner
+                android:id="@+id/spCliente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/edit_text" />
+
+            <EditText
+                android:id="@+id/edDataEntrada"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="Data e hora de entrada"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray"
+                android:focusable="false"
+                android:clickable="true" />
+
+            <EditText
+                android:id="@+id/edDataSaida"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Data e hora de saída"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray"
+                android:focusable="false"
+                android:clickable="true" />
+
+            <EditText
+                android:id="@+id/edModeloMaquina"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Modelo do compressor"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <Spinner
+                android:id="@+id/spTipoManutencao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@android:drawable/edit_text" />
+        </LinearLayout>
+
+        <!-- CARD CHECKLIST -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="@color/surfaceCard"
+            android:elevation="2dp"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Checklist – Inspeções gerais"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/textPrimary" />
+
+            <!-- Exemplo de linha de checklist -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1. Total de horas de funcionamento (em carga)"
+                android:textColor="@color/textPrimary"
+                android:layout_marginTop="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/spItem1Status"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:entries="@array/status_checklist" />
+
+                <EditText
+                    android:id="@+id/edItem1Valor"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Valor / Obs."
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+            <!-- Você pode duplicar o bloco abaixo para mais itens -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2. Pressão de descarga do pacote (carga/alívio)"
+                android:textColor="@color/textPrimary"
+                android:layout_marginTop="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/spItem2Status"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:entries="@array/status_checklist" />
+
+                <EditText
+                    android:id="@+id/edItem2Valor"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Valor / Obs."
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+            <!-- ...repita para quantos itens quiser (3,4,5, etc.) ... -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Observações gerais"
+                android:textColor="@color/textPrimary"
+                android:layout_marginTop="16dp" />
+
+            <EditText
+                android:id="@+id/edObservacoes"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:gravity="top"
+                android:hint="Descreva observações relevantes da inspeção."
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- BOTÕES -->
+        <Button
+            android:id="@+id/btnSelecionarImagens"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Selecionar imagens"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/buttonPrimary"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/btnSalvarRelatorio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Salvar PDF"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/buttonPrimary"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btnVoltar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Voltar"
+            android:textAllCaps="true"
+            android:textColor="@color/textPrimary"
+            android:backgroundTint="@color/buttonSecondary"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp" />
+    </LinearLayout>
+</ScrollView>
