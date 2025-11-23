@@ -12,7 +12,7 @@
     <color name="backgroundLight">#ECEFF4</color>
 
     <!-- Fundo de cartões / formulários -->
-    <color name="surfaceCard">#ffffff</color>
+    <color name="surfaceCard">#7d7c7c</color> <!--antes ffffff-->
 
     <!-- Textos – bem escuros -->
     <color name="textPrimary">#111827</color>         <!-- textos principais -->
@@ -20,11 +20,11 @@
     <color name="hintGray">#9CA3AF</color>            <!-- hints de EditText -->
     <color name="textDark">#111827</color>           <!-- alias usado em alguns layouts -->
 
-    <!-- Branco / divisores -->
+    <!-- Branco / divisores --> 
     <color name="white">#355079</color>
     <color name="divider">#D1D5DB</color>
 
     <!-- Botões -->
     <color name="buttonPrimary">#0D47A1</color>       <!-- principal (SALVAR, NOVO, etc.) -->
-    <color name="buttonSecondary">#455A64</color>     <!-- botão VOLTAR, ações secundárias -->
+    <color name="buttonSecondary">#000000</color>     <!--  455a64 botão VOLTAR, ações secundárias -->
 </resources>
