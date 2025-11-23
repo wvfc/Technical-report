@@ -12,7 +12,7 @@
     <color name="backgroundLight">#ECEFF4</color>
 
     <!-- Fundo de cartões / formulários -->
-    <color name="surfaceCard">#0D4799</color>
+    <color name="surfaceCard">#ffffff</color>
 
     <!-- Textos – bem escuros -->
     <color name="textPrimary">#111827</color>         <!-- textos principais -->
@@ -21,7 +21,7 @@
     <color name="textDark">#111827</color>           <!-- alias usado em alguns layouts -->
 
     <!-- Branco / divisores -->
-    <color name="white">#FFFFFF</color>
+    <color name="white">#0D47A1</color>
     <color name="divider">#D1D5DB</color>
 
     <!-- Botões -->
