@@ -16,114 +16,112 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bg_form_card"
             android:elevation="2dp">
-            
 
-        <Spinner
-            android:id="@+id/spCliente"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp" />
+            <Spinner
+                android:id="@+id/spCliente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp" />
 
-        <EditText
-            android:id="@+id/edDataEntrada"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Data e hora de entrada"
-            android:focusable="false"
-            android:textColor="@color/textDark"
-            android:textColorHint="@color/hintGray"
-            android:layout_marginBottom="8dp"/>
+            <EditText
+                android:id="@+id/edDataEntrada"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Data e hora de entrada"
+                android:focusable="false"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray"
+                android:layout_marginBottom="8dp" />
 
-        <EditText
-            android:id="@+id/edDataSaida"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Data e hora de saída"
-            android:focusable="false"
-            android:textColor="@color/textDark"
-            android:textColorHint="@color/hintGray"
-            android:layout_marginBottom="8dp"/>
+            <EditText
+                android:id="@+id/edDataSaida"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Data e hora de saída"
+                android:focusable="false"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray"
+                android:layout_marginBottom="8dp" />
 
-        <EditText
-            android:id="@+id/edModeloMaquina"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Modelo da máquina"
-            android:textColor="@color/textDark"
-            android:textColorHint="@color/hintGray"
-            android:layout_marginBottom="8dp"/>
+            <EditText
+                android:id="@+id/edModeloMaquina"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Modelo da máquina"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray"
+                android:layout_marginBottom="8dp" />
 
-        <Spinner
-            android:id="@+id/spTipoManutencao"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/tipos_manutencao"
-            android:layout_marginBottom="12dp"/>
+            <Spinner
+                android:id="@+id/spTipoManutencao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/tipos_manutencao"
+                android:layout_marginBottom="12dp" />
 
-        <EditText
-            android:id="@+id/edOcorrencia"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ocorrência"
-            android:inputType="textMultiLine"
-            android:minLines="3"
-            android:gravity="top"
-            android:textColor="@color/textDark"
-            android:textColorHint="@color/hintGray"
-            android:layout_marginBottom="8dp"/>
+            <EditText
+                android:id="@+id/edOcorrencia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ocorrência"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:gravity="top"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray"
+                android:layout_marginBottom="8dp" />
 
-        <EditText
-            android:id="@+id/edSolucao"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Solução proposta"
-            android:inputType="textMultiLine"
-            android:minLines="3"
-            android:gravity="top"
-            android:textColor="@color/textDark"
-            android:textColorHint="@color/hintGray"
-            android:layout_marginBottom="8dp"/>
+            <EditText
+                android:id="@+id/edSolucao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Solução proposta"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:gravity="top"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray"
+                android:layout_marginBottom="8dp" />
 
-        <EditText
-            android:id="@+id/edPecas"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Lista de peças (um item por linha)"
-            android:inputType="textMultiLine"
-            android:minLines="3"
-            android:gravity="top"
-            android:textColor="@color/textDark"
-            android:textColorHint="@color/hintGray"
-            android:layout_marginBottom="12dp"/>
+            <EditText
+                android:id="@+id/edPecas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Lista de peças (um item por linha)"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:gravity="top"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray"
+                android:layout_marginBottom="12dp" />
 
-        <Button
-            android:id="@+id/btnSelecionarImagens"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Selecionar imagens"
-            android:backgroundTint="@color/colorPrimary"
-            android:textColor="@color/white"
-            android:layout_marginBottom="12dp"/>
+            <Button
+                android:id="@+id/btnSelecionarImagens"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Selecionar imagens"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:layout_marginBottom="12dp" />
 
-        <Button
-            android:id="@+id/btnSalvarRelatorio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Salvar PDF"
-            android:backgroundTint="@color/colorPrimary"
-            android:textColor="@color/white"
-            android:layout_marginBottom="8dp"/>
+            <Button
+                android:id="@+id/btnSalvarRelatorio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Salvar PDF"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:layout_marginBottom="8dp" />
 
-        <Button
-            android:id="@+id/btnVoltar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Voltar"
-            android:backgroundTint="@android:color/darker_gray"
-            android:textColor="@color/white"/>
+            <Button
+                android:id="@+id/btnVoltar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Voltar"
+                android:backgroundTint="@android:color/darker_gray"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
-
-
-
