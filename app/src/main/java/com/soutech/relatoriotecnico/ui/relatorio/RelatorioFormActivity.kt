@@ -51,6 +51,19 @@ class RelatorioFormActivity : AppCompatActivity() {
         binding = ActivityRelatorioFormBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Configura spinner de Tipo de manutenção com layout de texto preto
+    val tipos = resources.getStringArray(R.array.tipos_manutencao)
+    val adapterTipo = ArrayAdapter(
+        this,
+        R.layout.spinner_item,          // item selecionado
+        tipos.toList()
+    ).apply {
+        setDropDownViewResource(R.layout.spinner_dropdown_item) // lista
+    }
+    binding.spTipoManutencao.adapter = adapterTipo
+
+        
+
         supportActionBar?.title = "Novo relatório"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
