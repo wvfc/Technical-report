@@ -2,6 +2,7 @@ package com.soutech.relatoriotecnico.util
 
 import android.content.Context
 import android.graphics.*
+import android.net.Uri
 import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
@@ -82,15 +83,27 @@ object PdfUtils {
         )
 
         y = drawSectionTitle(canvas, "Ocorrência", margin, y)
-        y = drawMultiline(canvas, relatorio.ocorrencia ?: "-", margin, y, contentWidth)
+        y = drawMultiline(
+            canvas,
+            relatorio.ocorrencia ?: "-",
+            margin,
+            y,
+            contentWidth
+        )
 
         y = drawSectionTitle(canvas, "Solução proposta", margin, y)
-        y = drawMultiline(canvas, relatorio.solucao ?: "-", margin, y, contentWidth)
+        y = drawMultiline(
+            canvas,
+            relatorio.solucaoProposta ?: "-",
+            margin,
+            y,
+            contentWidth
+        )
 
         y = drawSectionTitle(canvas, "Lista de peças", margin, y)
         y = drawMultiline(
             canvas,
-            (relatorio.listaPecas ?: "-").replace(";", "\n"),
+            (relatorio.pecasTexto ?: "-").replace(";", "\n"),
             margin,
             y,
             contentWidth
@@ -125,12 +138,41 @@ object PdfUtils {
             val maxImageHeight = 250f
 
             for (img in imagens) {
-                val path = img.caminho
-                if (path.isNullOrBlank()) continue
+                val uriString = img.uri
+                if (uriString.isNullOrBlank()) continue
 
-                val bitmap = BitmapFactory.decodeFile(path)
+                val uri = try {
+                    Uri.parse(uriString)
+                } catch (e: Exception) {
+                    Log.w(TAG, "URI inválida: $uriString", e)
+                    continue
+                }
+
+                val input = try {
+                    context.contentResolver.openInputStream(uri)
+                } catch (e: Exception) {
+                    Log.w(TAG, "Não foi possível abrir InputStream da URI: $uriString", e)
+                    null
+                }
+
+                if (input == null) {
+                    Log.w(TAG, "InputStream nulo para URI: $uriString")
+                    continue
+                }
+
+                val bitmap = try {
+                    BitmapFactory.decodeStream(input)
+                } catch (e: Exception) {
+                    Log.w(TAG, "Falha ao decodificar bitmap da URI: $uriString", e)
+                    null
+                } finally {
+                    try {
+                        input.close()
+                    } catch (_: Exception) { }
+                }
+
                 if (bitmap == null) {
-                    Log.w(TAG, "Não foi possível carregar imagem: $path")
+                    Log.w(TAG, "Bitmap nulo para URI: $uriString")
                     continue
                 }
 
