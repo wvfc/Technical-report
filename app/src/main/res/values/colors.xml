@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Cores principais do app -->
-    <color name="colorPrimary">#0a184a</color>
-    <color name="colorPrimaryDark">#0e1b4f</color>
-    <color name="colorAccent">#fffcfc</color>
+    <!-- Cores principais do app (vinho forte + destaque turquesa) -->
+    <color name="colorPrimary">#8C1538</color>        <!-- barra superior, botões principais -->
+    <color name="colorPrimaryDark">#5D0F27</color>    <!-- status bar / variações escuras -->
+    <color name="colorAccent">#00BCD4</color>         <!-- botões secundários, detalhes -->
 
-    <!-- Fundo geral do app -->
-    <color name="backgroundApp">#fafafa</color>
+    <!-- Fundo geral do app (cinza-azulado claro, mais vivo que branco puro) -->
+    <color name="backgroundApp">#ECEFF4</color>
 
     <!-- Alias para layouts antigos que usam backgroundLight -->
-    <color name="backgroundLight">#ffffff</color>
+    <color name="backgroundLight">#ECEFF4</color>
 
     <!-- Fundo de cartões / formulários -->
-    <color name="surfaceCard">#69707a</color>
+    <color name="surfaceCard">#FFFFFF</color>
 
-    <!-- Textos -->
-    <color name="textPrimary">#000000</color>
-    <color name="textSecondary">#62717a</color> <!--apenas cor de teste-->
-    <color name="hintGray">#62717a</color> <!--apenas cor de teste-->
+    <!-- Textos – bem escuros pra ter contraste forte -->
+    <color name="textPrimary">#111827</color>         <!-- textos principais -->
+    <color name="textSecondary">#4B5563</color>       <!-- textos secundários / descrições -->
+    <color name="hintGray">#9CA3AF</color>            <!-- hints de EditText -->
 
     <!-- Alias para layouts que usam textDark -->
-    <color name="textDark">#ffffff</color>
+    <color name="textDark">#111827</color>
 
-    <color name="white">#2f3f4a</color>
-    <color name="divider">#2f3f4a</color>
+    <!-- Branco e divisores -->
+    <color name="white">#FFFFFF</color>
+    <color name="divider">#D1D5DB</color>
+
+    <!-- Extras para deixar botões bem visíveis (use onde quiser) -->
+    <color name="buttonPrimary">#8C1538</color>       <!-- igual ao primary -->
+    <color name="buttonSecondary">#6B7280</color>     <!-- cinza forte para botão VOLTAR etc. -->
 </resources>
