@@ -4,7 +4,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
-import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.soutech.relatoriotecnico.data.AppDatabase
 import com.soutech.relatoriotecnico.data.ClienteEntity
 import com.soutech.relatoriotecnico.databinding.ActivityClienteListaBinding
+import com.soutech.relatoriotecnico.R
 import kotlinx.coroutines.launch
 
 class ClienteListaActivity : AppCompatActivity() {
@@ -28,7 +28,13 @@ class ClienteListaActivity : AppCompatActivity() {
         supportActionBar?.title = "Clientes cadastrados"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mutableListOf())
+        // Adapter usando layout customizado com texto preto
+        adapter = ArrayAdapter(
+            this,
+            R.layout.item_cliente,      // layout do item da lista
+            R.id.txtNomeCliente,        // TextView dentro do layout
+            mutableListOf<String>()
+        )
         binding.listClientes.adapter = adapter
 
         binding.listClientes.setOnItemClickListener { _, _, position, _ ->
@@ -37,9 +43,8 @@ class ClienteListaActivity : AppCompatActivity() {
         }
 
         binding.btnVoltar.setOnClickListener {
-           finish()
+            finish()
         }
-
     }
 
     override fun onResume() {
