@@ -5,5 +5,11 @@
         <item>Preditiva</item>
         <item>Corretiva</item>
         <item>Inspeção</item>
+    
+
+    <string-array name="status_checklist">
+        <item>OK</item>
+        <item>Reparado / trocado</item>
+        <item>Necessita reparo</item>
     </string-array>
 </resources>
