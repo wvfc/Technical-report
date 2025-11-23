@@ -3,25 +3,25 @@
     <!-- Cores principais do app -->
     <color name="colorPrimary">#0a184a</color>
     <color name="colorPrimaryDark">#0e1b4f</color>
-    <color name="colorAccent">#000000</color>
+    <color name="colorAccent">#fffcfc</color>
 
     <!-- Fundo geral do app -->
     <color name="backgroundApp">#fafafa</color>
 
     <!-- Alias para layouts antigos que usam backgroundLight -->
-    <color name="backgroundLight">#00000a</color>
+    <color name="backgroundLight">#ffffff</color>
 
     <!-- Fundo de cartões / formulários -->
-    <color name="surfaceCard">#000000</color>
+    <color name="surfaceCard">#69707a</color>
 
     <!-- Textos -->
     <color name="textPrimary">#000000</color>
-    <color name="textSecondary">#9e1595</color> <!--apenas cor de teste-->
-    <color name="hintGray">#0b4e61</color> <!--apenas cor de teste-->
+    <color name="textSecondary">#62717a</color> <!--apenas cor de teste-->
+    <color name="hintGray">#62717a</color> <!--apenas cor de teste-->
 
     <!-- Alias para layouts que usam textDark -->
-    <color name="textDark">#000000</color>
+    <color name="textDark">#ffffff</color>
 
-    <color name="white">#000000</color>
-    <color name="divider">#030000</color>
+    <color name="white">#2f3f4a</color>
+    <color name="divider">#2f3f4a</color>
 </resources>
