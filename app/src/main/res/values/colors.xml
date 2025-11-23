@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#45132D</color>
-    <color name="colorPrimaryDark">#2E0C1E</color>
-    <color name="colorAccent">#007bff</color>
+    <color name="colorPrimaryDark">#301021</color>
+    <color name="colorAccent">#FF9800</color>
 
-    <!-- Fundo mais escuro pra destacar campos -->
-    <color name="backgroundLight">#E0E0E0</color>
+    <!-- Fundo geral do app -->
+    <color name="backgroundApp">#F4F4F6</color>
 
-    <!-- Texto escuro -->
-    <color name="textDark">#222222</color>
+    <!-- Fundo de cartões / formulários -->
+    <color name="surfaceCard">#FFFFFF</color>
 
-    <!-- Opcional: cinza para hints -->
-    <color name="hintGray">#777777</color>
+    <!-- Textos -->
+    <color name="textPrimary">#222222</color>
+    <color name="textSecondary">#666666</color>
+    <color name="hintGray">#999999</color>
 
     <color name="white">#FFFFFF</color>
+    <color name="divider">#DDDDDD</color>
 </resources>
