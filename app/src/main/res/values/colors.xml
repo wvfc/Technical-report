@@ -12,7 +12,7 @@
     <color name="backgroundLight">#ECEFF4</color>
 
     <!-- Fundo de cartões / formulários -->
-    <color name="surfaceCard">#FFFFFF</color>
+    <color name="surfaceCard">#0D4799</color>
 
     <!-- Textos – bem escuros -->
     <color name="textPrimary">#111827</color>         <!-- textos principais -->
