@@ -14,15 +14,28 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_form_card"
+            android:background="@color/surfaceCard"
+            android:padding="16dp"
             android:elevation="2dp">
+
+            <!-- Cliente -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cliente"
+                android:textColor="@color/textSecondary"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp" />
 
             <Spinner
                 android:id="@+id/spCliente"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp" />
+                android:background="@drawable/bg_spinner"
+                android:popupBackground="@color/white"
+                android:layout_marginBottom="16dp" />
 
+            <!-- Datas -->
             <EditText
                 android:id="@+id/edDataEntrada"
                 android:layout_width="match_parent"
@@ -43,6 +56,7 @@
                 android:textColorHint="@color/hintGray"
                 android:layout_marginBottom="8dp" />
 
+            <!-- Modelo da máquina -->
             <EditText
                 android:id="@+id/edModeloMaquina"
                 android:layout_width="match_parent"
@@ -52,13 +66,17 @@
                 android:textColorHint="@color/hintGray"
                 android:layout_marginBottom="8dp" />
 
+            <!-- Tipo de manutenção -->
             <Spinner
                 android:id="@+id/spTipoManutencao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/tipos_manutencao"
-                android:layout_marginBottom="12dp" />
+                android:background="@drawable/bg_spinner"
+                android:popupBackground="@color/white"
+                android:layout_marginBottom="16dp" />
 
+            <!-- Ocorrência -->
             <EditText
                 android:id="@+id/edOcorrencia"
                 android:layout_width="match_parent"
@@ -71,6 +89,7 @@
                 android:textColorHint="@color/hintGray"
                 android:layout_marginBottom="8dp" />
 
+            <!-- Solução proposta -->
             <EditText
                 android:id="@+id/edSolucao"
                 android:layout_width="match_parent"
@@ -83,6 +102,7 @@
                 android:textColorHint="@color/hintGray"
                 android:layout_marginBottom="8dp" />
 
+            <!-- Lista de peças -->
             <EditText
                 android:id="@+id/edPecas"
                 android:layout_width="match_parent"
@@ -93,14 +113,15 @@
                 android:gravity="top"
                 android:textColor="@color/textPrimary"
                 android:textColorHint="@color/hintGray"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="16dp" />
 
+            <!-- Botões -->
             <Button
                 android:id="@+id/btnSelecionarImagens"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Selecionar imagens"
-                android:backgroundTint="@color/colorPrimary"
+                android:backgroundTint="@color/buttonPrimary"
                 android:textColor="@color/white"
                 android:layout_marginBottom="12dp" />
 
@@ -109,7 +130,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Salvar PDF"
-                android:backgroundTint="@color/colorPrimary"
+                android:backgroundTint="@color/buttonPrimary"
                 android:textColor="@color/white"
                 android:layout_marginBottom="8dp" />
 
@@ -118,7 +139,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Voltar"
-                android:backgroundTint="@android:color/darker_gray"
+                android:backgroundTint="@color/buttonSecondary"
                 android:textColor="@color/white" />
 
         </LinearLayout>
