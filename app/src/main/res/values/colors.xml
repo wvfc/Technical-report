@@ -19,6 +19,9 @@
     <color name="textSecondary">#666666</color>
     <color name="hintGray">#999999</color>
 
+    <!-- Alias para layouts que usam textDark -->
+    <color name="textDark">#222222</color>
+
     <color name="white">#FFFFFF</color>
     <color name="divider">#DDDDDD</color>
 </resources>
