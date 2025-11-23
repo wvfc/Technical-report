@@ -6,6 +6,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.soutech.relatoriotecnico.R
 import com.soutech.relatoriotecnico.data.AppDatabase
 import com.soutech.relatoriotecnico.data.RelatorioComCliente
 import com.soutech.relatoriotecnico.databinding.ActivityRelatorioListaBinding
@@ -28,7 +29,13 @@ class RelatorioListaActivity : AppCompatActivity() {
         supportActionBar?.title = "Histórico de relatórios"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, mutableListOf())
+        // Usa o layout customizado com texto escuro (item_relatorio.xml)
+        adapter = ArrayAdapter(
+            this,
+            R.layout.item_relatorio,  // layout do item
+            R.id.txtTitulo,           // TextView dentro do layout
+            mutableListOf()
+        )
         binding.listRelatorios.adapter = adapter
 
         binding.listRelatorios.setOnItemClickListener { _, _, position, _ ->
@@ -39,10 +46,8 @@ class RelatorioListaActivity : AppCompatActivity() {
         }
 
         binding.btnVoltar.setOnClickListener {
-           finish()
+            finish()
         }
-
-        
     }
 
     override fun onResume() {
@@ -66,8 +71,13 @@ class RelatorioListaActivity : AppCompatActivity() {
             adapter.clear()
             adapter.addAll(descricoes)
             adapter.notifyDataSetChanged()
+
             if (relatorios.isEmpty()) {
-                Toast.makeText(this@RelatorioListaActivity, "Nenhum relatório cadastrado.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@RelatorioListaActivity,
+                    "Nenhum relatório cadastrado.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
