@@ -1,30 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Azul forte como cor principal do app -->
-    <color name="colorPrimary">#0D47A1</color>        <!-- barra superior, botões principais -->
-    <color name="colorPrimaryDark">#002171</color>    <!-- status bar / variações escuras -->
-    <color name="colorAccent">#00BCD4</color>         <!-- detalhes / botões secundários -->
+    <!-- Azul cinzento como cor principal do app -->
+    <color name="colorPrimary">#546E7A</color>        <!-- barra superior, detalhes -->
+    <color name="colorPrimaryDark">#37474F</color>    <!-- status bar / variações escuras -->
+    <color name="colorAccent">#0097A7</color>         <!-- se precisar de destaque secundário -->
 
-    <!-- Fundo geral do app (cinza-azulado claro, bom contraste) -->
-    <color name="backgroundApp">#ECEFF4</color>
+    <!-- Fundos SEMPRE brancos -->
+    <color name="backgroundApp">#FFFFFF</color>
+    <color name="backgroundLight">#FFFFFF</color>
+    <color name="surfaceCard">#FFFFFF</color>
 
-    <!-- Compatibilidade com layouts antigos -->
-    <color name="backgroundLight">#ECEFF4</color>
+    <!-- Textos SEMPRE pretos -->
+    <color name="textPrimary">#000000</color>         <!-- textos principais -->
+    <color name="textSecondary">#000000</color>       <!-- textos secundários -->
+    <color name="hintGray">#666666</color>            <!-- hint de EditText (um cinza mais fraco) -->
+    <color name="textDark">#000000</color>            <!-- alias usado em layouts antigos -->
 
-    <!-- Fundo de cartões / formulários -->
-    <color name="surfaceCard">#7d7c7c</color> <!--antes ffffff-->
+    <!-- Branco / divisores -->
+    <color name="white">#FFFFFF</color>
+    <color name="divider">#CCCCCC</color>
 
-    <!-- Textos – bem escuros -->
-    <color name="textPrimary">#111827</color>         <!-- textos principais -->
-    <color name="textSecondary">#ffffff</color>       <!-- textos secundários -->
-    <color name="hintGray">#9CA3AF</color>            <!-- hints de EditText -->
-    <color name="textDark">#111827</color>           <!-- alias usado em alguns layouts -->
-
-    <!-- Branco / divisores --> 
-    <color name="white">#355079</color>
-    <color name="divider">#D1D5DB</color>
-
-    <!-- Botões -->
-    <color name="buttonPrimary">#0D47A1</color>       <!-- principal (SALVAR, NOVO, etc.) -->
-    <color name="buttonSecondary">#000000</color>     <!--  455a64 botão VOLTAR, ações secundárias -->
+    <!-- Botões em azul cinzento -->
+    <color name="buttonPrimary">#546E7A</color>       <!-- botões principais -->
+    <color name="buttonSecondary">#B0BEC5</color>     <!-- botões secundários (ex.: VOLTAR) -->
 </resources>
