@@ -79,30 +79,32 @@ class RelatorioFormActivity : AppCompatActivity() {
         return true
     }
 
-    private fun carregarClientes() {
-        val db = AppDatabase.getInstance(this)
-        lifecycleScope.launch {
-            clientes = db.clienteDao().listarTodos()
-            val nomes = clientes.map { it.nomeFantasia }
-            val adapter = ArrayAdapter(
+   private fun carregarClientes() {
+    val db = AppDatabase.getInstance(this)
+    lifecycleScope.launch {
+        clientes = db.clienteDao().listarTodos()
+        val nomes = clientes.map { it.nomeFantasia }
+
+        val adapter = ArrayAdapter(
+            this@RelatorioFormActivity,
+            R.layout.spinner_item,          // item selecionado
+            nomes
+        ).apply {
+            setDropDownViewResource(R.layout.spinner_dropdown_item) // lista
+        }
+
+        binding.spCliente.adapter = adapter
+
+        if (clientes.isEmpty()) {
+            Toast.makeText(
                 this@RelatorioFormActivity,
-                android.R.layout.simple_spinner_item,
-                nomes
-            )
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.spCliente.adapter = adapter
-
-            if (clientes.isEmpty()) {
-                Toast.makeText(
-                    this@RelatorioFormActivity,
-                    "Cadastre um cliente antes de criar relatórios.",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-
-            // TODO: se relatorioId != null, carregar dados para edição
+                "Cadastre um cliente antes de criar relatórios.",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
+}
+
 
     private fun escolherDataHora(campo: android.widget.EditText) {
         val cal = Calendar.getInstance()
