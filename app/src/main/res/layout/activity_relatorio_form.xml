@@ -2,13 +2,21 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundLight">
+    android:background="@color/backgroundApp">
 
     <LinearLayout
         android:orientation="vertical"
         android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_form_card"
+            android:elevation="2dp">
+            
 
         <Spinner
             android:id="@+id/spCliente"
@@ -116,3 +124,6 @@
 
     </LinearLayout>
 </ScrollView>
+
+
+
