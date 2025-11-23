@@ -16,7 +16,7 @@
 
     <!-- Textos – bem escuros -->
     <color name="textPrimary">#111827</color>         <!-- textos principais -->
-    <color name="textSecondary">#4B5563</color>       <!-- textos secundários -->
+    <color name="textSecondary">#ffffff</color>       <!-- textos secundários -->
     <color name="hintGray">#9CA3AF</color>            <!-- hints de EditText -->
     <color name="textDark">#111827</color>           <!-- alias usado em alguns layouts -->
 
