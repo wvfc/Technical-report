@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootTipo"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/backgroundApp">
+
+    <TextView
+        android:id="@+id/txtTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Selecione o tipo de relatório"
+        android:textColor="@color/textPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:paddingBottom="16dp" />
+
+    <Button
+        android:id="@+id/btnRelatorioCompressor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Relatório de COMPRESSOR"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/buttonPrimary"
+        android:padding="12dp" />
+
+    <Button
+        android:id="@+id/btnRelatorioGeral"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Relatório GERAL"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/buttonSecondary"
+        android:layout_marginTop="12dp"
+        android:padding="12dp" />
+
+    <Button
+        android:id="@+id/btnVoltar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Voltar"
+        android:textAllCaps="true"
+        android:textColor="@color/textPrimary"
+        android:backgroundTint="@color/backgroundLight"
+        android:layout_marginTop="24dp"
+        android:padding="12dp" />
+</LinearLayout>
