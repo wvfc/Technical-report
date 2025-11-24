@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.soutech.relatoriotecnico.R
 import com.soutech.relatoriotecnico.data.AppDatabase
 import com.soutech.relatoriotecnico.data.ClienteEntity
 import com.soutech.relatoriotecnico.data.ImagemRelatorioEntity
@@ -72,10 +73,18 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
         return true
     }
 
+    // =========================
+    //   SPINNERS (cores novas)
+    // =========================
     private fun configurarSpinners() {
         val tipos = listOf("Preventiva", "Preditiva", "Corretiva", "Inspeção")
-        val adapterTipo = ArrayAdapter(this, android.R.layout.simple_spinner_item, tipos)
-        adapterTipo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        val adapterTipo = ArrayAdapter(
+            this,
+            R.layout.spinner_item,        // texto preto
+            tipos
+        )
+        adapterTipo.setDropDownViewResource(R.layout.spinner_dropdown_item)
         binding.spTipoManutencao.adapter = adapterTipo
     }
 
@@ -84,13 +93,14 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
         lifecycleScope.launch {
             clientes = db.clienteDao().listarTodos()
             val nomes = clientes.map { it.nomeFantasia }
-            val adapter = ArrayAdapter(
+
+            val adapterClientes = ArrayAdapter(
                 this@RelatorioCompressorFormActivity,
-                android.R.layout.simple_spinner_item,
+                R.layout.spinner_item,        // texto preto
                 nomes
             )
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.spCliente.adapter = adapter
+            adapterClientes.setDropDownViewResource(R.layout.spinner_dropdown_item)
+            binding.spCliente.adapter = adapterClientes
 
             if (clientes.isEmpty()) {
                 Toast.makeText(
@@ -102,6 +112,9 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
         }
     }
 
+    // =========================
+    //   DATA / HORA
+    // =========================
     private fun escolherDataHora(campo: EditText) {
         val cal = Calendar.getInstance()
         DatePickerDialog(this, { _, year, month, day ->
@@ -117,6 +130,9 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
         }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show()
     }
 
+    // =========================
+    //   SALVAR RELATÓRIO
+    // =========================
     private fun salvarRelatorio() {
         if (clientes.isEmpty()) {
             Toast.makeText(this, "Cadastre pelo menos um cliente.", Toast.LENGTH_SHORT).show()
@@ -204,6 +220,9 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
         }
     }
 
+    // =========================
+    //   RESUMO CHECKLIST
+    // =========================
     private fun montarResumoChecklist(): String {
         val sb = StringBuilder()
 
@@ -233,7 +252,9 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
             binding.edItem2Valor
         )
 
-        // aqui você pode adicionar mais linhas linha(3,...), linha(4,...) copiando o padrão
+        // Adicione aqui os próximos itens do checklist conforme for criando os campos:
+        // linha(3, "Temperatura de descarga do pacote a plena carga", binding.spItem3Status, binding.edItem3Valor)
+        // ...
 
         return sb.toString()
     }
