@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundApp">
+    android:fillViewport="true"
+    android:background="@color/backgroundApp"
+    tools:context=".ui.relatorio.RelatorioCompressorFormActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,1787 +13,1740 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- CARD: DADOS DO CLIENTE / ATENDIMENTO -->
-        <LinearLayout
+        <!-- TÍTULO -->
+        <TextView
+            android:id="@+id/tvTituloAtendimentoCompressor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:background="@color/surfaceCard"
-            android:elevation="2dp">
+            android:text="Dados do atendimento (Compressor)"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/textPrimary"
+            android:layout_marginBottom="12dp" />
 
-            <TextView
-                android:id="@+id/tvTituloDados"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Dados do cliente e atendimento"
-                android:textColor="@color/textPrimary"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
+        <!-- CLIENTE -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cliente"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp" />
 
-            <!-- Cliente -->
-            <TextView
-                android:id="@+id/tvCliente"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Cliente"
-                android:textColor="@color/textPrimary"
-                android:textSize="14sp" />
+        <Spinner
+            android:id="@+id/spCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" />
 
-            <Spinner
-                android:id="@+id/spCliente"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:background="@android:drawable/btn_dropdown" />
+        <!-- DATA / HORA ENTRADA -->
+        <EditText
+            android:id="@+id/edDataEntrada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Data e hora de entrada"
+            android:focusable="false"
+            android:clickable="true"
+            android:inputType="text"
+            android:textColor="@color/textPrimary"
+            android:textColorHint="@color/hintGray"
+            android:layout_marginBottom="8dp" />
 
-            <!-- Datas -->
-            <TextView
-                android:id="@+id/tvDataEntrada"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Data e hora de entrada"
-                android:textColor="@color/textPrimary"
-                android:textSize="14sp" />
+        <!-- DATA / HORA SAÍDA -->
+        <EditText
+            android:id="@+id/edDataSaida"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Data e hora de saída"
+            android:focusable="false"
+            android:clickable="true"
+            android:inputType="text"
+            android:textColor="@color/textPrimary"
+            android:textColorHint="@color/hintGray"
+            android:layout_marginBottom="8dp" />
 
-            <EditText
-                android:id="@+id/edDataEntrada"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:clickable="true"
-                android:inputType="none"
-                android:hint="Toque para selecionar"
-                android:textColor="@color/textPrimary"
-                android:textColorHint="@color/hintGray"
-                android:layout_marginBottom="8dp" />
+        <!-- MODELO COMPRESSOR -->
+        <EditText
+            android:id="@+id/edModeloMaquina"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Modelo do compressor"
+            android:inputType="textCapSentences"
+            android:textColor="@color/textPrimary"
+            android:textColorHint="@color/hintGray"
+            android:layout_marginBottom="8dp" />
 
-            <TextView
-                android:id="@+id/tvDataSaida"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Data e hora de saída"
-                android:textColor="@color/textPrimary"
-                android:textSize="14sp" />
+        <!-- TIPO MANUTENÇÃO -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tipo de manutenção"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp" />
 
-            <EditText
-                android:id="@+id/edDataSaida"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:clickable="true"
-                android:inputType="none"
-                android:hint="Toque para selecionar"
-                android:textColor="@color/textPrimary"
-                android:textColorHint="@color/hintGray"
-                android:layout_marginBottom="8dp" />
+        <Spinner
+            android:id="@+id/spTipoManutencao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" />
 
-            <!-- Modelo máquina -->
-            <TextView
-                android:id="@+id/tvModelo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Modelo da máquina"
-                android:textColor="@color/textPrimary"
-                android:textSize="14sp" />
-
-            <EditText
-                android:id="@+id/edModeloMaquina"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Ex.: GA90 VSD FF"
-                android:textColor="@color/textPrimary"
-                android:textColorHint="@color/hintGray"
-                android:layout_marginBottom="8dp" />
-
-            <!-- Tipo manutenção -->
-            <TextView
-                android:id="@+id/tvTipoManutencao"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Tipo de manutenção"
-                android:textColor="@color/textPrimary"
-                android:textSize="14sp" />
-
-            <Spinner
-                android:id="@+id/spTipoManutencao"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:background="@android:drawable/btn_dropdown" />
-        </LinearLayout>
-
-        <!-- ESPAÇO -->
+        <!-- DIVISOR -->
         <View
             android:layout_width="match_parent"
-            android:layout_height="12dp" />
+            android:layout_height="1dp"
+            android:background="@color/divider"
+            android:layout_marginBottom="12dp" />
 
         <!-- ================= CHECKLIST – ITENS 1 A 42 ================= -->
 
-<TextView
-    android:id="@+id/tvChecklistTituloGerais"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Checklist – Inspeções gerais"
-    android:textStyle="bold"
-    android:textColor="@color/textPrimary"
-    android:textSize="16sp"
-    android:layout_marginTop="16dp"
-    android:layout_marginBottom="8dp" />
-
-<!-- ITEM 1 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="1. Total de horas de funcionamento / em carga"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem1Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem1Valor"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Valor / Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 2 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="2. Pressão de descarga do pacote (carga/alívio)"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem2Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem2Valor"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Valor / Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 3 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="3. Temp. de descarga do pacote a plena carga (°F / °C)"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem3Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem3Valor"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Valor / Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 4 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="4. Temp. de descarga da unidade compressora a plena carga (°F / °C)"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem4Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem4Valor"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Valor / Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 5 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="5. Temp. injeção do óleo a plena carga (°F / °C)"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem5Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem5Valor"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Valor / Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 6 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="6. Pressão do cárter em alívio (PSIG / BarG)"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem6Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem6Valor"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Valor / Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 7 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="7. Vácuo na admissão em alívio (PSIG / BarG)"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem7Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem7Valor"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Valor / Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 8 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="8. Condição do filtro de admissão"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem8Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem8Valor"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Valor / Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 9 (Data / Horas) -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="9. Última substituição do filtro de admissão"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem9Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem9Data"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="Data"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem9Horas"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="Horas"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 10 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="10. Verificar nível do óleo refrigerante"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem10Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem10Obs"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 11 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="11. Inspecionar vazamentos de óleo"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem11Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem11Obs"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 12 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="12. Substituição do filtro de óleo em (2.000 h ou 1 ano)"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem12Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem12Obs"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 13 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="13. Unidade de pressão do separador a plena carga (PSIG / BarG)"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem13Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem13Valor"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Valor / Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 14 (Data / Horas) -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="14. Data da última substituição do elemento separador"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem14Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem14Data"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="Data"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem14Horas"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="Horas"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 15 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="15. Data da última limpeza do orifício e tela do pescador"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem15Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem15Obs"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Data / Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 16 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="16. Inspecionar e limpar o respiro da caixa de engrenagens"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem16Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem16Obs"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 17 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="17. Temperatura ambiente da instalação (°F / °C)"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem17Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem17Valor"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Valor / Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 18 (A/B/C) -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="18. Temp. da válvula de controle termostático (°F / °C) - Abertura"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem18Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem18A"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="A"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem18B"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="B"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem18C"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="C"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 19 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="19. Alinhamento da correia verificado e em boas condições"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem19Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem19Obs"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 20 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="20. Sistema da tensão da correia verificado"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem20Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem20Obs"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 21 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="21. Inspecionar por vazamentos de ar"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem21Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem21Obs"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 22 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="22. Inspecionar os núcleos dos trocadores de calor"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem22Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem22Obs"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 23 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="23. Inspecionar e limpar o dreno de condensado"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem23Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem23Obs"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 24 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="24. Inspecionar o motor principal e o ventilador"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem24Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem24Obs"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 25 (Data / Horas) -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="25. Última lubrificação do motor principal"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem25Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem25Data"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="Data"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem25Horas"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="Horas"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 26 (Data / Horas) -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="26. Última lubrificação do motor do ventilador"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem26Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem26Data"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="Data"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem26Horas"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="Horas"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 27 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="27. Válvula de segurança instalada e operacional"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem27Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem27Obs"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 28 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="28. Tipo do óleo refrigerante"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem28Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem28Tipo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Tipo / Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 29 (Data / Horas) -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="29. Última troca do óleo refrigerante"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="12dp">
-
-    <Spinner
-        android:id="@+id/spItem29Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem29Data"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="Data"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem29Horas"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="Horas"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ====== INSPEÇÕES ELÉTRICAS ====== -->
-<TextView
-    android:id="@+id/tvChecklistTituloEletrico"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Inspeções elétricas (Verificar e registrar, se for o caso)"
-    android:textStyle="bold"
-    android:textColor="@color/textPrimary"
-    android:textSize="16sp"
-    android:layout_marginTop="16dp"
-    android:layout_marginBottom="8dp" />
-
-<!-- ITEM 30 – Tensão (plena carga) L1/L2/L3 -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="30. Tensão (plena carga)"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem30Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem30L1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="L1"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem30L2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="L2"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem30L3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="L3"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 31 – Tensão (sem carga) -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="31. Tensão (sem carga)"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem31Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem31L1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="L1"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem31L2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="L2"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem31L3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="L3"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 32 – Corrente do motor (plena carga) -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="32. Corrente do motor (plena carga)"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem32Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem32T1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="T1"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem32T2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="T2"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem32T3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="T3"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 33 – Corrente do motor (sem carga) -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="33. Corrente do motor (sem carga)"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem33Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem33T1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="T1"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem33T2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="T2"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem33T3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="T3"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 34 – Queda de tensão através da chave de part. -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="34. Queda de tensão através da chave de part."
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem34Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem34L1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="L1"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem34L2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="L2"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem34L3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="L3"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 35 – Corrente total do pacote (plena carga) -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="35. Corrente total do pacote (plena carga)"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem35Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem35L1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="L1"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem35L2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="L2"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem35L3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="L3"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 36 – Dados da placa de identificação do motor -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="36. Dados da placa de identificação do motor"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem36Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem36HpKw"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="HP / kW"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem36Rpm"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="RPM"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem36V"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="V"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-
-    <EditText
-        android:id="@+id/edItem36A"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="A"
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 37 – Inspecionar os contatores -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="37. Inspecionar os contatores"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem37Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem37Obs"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 38 – Verificar as conexões elétricas -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="38. Verificar as conexões elétricas"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem38Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem38Obs"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 39 – Temp. operacional HAT (°C) -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="39. Temp. operacional HAT (°C) (corte de alta temperatura)"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="8dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="12dp">
-
-    <Spinner
-        android:id="@+id/spItem39Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem39Valor"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Valor / Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ====== SECADOR DE REFRIGERAÇÃO ====== -->
-<TextView
-    android:id="@+id/tvChecklistTituloSecador"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Secador de refrigeração"
-    android:textStyle="bold"
-    android:textColor="@color/textPrimary"
-    android:textSize="16sp"
-    android:layout_marginTop="16dp"
-    android:layout_marginBottom="8dp" />
-
-<!-- ITEM 40 – Ponto de orvalho -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="40. Ponto de orvalho (°C)"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="4dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem40Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem40PontoOrvalho"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Valor / Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 41 – Pré-filtro -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="41. Pré-filtro"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="4dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="4dp">
-
-    <Spinner
-        android:id="@+id/spItem41Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem41Ref"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Ref. / Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ITEM 42 – Pós-filtro -->
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="42. Pós-filtro"
-    android:textColor="@color/textPrimary"
-    android:textSize="14sp"
-    android:layout_marginTop="4dp" />
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="16dp">
-
-    <Spinner
-        android:id="@+id/spItem42Status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edItem42Ref"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:hint="Ref. / Obs."
-        android:inputType="text"
-        android:textColor="@color/textPrimary"
-        android:textColorHint="@color/hintGray" />
-</LinearLayout>
-
-<!-- ================= FIM CHECKLIST 1–42 ================= -->
-
-            <!-- OBSERVAÇÕES GERAIS -->
-            <TextView
-                android:id="@+id/tvObservacoes"
-                android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvChecklistTituloGerais"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Checklist – Inspeções gerais"
+            android:textStyle="bold"
+            android:textColor="@color/textPrimary"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- ITEM 1 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. Total de horas de funcionamento / em carga"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem1Status"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Observações gerais"
-                android:textColor="@color/textPrimary"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginTop="20dp" />
+                android:layout_weight="1" />
 
             <EditText
-                android:id="@+id/edObservacoes"
-                android:layout_width="match_parent"
+                android:id="@+id/edItem1Valor"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:minLines="3"
-                android:gravity="top|start"
-                android:hint="Descreva observações gerais da inspeção..."
+                android:layout_weight="2"
+                android:hint="Valor / Obs."
+                android:inputType="text"
                 android:textColor="@color/textPrimary"
-                android:textColorHint="@color/hintGray"
-                android:inputType="textMultiLine" />
-
-            <!-- BOTÕES -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp">
-
-                <Button
-                    android:id="@+id/btnSelecionarImagens"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Selecionar imagens"
-                    android:textColor="@color/white"
-                    android:backgroundTint="@color/buttonSecondary" />
-
-                <View
-                    android:layout_width="8dp"
-                    android:layout_height="match_parent" />
-
-                <Button
-                    android:id="@+id/btnSalvarRelatorio"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Salvar relatório"
-                    android:textColor="@color/white"
-                    android:backgroundTint="@color/buttonPrimary" />
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/btnVoltar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Voltar"
-                android:textColor="@color/white"
-                android:backgroundTint="@color/buttonSecondary"
-                android:layout_marginTop="8dp" />
-
+                android:textColorHint="@color/hintGray" />
         </LinearLayout>
+
+        <!-- ITEM 2 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2. Pressão de descarga do pacote (carga/alívio)"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem2Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem2Valor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Valor / Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 3 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3. Temp. de descarga do pacote a plena carga (°F / °C)"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem3Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem3Valor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Valor / Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 4 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="4. Temp. de descarga da unidade compressora a plena carga (°F / °C)"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem4Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem4Valor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Valor / Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 5 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="5. Temp. injeção do óleo a plena carga (°F / °C)"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem5Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem5Valor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Valor / Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 6 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="6. Pressão do cárter em alívio (PSIG / BarG)"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem6Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem6Valor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Valor / Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 7 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="7. Vácuo na admissão em alívio (PSIG / BarG)"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem7Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem7Valor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Valor / Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 8 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="8. Condição do filtro de admissão"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem8Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem8Valor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Valor / Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 9 (Data / Horas) -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="9. Última substituição do filtro de admissão"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem9Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem9Data"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Data"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem9Horas"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Horas"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 10 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="10. Verificar nível do óleo refrigerante"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem10Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem10Obs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 11 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="11. Inspecionar vazamentos de óleo"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem11Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem11Obs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 12 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="12. Substituição do filtro de óleo em (2.000 h ou 1 ano)"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem12Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem12Obs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 13 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="13. Unidade de pressão do separador a plena carga (PSIG / BarG)"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem13Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem13Valor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Valor / Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 14 (Data / Horas) -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="14. Data da última substituição do elemento separador"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem14Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem14Data"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Data"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem14Horas"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Horas"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 15 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="15. Data da última limpeza do orifício e tela do pescador"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem15Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem15Obs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Data / Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 16 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="16. Inspecionar e limpar o respiro da caixa de engrenagens"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem16Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem16Obs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 17 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="17. Temperatura ambiente da instalação (°F / °C)"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem17Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem17Valor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Valor / Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 18 A/B/C -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="18. Temp. da válvula de controle termostático (°F / °C) - Abertura"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem18Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem18A"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="A"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem18B"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="B"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem18C"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="C"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 19 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="19. Alinhamento da correia verificado e em boas condições"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem19Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem19Obs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 20 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="20. Sistema da tensão da correia verificado"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem20Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem20Obs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 21 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="21. Inspecionar por vazamentos de ar"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem21Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem21Obs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 22 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="22. Inspecionar os núcleos dos trocadores de calor"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem22Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem22Obs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 23 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="23. Inspecionar e limpar o dreno de condensado"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem23Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem23Obs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 24 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="24. Inspecionar o motor principal e o ventilador"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem24Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem24Obs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 25 (Data / Horas) -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="25. Última lubrificação do motor principal"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem25Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem25Data"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Data"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem25Horas"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Horas"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 26 (Data / Horas) -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="26. Última lubrificação do motor do ventilador"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem26Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem26Data"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Data"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem26Horas"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Horas"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 27 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="27. Válvula de segurança instalada e operacional"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem27Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem27Obs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 28 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="28. Tipo do óleo refrigerante"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem28Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem28Tipo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Tipo / Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 29 (Data / Horas) -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="29. Última troca do óleo refrigerante"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+
+            <Spinner
+                android:id="@+id/spItem29Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem29Data"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Data"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem29Horas"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Horas"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- INSPEÇÕES ELÉTRICAS -->
+        <TextView
+            android:id="@+id/tvChecklistTituloEletrico"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Inspeções elétricas (Verificar e registrar, se for o caso)"
+            android:textStyle="bold"
+            android:textColor="@color/textPrimary"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- ITEM 30 – Tensão (plena carga) L1/L2/L3 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="30. Tensão (plena carga)"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem30Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem30L1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="L1"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem30L2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="L2"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem30L3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="L3"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 31 – Tensão (sem carga) -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="31. Tensão (sem carga)"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem31Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem31L1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="L1"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem31L2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="L2"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem31L3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="L3"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 32 – Corrente do motor (plena carga) -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="32. Corrente do motor (plena carga)"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem32Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem32T1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="T1"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem32T2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="T2"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem32T3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="T3"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 33 – Corrente do motor (sem carga) -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="33. Corrente do motor (sem carga)"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem33Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem33T1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="T1"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem33T2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="T2"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem33T3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="T3"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 34 – Queda de tensão através da chave de part. -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="34. Queda de tensão através da chave de part."
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem34Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem34L1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="L1"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem34L2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="L2"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem34L3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="L3"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 35 – Corrente total do pacote (plena carga) -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="35. Corrente total do pacote (plena carga)"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem35Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem35L1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="L1"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem35L2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="L2"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem35L3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="L3"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 36 – Dados da placa de identificação do motor -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="36. Dados da placa de identificação do motor"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem36Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem36HpKw"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="HP / kW"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem36Rpm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="RPM"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem36V"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="V"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+
+            <EditText
+                android:id="@+id/edItem36A"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="A"
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 37 – Inspecionar os contatores -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="37. Inspecionar os contatores"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem37Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem37Obs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 38 – Verificar as conexões elétricas -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="38. Verificar as conexões elétricas"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem38Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem38Obs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 39 – Temp. operacional HAT (°C) -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="39. Temp. operacional HAT (°C) (corte de alta temperatura)"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+
+            <Spinner
+                android:id="@+id/spItem39Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem39Valor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Valor / Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- SECADOR DE REFRIGERAÇÃO -->
+        <TextView
+            android:id="@+id/tvChecklistTituloSecador"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Secador de refrigeração"
+            android:textStyle="bold"
+            android:textColor="@color/textPrimary"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- ITEM 40 – Ponto de orvalho -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="40. Ponto de orvalho (°C)"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem40Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem40PontoOrvalho"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Valor / Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 41 – Pré-filtro -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="41. Pré-filtro"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <Spinner
+                android:id="@+id/spItem41Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem41Ref"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Ref. / Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- ITEM 42 – Pós-filtro -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="42. Pós-filtro"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <Spinner
+                android:id="@+id/spItem42Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/edItem42Ref"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="Ref. / Obs."
+                android:inputType="text"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray" />
+        </LinearLayout>
+
+        <!-- OBSERVAÇÕES GERAIS -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Observações gerais"
+            android:textColor="@color/textPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/edObservacoes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minLines="3"
+            android:gravity="top|start"
+            android:hint="Descreva observações relevantes da inspeção."
+            android:inputType="textMultiLine"
+            android:textColor="@color/textPrimary"
+            android:textColorHint="@color/hintGray"
+            android:layout_marginBottom="16dp" />
+
+        <!-- BOTÕES -->
+        <Button
+            android:id="@+id/btnSelecionarImagens"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Selecionar imagens"
+            android:backgroundTint="@color/buttonPrimary"
+            android:textColor="@color/white"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btnSalvarRelatorio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Salvar PDF"
+            android:backgroundTint="@color/buttonPrimary"
+            android:textColor="@color/white"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btnVoltar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Voltar"
+            android:backgroundTint="@color/buttonSecondary"
+            android:textColor="@color/white"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp" />
 
     </LinearLayout>
 </ScrollView>
