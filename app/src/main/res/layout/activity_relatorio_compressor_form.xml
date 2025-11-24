@@ -353,6 +353,485 @@
                  tvItem35Titulo, spItem35Status, edItem35Obs
             -->
 
+<!-- ITEM 26 – Troca de óleo (data e horas) -->
+            <TextView
+                android:id="@+id/tvItem26Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="26 - Troca de óleo (data e horas de funcionamento)"
+                android:textColor="@color/textPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp" />
+
+            <Spinner
+                android:id="@+id/spItem26Status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp">
+
+                <EditText
+                    android:id="@+id/edItem26Data"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Data"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="text" />
+
+                <EditText
+                    android:id="@+id/edItem26Horas"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:hint="Horas"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="number" />
+            </LinearLayout>
+
+            <!-- ITEM 27 – Filtros (obs simples) -->
+            <TextView
+                android:id="@+id/tvItem27Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="27 - Filtros / elementos filtrantes"
+                android:textColor="@color/textPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spItem27Status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown" />
+
+            <EditText
+                android:id="@+id/edItem27Obs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Observações filtros"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray"
+                android:inputType="textMultiLine"
+                android:layout_marginBottom="8dp" />
+
+            <!-- ITEM 28 – Tipo de óleo / fluido -->
+            <TextView
+                android:id="@+id/tvItem28Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="28 - Tipo de óleo / fluido aplicado"
+                android:textColor="@color/textPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spItem28Status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown" />
+
+            <EditText
+                android:id="@+id/edItem28Tipo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tipo de óleo / fluido (ex.: GA S46, GA S32...)"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray"
+                android:inputType="text"
+                android:layout_marginBottom="8dp" />
+
+            <!-- ITEM 29 – Troca elemento separador (data / horas) -->
+            <TextView
+                android:id="@+id/tvItem29Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="29 - Troca do elemento separador (data e horas)"
+                android:textColor="@color/textPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spItem29Status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp">
+
+                <EditText
+                    android:id="@+id/edItem29Data"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Data"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="text" />
+
+                <EditText
+                    android:id="@+id/edItem29Horas"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:hint="Horas"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="number" />
+            </LinearLayout>
+
+            <!-- ITEM 30 – Corrente do motor em carga (L1, L2, L3) -->
+            <TextView
+                android:id="@+id/tvItem30Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="30 - Corrente do motor em carga (L1, L2, L3)"
+                android:textColor="@color/textPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spItem30Status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp">
+
+                <EditText
+                    android:id="@+id/edItem30L1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="L1 (A)"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/edItem30L2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:hint="L2 (A)"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/edItem30L3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:hint="L3 (A)"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="numberDecimal" />
+            </LinearLayout>
+
+            <!-- ITEM 31 – Corrente do motor em vazio (L1, L2, L3) -->
+            <TextView
+                android:id="@+id/tvItem31Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="31 - Corrente do motor em vazio (L1, L2, L3)"
+                android:textColor="@color/textPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spItem31Status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp">
+
+                <EditText
+                    android:id="@+id/edItem31L1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="L1 (A)"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/edItem31L2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:hint="L2 (A)"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/edItem31L3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:hint="L3 (A)"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="numberDecimal" />
+            </LinearLayout>
+
+            <!-- ITEM 32 – Temperatura mancais T1, T2, T3 -->
+            <TextView
+                android:id="@+id/tvItem32Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="32 - Temperatura mancais / rolamentos (T1, T2, T3)"
+                android:textColor="@color/textPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spItem32Status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp">
+
+                <EditText
+                    android:id="@+id/edItem32T1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="T1 (°C)"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/edItem32T2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:hint="T2 (°C)"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/edItem32T3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:hint="T3 (°C)"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="numberDecimal" />
+            </LinearLayout>
+
+            <!-- ITEM 33 – Temperatura óleo / ar / estágio (T1, T2, T3) -->
+            <TextView
+                android:id="@+id/tvItem33Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="33 - Temperatura óleo / ar / estágio (T1, T2, T3)"
+                android:textColor="@color/textPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spItem33Status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp">
+
+                <EditText
+                    android:id="@+id/edItem33T1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="T1 (°C)"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/edItem33T2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:hint="T2 (°C)"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/edItem33T3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:hint="T3 (°C)"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="numberDecimal" />
+            </LinearLayout>
+
+            <!-- ITEM 34 – Tensão alimentação (L1, L2, L3) -->
+            <TextView
+                android:id="@+id/tvItem34Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="34 - Tensão de alimentação (L1, L2, L3)"
+                android:textColor="@color/textPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spItem34Status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp">
+
+                <EditText
+                    android:id="@+id/edItem34L1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="L1 (V)"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/edItem34L2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:hint="L2 (V)"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/edItem34L3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:hint="L3 (V)"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="numberDecimal" />
+            </LinearLayout>
+
+            <!-- ITEM 35 – Corrente ventiladores / bombas (L1, L2, L3) -->
+            <TextView
+                android:id="@+id/tvItem35Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="35 - Corrente ventiladores / bombas (L1, L2, L3)"
+                android:textColor="@color/textPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spItem35Status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp">
+
+                <EditText
+                    android:id="@+id/edItem35L1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="L1 (A)"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/edItem35L2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:hint="L2 (A)"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/edItem35L3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:hint="L3 (A)"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/hintGray"
+                    android:inputType="numberDecimal" />
+            </LinearLayout>
+
             <!-- ====== ITENS ESPECIAIS 36 a 42 ====== -->
 
             <!-- ITEM 36 – placa motor (4 campos) -->
