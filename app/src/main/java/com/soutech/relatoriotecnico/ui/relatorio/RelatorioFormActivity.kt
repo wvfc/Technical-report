@@ -60,16 +60,15 @@ class RelatorioFormActivity : AppCompatActivity() {
         binding = ActivityRelatorioFormBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Configura spinner de Tipo de manutenção com layout de texto preto
-    val tipos = resources.getStringArray(R.array.tipos_manutencao)
-    val adapterTipo = ArrayAdapter(
+        // TIPOS DE MANUTENÇÃO (Preventiva, Preditiva, etc.)
+    val tipos = resources.getStringArray(R.array.tipos_manutencao).toList()
+    val tipoAdapter = ArrayAdapter(
         this,
-        R.layout.spinner_item,          // item selecionado
-        tipos.toList()
-    ).apply {
-        setDropDownViewResource(R.layout.spinner_dropdown_item) // lista
-    }
-    binding.spTipoManutencao.adapter = adapterTipo
+        R.layout.spinner_item,
+        tipos
+    )
+    tipoAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+    binding.spTipoManutencao.adapter = tipoAdapter
 
         
 
