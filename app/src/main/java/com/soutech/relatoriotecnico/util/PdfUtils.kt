@@ -19,11 +19,9 @@ object PdfUtils {
 
     private const val TAG = "PdfUtils"
 
-    /**
-     * Gera um PDF A4 bonito, com seções e imagens.
-     *
-     * @return File do PDF gerado.
-     */
+    // ============================================================
+    // 1) PDF GERAL (relatório que você já tinha)
+    // ============================================================
     fun gerarPdfRelatorio(
         context: Context,
         relatorio: RelatorioEntity,
@@ -31,8 +29,8 @@ object PdfUtils {
         imagens: List<ImagemRelatorioEntity>
     ): File {
         val pdf = android.graphics.pdf.PdfDocument()
-        val pageWidth = 595  // A4 em points (72 dpi) ~ 21cm
-        val pageHeight = 842 // A4 em points ~ 29.7cm
+        val pageWidth = 595  // A4 (72 dpi)
+        val pageHeight = 842
 
         var pageNumber = 1
         var pageInfo = android.graphics.pdf.PdfDocument.PageInfo
@@ -48,9 +46,9 @@ object PdfUtils {
         // ---------- CABEÇALHO ----------
         y = drawHeader(canvas, pageWidth.toFloat(), margin)
 
-        // ---------- SEÇÕES DE TEXTO ----------
         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
 
+        // ---------- CLIENTE ----------
         y = drawSectionTitle(canvas, "Dados do Cliente", margin, y)
         y = drawMultiline(
             canvas,
@@ -68,6 +66,7 @@ object PdfUtils {
             contentWidth
         )
 
+        // ---------- ATENDIMENTO ----------
         y = drawSectionTitle(canvas, "Dados do Atendimento", margin, y)
         y = drawMultiline(
             canvas,
@@ -82,6 +81,7 @@ object PdfUtils {
             contentWidth
         )
 
+        // ---------- OCORRÊNCIA ----------
         y = drawSectionTitle(canvas, "Ocorrência", margin, y)
         y = drawMultiline(
             canvas,
@@ -91,6 +91,7 @@ object PdfUtils {
             contentWidth
         )
 
+        // ---------- SOLUÇÃO ----------
         y = drawSectionTitle(canvas, "Solução proposta", margin, y)
         y = drawMultiline(
             canvas,
@@ -100,6 +101,7 @@ object PdfUtils {
             contentWidth
         )
 
+        // ---------- PEÇAS ----------
         y = drawSectionTitle(canvas, "Lista de peças", margin, y)
         y = drawMultiline(
             canvas,
@@ -120,7 +122,6 @@ object PdfUtils {
 
         // ---------- IMAGENS ----------
         if (imagens.isNotEmpty()) {
-            // Se faltar espaço na página atual, vai para outra
             if (y > pageHeight - 200) {
                 pdf.finishPage(page)
                 pageNumber++
@@ -138,43 +139,7 @@ object PdfUtils {
             val maxImageHeight = 250f
 
             for (img in imagens) {
-                val uriString = img.uri
-                if (uriString.isNullOrBlank()) continue
-
-                val uri = try {
-                    Uri.parse(uriString)
-                } catch (e: Exception) {
-                    Log.w(TAG, "URI inválida: $uriString", e)
-                    continue
-                }
-
-                val input = try {
-                    context.contentResolver.openInputStream(uri)
-                } catch (e: Exception) {
-                    Log.w(TAG, "Não foi possível abrir InputStream da URI: $uriString", e)
-                    null
-                }
-
-                if (input == null) {
-                    Log.w(TAG, "InputStream nulo para URI: $uriString")
-                    continue
-                }
-
-                val bitmap = try {
-                    BitmapFactory.decodeStream(input)
-                } catch (e: Exception) {
-                    Log.w(TAG, "Falha ao decodificar bitmap da URI: $uriString", e)
-                    null
-                } finally {
-                    try {
-                        input.close()
-                    } catch (_: Exception) { }
-                }
-
-                if (bitmap == null) {
-                    Log.w(TAG, "Bitmap nulo para URI: $uriString")
-                    continue
-                }
+                val bitmap = carregarBitmapSegura(context, img.uri) ?: continue
 
                 val scale = minOf(
                     maxImageWidth / bitmap.width,
@@ -184,7 +149,6 @@ object PdfUtils {
                 val drawWidth = bitmap.width * scale
                 val drawHeight = bitmap.height * scale
 
-                // quebra de página se não couber
                 if (y + drawHeight + 40 > pageHeight) {
                     pdf.finishPage(page)
                     pageNumber++
@@ -199,7 +163,6 @@ object PdfUtils {
 
                 val left = margin
                 val top = y + 12f
-
                 val dest = RectF(left, top, left + drawWidth, top + drawHeight)
                 canvas.drawBitmap(bitmap, null, dest, null)
                 bitmap.recycle()
@@ -208,7 +171,6 @@ object PdfUtils {
             }
         }
 
-        // ---------- FINALIZAÇÃO ----------
         pdf.finishPage(page)
 
         val dir = File(context.getExternalFilesDir(null), "relatorios")
@@ -216,16 +178,159 @@ object PdfUtils {
 
         val fileName = "relatorio_${relatorio.id}_${System.currentTimeMillis()}.pdf"
         val file = File(dir, fileName)
-
-        FileOutputStream(file).use { out ->
-            pdf.writeTo(out)
-        }
+        FileOutputStream(file).use { out -> pdf.writeTo(out) }
         pdf.close()
 
         return file
     }
 
-    // ===== helpers =====
+    // ============================================================
+    // 2) PDF ESPECÍFICO – COMPRESSOR
+    // ============================================================
+    fun gerarPdfRelatorioCompressor(
+        context: Context,
+        relatorio: RelatorioEntity,
+        cliente: ClienteEntity,
+        imagens: List<ImagemRelatorioEntity>
+    ): File {
+        val pdf = android.graphics.pdf.PdfDocument()
+        val pageWidth = 595
+        val pageHeight = 842
+
+        var pageNumber = 1
+        var pageInfo = android.graphics.pdf.PdfDocument.PageInfo
+            .Builder(pageWidth, pageHeight, pageNumber)
+            .create()
+        var page = pdf.startPage(pageInfo)
+        var canvas = page.canvas
+
+        val margin = 40f
+        val contentWidth = pageWidth - margin * 2
+        var y = 0f
+
+        // Cabeçalho padrão SOUTECH
+        y = drawHeader(canvas, pageWidth.toFloat(), margin)
+
+        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+
+        // Dados do cliente
+        y = drawSectionTitle(canvas, "Dados do Cliente", margin, y)
+        y = drawMultiline(
+            canvas,
+            """
+            Nome fantasia: ${cliente.nomeFantasia}
+            Razão social: ${cliente.razaoSocial ?: "-"}
+            CNPJ/CPF: ${cliente.documento ?: "-"}
+            Endereço: ${cliente.endereco ?: "-"}
+            E-mail: ${cliente.email ?: "-"}
+            Telefone: ${cliente.telefone ?: "-"}
+            WhatsApp: ${cliente.whatsapp ?: "-"}
+            """.trimIndent(),
+            margin,
+            y,
+            contentWidth
+        )
+
+        // Dados do atendimento – Compressor
+        y = drawSectionTitle(canvas, "Dados do Atendimento – Compressor", margin, y)
+        y = drawMultiline(
+            canvas,
+            """
+            Entrada: ${sdf.format(relatorio.dataEntrada)}
+            Saída: ${sdf.format(relatorio.dataSaida)}
+            Modelo do compressor: ${relatorio.modeloMaquina}
+            Tipo de manutenção: ${relatorio.tipoManutencao}
+            """.trimIndent(),
+            margin,
+            y,
+            contentWidth
+        )
+
+        // Checklist montado no campo ocorrencia
+        y = drawSectionTitle(canvas, "Checklist de inspeção", margin, y)
+        y = drawMultiline(
+            canvas,
+            relatorio.ocorrencia ?: "-",
+            margin,
+            y,
+            contentWidth
+        )
+
+        // Observações gerais (campo solucaoProposta)
+        y = drawSectionTitle(canvas, "Observações gerais", margin, y)
+        y = drawMultiline(
+            canvas,
+            relatorio.solucaoProposta ?: "-",
+            margin,
+            y,
+            contentWidth
+        )
+
+        // Imagens
+        if (imagens.isNotEmpty()) {
+            if (y > pageHeight - 200) {
+                pdf.finishPage(page)
+                pageNumber++
+                pageInfo = android.graphics.pdf.PdfDocument.PageInfo
+                    .Builder(pageWidth, pageHeight, pageNumber)
+                    .create()
+                page = pdf.startPage(pageInfo)
+                canvas = page.canvas
+                y = drawHeader(canvas, pageWidth.toFloat(), margin)
+            }
+
+            y = drawSectionTitle(canvas, "Imagens do atendimento", margin, y)
+
+            val maxImageWidth = contentWidth
+            val maxImageHeight = 250f
+
+            for (img in imagens) {
+                val bitmap = carregarBitmapSegura(context, img.uri) ?: continue
+
+                val scale = minOf(
+                    maxImageWidth / bitmap.width,
+                    maxImageHeight / bitmap.height
+                )
+                val drawWidth = bitmap.width * scale
+                val drawHeight = bitmap.height * scale
+
+                if (y + drawHeight + 40 > pageHeight) {
+                    pdf.finishPage(page)
+                    pageNumber++
+                    pageInfo = android.graphics.pdf.PdfDocument.PageInfo
+                        .Builder(pageWidth, pageHeight, pageNumber)
+                        .create()
+                    page = pdf.startPage(pageInfo)
+                    canvas = page.canvas
+                    y = drawHeader(canvas, pageWidth.toFloat(), margin)
+                    y = drawSectionTitle(canvas, "Imagens do atendimento (cont.)", margin, y)
+                }
+
+                val left = margin
+                val top = y + 12f
+                val dest = RectF(left, top, left + drawWidth, top + drawHeight)
+                canvas.drawBitmap(bitmap, null, dest, null)
+                bitmap.recycle()
+
+                y = dest.bottom + 16f
+            }
+        }
+
+        pdf.finishPage(page)
+
+        val dir = File(context.getExternalFilesDir(null), "relatorios")
+        if (!dir.exists()) dir.mkdirs()
+        val fileName = "relatorio_compressor_${relatorio.id}_${System.currentTimeMillis()}.pdf"
+        val file = File(dir, fileName)
+        FileOutputStream(file).use { out -> pdf.writeTo(out) }
+        pdf.close()
+
+        return file
+    }
+
+    // ============================================================
+    // HELPERS COMUNS
+    // ============================================================
 
     private fun drawHeader(canvas: Canvas, pageWidth: Float, margin: Float): Float {
         val headerHeight = 70f
@@ -301,150 +406,20 @@ object PdfUtils {
 
         return yStart + layout.height + 8f
     }
-}
 
-
-fun gerarPdfRelatorioCompressor(
-    context: Context,
-    relatorio: RelatorioEntity,
-    cliente: ClienteEntity,
-    imagens: List<ImagemRelatorioEntity>
-): File {
-    val pdf = android.graphics.pdf.PdfDocument()
-    val pageWidth = 595
-    val pageHeight = 842
-
-    var pageNumber = 1
-    var pageInfo = android.graphics.pdf.PdfDocument.PageInfo
-        .Builder(pageWidth, pageHeight, pageNumber)
-        .create()
-    var page = pdf.startPage(pageInfo)
-    var canvas = page.canvas
-
-    val margin = 40f
-    val contentWidth = pageWidth - margin * 2
-    var y = 0f
-
-    // Cabeçalho vinho (pode reaproveitar drawHeader)
-    y = drawHeader(canvas, pageWidth.toFloat(), margin)
-
-    val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-
-    // Dados cliente
-    y = drawSectionTitle(canvas, "Dados do Cliente", margin, y)
-    y = drawMultiline(
-        canvas,
-        """
-        Nome fantasia: ${cliente.nomeFantasia}
-        Razão social: ${cliente.razaoSocial ?: "-"}
-        CNPJ/CPF: ${cliente.documento ?: "-"}
-        Endereço: ${cliente.endereco ?: "-"}
-        E-mail: ${cliente.email ?: "-"}
-        Telefone: ${cliente.telefone ?: "-"}
-        WhatsApp: ${cliente.whatsapp ?: "-"}
-        """.trimIndent(),
-        margin,
-        y,
-        contentWidth
-    )
-
-    // Dados do atendimento
-    y = drawSectionTitle(canvas, "Dados do Atendimento – Compressor", margin, y)
-    y = drawMultiline(
-        canvas,
-        """
-        Entrada: ${sdf.format(relatorio.dataEntrada)}
-        Saída: ${sdf.format(relatorio.dataSaida)}
-        Modelo do compressor: ${relatorio.modeloMaquina}
-        Tipo de manutenção: ${relatorio.tipoManutencao}
-        """.trimIndent(),
-        margin,
-        y,
-        contentWidth
-    )
-
-    // Checklist (texto montado na Activity, salvo em ocorrencia)
-    y = drawSectionTitle(canvas, "Checklist de Inspeção", margin, y)
-    y = drawMultiline(
-        canvas,
-        relatorio.ocorrencia ?: "-",
-        margin,
-        y,
-        contentWidth
-    )
-
-    // Observações (salvas em solucaoProposta)
-    y = drawSectionTitle(canvas, "Observações gerais", margin, y)
-    y = drawMultiline(
-        canvas,
-        relatorio.solucaoProposta ?: "-",
-        margin,
-        y,
-        contentWidth
-    )
-
-    // Imagens (igual padrão geral)
-    if (imagens.isNotEmpty()) {
-        if (y > pageHeight - 200) {
-            pdf.finishPage(page)
-            pageNumber++
-            pageInfo = android.graphics.pdf.PdfDocument.PageInfo
-                .Builder(pageWidth, pageHeight, pageNumber)
-                .create()
-            page = pdf.startPage(pageInfo)
-            canvas = page.canvas
-            y = drawHeader(canvas, pageWidth.toFloat(), margin)
-        }
-
-        y = drawSectionTitle(canvas, "Imagens do atendimento", margin, y)
-
-        val maxImageWidth = contentWidth
-        val maxImageHeight = 250f
-
-        for (img in imagens) {
-            val path = img.caminho
-            if (path.isNullOrBlank()) continue
-
-            val bitmap = BitmapFactory.decodeFile(path) ?: continue
-
-            val scale = minOf(
-                maxImageWidth / bitmap.width,
-                maxImageHeight / bitmap.height
-            )
-            val drawWidth = bitmap.width * scale
-            val drawHeight = bitmap.height * scale
-
-            if (y + drawHeight + 40 > pageHeight) {
-                pdf.finishPage(page)
-                pageNumber++
-                pageInfo = android.graphics.pdf.PdfDocument.PageInfo
-                    .Builder(pageWidth, pageHeight, pageNumber)
-                    .create()
-                page = pdf.startPage(pageInfo)
-                canvas = page.canvas
-                y = drawHeader(canvas, pageWidth.toFloat(), margin)
-                y = drawSectionTitle(canvas, "Imagens do atendimento (cont.)", margin, y)
+    /**
+     * Carrega bitmap a partir do campo uri da entidade, tratando content:// e file://.
+     */
+    private fun carregarBitmapSegura(context: Context, uriStr: String?): Bitmap? {
+        if (uriStr.isNullOrBlank()) return null
+        return try {
+            val uri = Uri.parse(uriStr)
+            context.contentResolver.openInputStream(uri)?.use { input ->
+                BitmapFactory.decodeStream(input)
             }
-
-            val left = margin
-            val top = y + 12f
-            val dest = RectF(left, top, left + drawWidth, top + drawHeight)
-            canvas.drawBitmap(bitmap, null, dest, null)
-            bitmap.recycle()
-
-            y = dest.bottom + 16f
+        } catch (e: Exception) {
+            Log.w(TAG, "Falha ao carregar imagem do URI $uriStr", e)
+            null
         }
     }
-
-    pdf.finishPage(page)
-
-    val dir = File(context.getExternalFilesDir(null), "relatorios")
-    if (!dir.exists()) dir.mkdirs()
-    val fileName = "relatorio_compressor_${relatorio.id}_${System.currentTimeMillis()}.pdf"
-    val file = File(dir, fileName)
-
-    FileOutputStream(file).use { out -> pdf.writeTo(out) }
-    pdf.close()
-
-    return file
 }
