@@ -638,7 +638,6 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
     )
 
     return sb.toString()
- }
+}
 
         
-}
