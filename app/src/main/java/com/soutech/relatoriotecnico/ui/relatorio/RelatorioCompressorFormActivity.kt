@@ -77,99 +77,110 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
 
     // --------- Tipo de manutenção ---------
 
-    private fun configurarSpinnersTipoManutencao() {
-        val tipos = listOf("Preventiva", "Preditiva", "Corretiva", "Inspeção")
-        val adapterTipo = ArrayAdapter(this, android.R.layout.simple_spinner_item, tipos)
-        adapterTipo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spTipoManutencao.adapter = adapterTipo
+    private fun configurarSpinners() {
+    // Tipo de manutenção
+    val tipos = listOf("Preventiva", "Preditiva", "Corretiva", "Inspeção")
+    val adapterTipo = ArrayAdapter(
+        this,
+        com.soutech.relatoriotecnico.R.layout.spinner_item_dark,
+        tipos
+    )
+    adapterTipo.setDropDownViewResource(
+        com.soutech.relatoriotecnico.R.layout.spinner_dropdown_item_dark
+    )
+    binding.spTipoManutencao.adapter = adapterTipo
+
+    // Status dos itens do checklist
+    val statusOpcoes = listOf(
+        "Ok",
+        "Reparado / limpo nesta visita",
+        "Necessita reparo / limpeza"
+    )
+    val adapterStatus = ArrayAdapter(
+        this,
+        com.soutech.relatoriotecnico.R.layout.spinner_item_dark,
+        statusOpcoes
+    )
+    adapterStatus.setDropDownViewResource(
+        com.soutech.relatoriotecnico.R.layout.spinner_dropdown_item_dark
+    )
+
+    fun aplicaStatus(spinner: Spinner) {
+        spinner.adapter = adapterStatus
     }
 
-    // --------- Spinners OK / Reparado / Necessita reparo ---------
-
-    private fun configurarSpinnersChecklist() {
-        val statusOpcoes = listOf(
-            "OK",
-            "Reparado / limpo nesta visita",
-            "Necessita reparo / limpeza"
-        )
-
-        val adapterStatus = ArrayAdapter(this, android.R.layout.simple_spinner_item, statusOpcoes)
-        adapterStatus.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        // Inspeções gerais 1–29
-        binding.spItem1Status.adapter = adapterStatus
-        binding.spItem2Status.adapter = adapterStatus
-        binding.spItem3Status.adapter = adapterStatus
-        binding.spItem4Status.adapter = adapterStatus
-        binding.spItem5Status.adapter = adapterStatus
-        binding.spItem6Status.adapter = adapterStatus
-        binding.spItem7Status.adapter = adapterStatus
-        binding.spItem8Status.adapter = adapterStatus
-        binding.spItem9Status.adapter = adapterStatus
-        binding.spItem10Status.adapter = adapterStatus
-        binding.spItem11Status.adapter = adapterStatus
-        binding.spItem12Status.adapter = adapterStatus
-        binding.spItem13Status.adapter = adapterStatus
-        binding.spItem14Status.adapter = adapterStatus
-        binding.spItem15Status.adapter = adapterStatus
-        binding.spItem16Status.adapter = adapterStatus
-        binding.spItem17Status.adapter = adapterStatus
-        binding.spItem18Status.adapter = adapterStatus
-        binding.spItem19Status.adapter = adapterStatus
-        binding.spItem20Status.adapter = adapterStatus
-        binding.spItem21Status.adapter = adapterStatus
-        binding.spItem22Status.adapter = adapterStatus
-        binding.spItem23Status.adapter = adapterStatus
-        binding.spItem24Status.adapter = adapterStatus
-        binding.spItem25Status.adapter = adapterStatus
-        binding.spItem26Status.adapter = adapterStatus
-        binding.spItem27Status.adapter = adapterStatus
-        binding.spItem28Status.adapter = adapterStatus
-        binding.spItem29Status.adapter = adapterStatus
-
-        // Inspeções elétricas 30–39
-        binding.spItem30Status.adapter = adapterStatus
-        binding.spItem31Status.adapter = adapterStatus
-        binding.spItem32Status.adapter = adapterStatus
-        binding.spItem33Status.adapter = adapterStatus
-        binding.spItem34Status.adapter = adapterStatus
-        binding.spItem35Status.adapter = adapterStatus
-        binding.spItem36Status.adapter = adapterStatus
-        binding.spItem37Status.adapter = adapterStatus
-        binding.spItem38Status.adapter = adapterStatus
-        binding.spItem39Status.adapter = adapterStatus
-
-        // Secador 40–42
-        binding.spItem40Status.adapter = adapterStatus
-        binding.spItem41Status.adapter = adapterStatus
-        binding.spItem42Status.adapter = adapterStatus
-    }
+    // Itens 1 a 42
+    aplicaStatus(binding.spItem1Status)
+    aplicaStatus(binding.spItem2Status)
+    aplicaStatus(binding.spItem3Status)
+    aplicaStatus(binding.spItem4Status)
+    aplicaStatus(binding.spItem5Status)
+    aplicaStatus(binding.spItem6Status)
+    aplicaStatus(binding.spItem7Status)
+    aplicaStatus(binding.spItem8Status)
+    aplicaStatus(binding.spItem9Status)
+    aplicaStatus(binding.spItem10Status)
+    aplicaStatus(binding.spItem11Status)
+    aplicaStatus(binding.spItem12Status)
+    aplicaStatus(binding.spItem13Status)
+    aplicaStatus(binding.spItem14Status)
+    aplicaStatus(binding.spItem15Status)
+    aplicaStatus(binding.spItem16Status)
+    aplicaStatus(binding.spItem17Status)
+    aplicaStatus(binding.spItem18Status)
+    aplicaStatus(binding.spItem19Status)
+    aplicaStatus(binding.spItem20Status)
+    aplicaStatus(binding.spItem21Status)
+    aplicaStatus(binding.spItem22Status)
+    aplicaStatus(binding.spItem23Status)
+    aplicaStatus(binding.spItem24Status)
+    aplicaStatus(binding.spItem25Status)
+    aplicaStatus(binding.spItem26Status)
+    aplicaStatus(binding.spItem27Status)
+    aplicaStatus(binding.spItem28Status)
+    aplicaStatus(binding.spItem29Status)
+    aplicaStatus(binding.spItem30Status)
+    aplicaStatus(binding.spItem31Status)
+    aplicaStatus(binding.spItem32Status)
+    aplicaStatus(binding.spItem33Status)
+    aplicaStatus(binding.spItem34Status)
+    aplicaStatus(binding.spItem35Status)
+    aplicaStatus(binding.spItem36Status)
+    aplicaStatus(binding.spItem37Status)
+    aplicaStatus(binding.spItem38Status)
+    aplicaStatus(binding.spItem39Status)
+    aplicaStatus(binding.spItem40Status)
+    aplicaStatus(binding.spItem41Status)
+    aplicaStatus(binding.spItem42Status)
+}
 
     // --------- Clientes / datas ---------
 
     private fun carregarClientes() {
-        val db = AppDatabase.getInstance(this)
-        lifecycleScope.launch {
-            clientes = db.clienteDao().listarTodos()
-            val nomes = clientes.map { it.nomeFantasia }
+    val db = AppDatabase.getInstance(this)
+    lifecycleScope.launch {
+        clientes = db.clienteDao().listarTodos()
+        val nomes = clientes.map { it.nomeFantasia }
 
-            val adapterClientes = ArrayAdapter(
+        val adapter = ArrayAdapter(
+            this@RelatorioCompressorFormActivity,
+            com.soutech.relatoriotecnico.R.layout.spinner_item_dark,
+            nomes
+        )
+        adapter.setDropDownViewResource(
+            com.soutech.relatoriotecnico.R.layout.spinner_dropdown_item_dark
+        )
+        binding.spCliente.adapter = adapter
+
+        if (clientes.isEmpty()) {
+            Toast.makeText(
                 this@RelatorioCompressorFormActivity,
-                android.R.layout.simple_spinner_item,
-                nomes
-            )
-            adapterClientes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.spCliente.adapter = adapterClientes
-
-            if (clientes.isEmpty()) {
-                Toast.makeText(
-                    this@RelatorioCompressorFormActivity,
-                    "Cadastre um cliente antes de criar relatórios.",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+                "Cadastre um cliente antes de criar relatórios.",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
+}
 
     private fun escolherDataHora(campo: EditText) {
         val cal = Calendar.getInstance()
