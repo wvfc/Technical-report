@@ -364,7 +364,7 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
                 8,
                 "Condição do filtro de admissão",
                 binding.spItem8Status,
-                listOf(binding.edItem8Obs)
+                emptyList()
             ),
             ChecklistItem(
                 9,
@@ -424,13 +424,13 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
                 18,
                 "Temp. da válvula de controle termostático (°F / °C) / Abertura",
                 binding.spItem18Status,
-                listOf(binding.edItem18Temp, binding.edItem18Abertura)
+                emptyList()
             ),
             ChecklistItem(
                 19,
                 "Alinhamento da correia verificado e em boas condições (A / B / C)",
                 binding.spItem19Status,
-                listOf(binding.edItem19A, binding.edItem19B, binding.edItem19C)
+                emptyList()
             ),
             ChecklistItem(
                 20,
