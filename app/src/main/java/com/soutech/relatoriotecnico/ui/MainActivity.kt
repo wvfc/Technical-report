@@ -9,6 +9,8 @@ import com.soutech.relatoriotecnico.ui.cliente.ClienteListaActivity
 import com.soutech.relatoriotecnico.ui.relatorio.RelatorioFormActivity
 import com.soutech.relatoriotecnico.ui.relatorio.RelatorioListaActivity
 
+import com.soutech.relatoriotecnico.ui.relatorio.TipoRelatorioActivity
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
