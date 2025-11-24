@@ -109,11 +109,10 @@ class RelatorioFormActivity : AppCompatActivity() {
 
         val adapter = ArrayAdapter(
             this@RelatorioFormActivity,
-            R.layout.spinner_item,          // item selecionado
+            R.layout.spinner_item,        // layout com texto preto
             nomes
-        ).apply {
-            setDropDownViewResource(R.layout.spinner_dropdown_item) // lista
-        }
+        )
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
 
         binding.spCliente.adapter = adapter
 
