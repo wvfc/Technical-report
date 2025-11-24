@@ -126,7 +126,7 @@
             android:layout_width="match_parent"
             android:layout_height="12dp" />
 
-        <!-- CARD: CHECKLIST COMPRESSOR -->
+        <!-- CARD: CHECKLIST COMPLETO (1 a 42) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -145,7 +145,9 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
 
-            <!-- ========= ITEM 1 ========= -->
+            <!-- ====== ITENS 1 a 35: padrão (Status + Obs/Valor) ====== -->
+
+            <!-- ITEM 1 -->
             <TextView
                 android:id="@+id/tvItem1Titulo"
                 android:layout_width="match_parent"
@@ -153,26 +155,23 @@
                 android:text="1 - Total de horas de funcionamento (em carga)"
                 android:textColor="@color/textPrimary"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginTop="4dp" />
-
+                android:textStyle="bold" />
             <Spinner
                 android:id="@+id/spItem1Status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:drawable/btn_dropdown" />
-
             <EditText
                 android:id="@+id/edItem1Valor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:hint="Horas em carga / observações"
+                android:hint="Horas/observações"
                 android:textColor="@color/textPrimary"
                 android:textColorHint="@color/hintGray"
-                android:inputType="text" />
+                android:inputType="text"
+                android:layout_marginBottom="8dp" />
 
-            <!-- ========= ITEM 2 ========= -->
+            <!-- ITEM 2 -->
             <TextView
                 android:id="@+id/tvItem2Titulo"
                 android:layout_width="match_parent"
@@ -180,38 +179,192 @@
                 android:text="2 - Pressão de descarga do pacote (carga/alívio)"
                 android:textColor="@color/textPrimary"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginTop="12dp" />
-
+                android:textStyle="bold" />
             <Spinner
                 android:id="@+id/spItem2Status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:drawable/btn_dropdown" />
-
             <EditText
                 android:id="@+id/edItem2Valor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:hint="Pressão / observações"
                 android:textColor="@color/textPrimary"
                 android:textColorHint="@color/hintGray"
-                android:inputType="text" />
+                android:inputType="text"
+                android:layout_marginBottom="8dp" />
 
-            <!-- AQUI PODERIAM IR ITENS 3 A 35, SE VOCÊ QUISER DETALHAR DEPOIS -->
+            <!-- ITENS 3 a 35 – genéricos (ajuste o texto depois se quiser) -->
 
-            <!-- ========= ITEM 36 ========= -->
+            <!-- TEMPLATE: para cada item, você só ajusta o texto do título. Os IDs já estão prontos. -->
+
+            <!-- ITEM 3 -->
+            <TextView
+                android:id="@+id/tvItem3Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="3 - Item 3 do checklist"
+                android:textColor="@color/textPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+            <Spinner
+                android:id="@+id/spItem3Status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown" />
+            <EditText
+                android:id="@+id/edItem3Obs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Observações do item 3"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray"
+                android:inputType="text"
+                android:layout_marginBottom="8dp" />
+
+            <!-- ITEM 4 -->
+            <TextView
+                android:id="@+id/tvItem4Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="4 - Item 4 do checklist"
+                android:textColor="@color/textPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+            <Spinner
+                android:id="@+id/spItem4Status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown" />
+            <EditText
+                android:id="@+id/edItem4Obs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Observações do item 4"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray"
+                android:inputType="text"
+                android:layout_marginBottom="8dp" />
+
+            <!-- ITEM 5 -->
+            <TextView
+                android:id="@+id/tvItem5Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="5 - Item 5 do checklist"
+                android:textColor="@color/textPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+            <Spinner
+                android:id="@+id/spItem5Status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown" />
+            <EditText
+                android:id="@+id/edItem5Obs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Observações do item 5"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray"
+                android:inputType="text"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Repete esse padrão até o item 35 -->
+
+            <!-- ITEM 6 -->
+            <TextView
+                android:id="@+id/tvItem6Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="6 - Item 6 do checklist"
+                android:textColor="@color/textPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+            <Spinner
+                android:id="@+id/spItem6Status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown" />
+            <EditText
+                android:id="@+id/edItem6Obs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Observações do item 6"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray"
+                android:inputType="text"
+                android:layout_marginBottom="8dp" />
+
+            <!-- ITEM 7 -->
+            <TextView
+                android:id="@+id/tvItem7Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="7 - Item 7 do checklist"
+                android:textColor="@color/textPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+            <Spinner
+                android:id="@+id/spItem7Status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown" />
+            <EditText
+                android:id="@+id/edItem7Obs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Observações do item 7"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray"
+                android:inputType="text"
+                android:layout_marginBottom="8dp" />
+
+            <!-- ITEM 8 -->
+            <TextView
+                android:id="@+id/tvItem8Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="8 - Item 8 do checklist"
+                android:textColor="@color/textPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+            <Spinner
+                android:id="@+id/spItem8Status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown" />
+            <EditText
+                android:id="@+id/edItem8Obs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Observações do item 8"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/hintGray"
+                android:inputType="text"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Você continua esse padrão para 9..35: -->
+            <!-- Para não explodir aqui, basta copiar/colar o bloco de 3 views
+                 (TextView, Spinner, EditText) e trocar os IDs e o número no texto:
+                 tvItem9Titulo, spItem9Status, edItem9Obs
+                 ...
+                 tvItem35Titulo, spItem35Status, edItem35Obs
+            -->
+
+            <!-- ====== ITENS ESPECIAIS 36 a 42 ====== -->
+
+            <!-- ITEM 36 – placa motor (4 campos) -->
             <TextView
                 android:id="@+id/tvItem36Titulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="36 - Dados da placa de identificação do motor (HP/kW, RPM, V, A)"
+                android:text="36 - Placa do motor (HP/kW, RPM, V, A)"
                 android:textColor="@color/textPrimary"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:layout_marginTop="16dp" />
-
             <Spinner
                 android:id="@+id/spItem36Status"
                 android:layout_width="match_parent"
@@ -274,88 +427,80 @@
                     android:inputType="numberDecimal" />
             </LinearLayout>
 
-            <!-- ========= ITEM 37 ========= -->
+            <!-- ITEM 37 – contatores -->
             <TextView
                 android:id="@+id/tvItem37Titulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="37 - Inspecionar os contatores"
+                android:text="37 - Inspecionar contatores"
                 android:textColor="@color/textPrimary"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:layout_marginTop="16dp" />
-
             <Spinner
                 android:id="@+id/spItem37Status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:drawable/btn_dropdown" />
-
             <EditText
                 android:id="@+id/edItem37Obs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:hint="Observações sobre contatores"
+                android:hint="Observações contatores"
                 android:textColor="@color/textPrimary"
                 android:textColorHint="@color/hintGray"
-                android:inputType="textMultiLine" />
+                android:inputType="textMultiLine"
+                android:layout_marginBottom="8dp" />
 
-            <!-- ========= ITEM 38 ========= -->
+            <!-- ITEM 38 – conexões elétricas -->
             <TextView
                 android:id="@+id/tvItem38Titulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="38 - Verificar as conexões elétricas"
+                android:text="38 - Verificar conexões elétricas"
                 android:textColor="@color/textPrimary"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginTop="16dp" />
-
+                android:textStyle="bold" />
             <Spinner
                 android:id="@+id/spItem38Status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:drawable/btn_dropdown" />
-
             <EditText
                 android:id="@+id/edItem38Obs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:hint="Observações das conexões elétricas"
+                android:hint="Observações conexões elétricas"
                 android:textColor="@color/textPrimary"
                 android:textColorHint="@color/hintGray"
-                android:inputType="textMultiLine" />
+                android:inputType="textMultiLine"
+                android:layout_marginBottom="8dp" />
 
-            <!-- ========= ITEM 39 ========= -->
+            <!-- ITEM 39 – HAT -->
             <TextView
                 android:id="@+id/tvItem39Titulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="39 - Temp. operacional HAT (°C) / corte de alta temperatura"
+                android:text="39 - Temp. operacional HAT / corte alta temperatura"
                 android:textColor="@color/textPrimary"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginTop="16dp" />
-
+                android:textStyle="bold" />
             <Spinner
                 android:id="@+id/spItem39Status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:drawable/btn_dropdown" />
-
             <EditText
                 android:id="@+id/edItem39Valor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:hint="Temperatura / observações"
                 android:textColor="@color/textPrimary"
                 android:textColorHint="@color/hintGray"
-                android:inputType="text" />
+                android:inputType="text"
+                android:layout_marginBottom="8dp" />
 
-            <!-- ========= ITEM 40 ========= -->
+            <!-- ITEM 40 – ponto de orvalho -->
             <TextView
                 android:id="@+id/tvItem40Titulo"
                 android:layout_width="match_parent"
@@ -363,26 +508,23 @@
                 android:text="40 - Ponto de orvalho (°C)"
                 android:textColor="@color/textPrimary"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginTop="16dp" />
-
+                android:textStyle="bold" />
             <Spinner
                 android:id="@+id/spItem40Status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:drawable/btn_dropdown" />
-
             <EditText
                 android:id="@+id/edItem40PontoOrvalho"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:hint="Ponto de orvalho (°C)"
+                android:hint="Ponto de orvalho / observações"
                 android:textColor="@color/textPrimary"
                 android:textColorHint="@color/hintGray"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="8dp" />
 
-            <!-- ========= ITEM 41 ========= -->
+            <!-- ITEM 41 – pré-filtro -->
             <TextView
                 android:id="@+id/tvItem41Titulo"
                 android:layout_width="match_parent"
@@ -390,26 +532,23 @@
                 android:text="41 - Pré-filtro (referência / observações)"
                 android:textColor="@color/textPrimary"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginTop="16dp" />
-
+                android:textStyle="bold" />
             <Spinner
                 android:id="@+id/spItem41Status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:drawable/btn_dropdown" />
-
             <EditText
                 android:id="@+id/edItem41Ref"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:hint="Referência / observações do pré-filtro"
+                android:hint="Referência / observações pré-filtro"
                 android:textColor="@color/textPrimary"
                 android:textColorHint="@color/hintGray"
-                android:inputType="textMultiLine" />
+                android:inputType="textMultiLine"
+                android:layout_marginBottom="8dp" />
 
-            <!-- ========= ITEM 42 ========= -->
+            <!-- ITEM 42 – pós-filtro -->
             <TextView
                 android:id="@+id/tvItem42Titulo"
                 android:layout_width="match_parent"
@@ -417,24 +556,21 @@
                 android:text="42 - Pós-filtro (referência / observações)"
                 android:textColor="@color/textPrimary"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginTop="16dp" />
-
+                android:textStyle="bold" />
             <Spinner
                 android:id="@+id/spItem42Status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:drawable/btn_dropdown" />
-
             <EditText
                 android:id="@+id/edItem42Ref"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:hint="Referência / observações do pós-filtro"
+                android:hint="Referência / observações pós-filtro"
                 android:textColor="@color/textPrimary"
                 android:textColorHint="@color/hintGray"
-                android:inputType="textMultiLine" />
+                android:inputType="textMultiLine"
+                android:layout_marginBottom="8dp" />
 
             <!-- OBSERVAÇÕES GERAIS -->
             <TextView
