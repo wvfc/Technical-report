@@ -20,7 +20,7 @@ object PdfUtils {
     private const val TAG = "PdfUtils"
 
     // ============================================================
-    // 1) PDF GERAL (relatório que você já tinha)
+    // 1) PDF GERAL (relatório padrão)
     // ============================================================
     fun gerarPdfRelatorio(
         context: Context,
@@ -41,6 +41,7 @@ object PdfUtils {
 
         val margin = 40f
         val contentWidth = pageWidth - margin * 2
+        val bottomLimit = pageHeight - 60f
         var y = 0f
 
         // ---------- CABEÇALHO ----------
@@ -48,7 +49,22 @@ object PdfUtils {
 
         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
 
+        fun novaPagina(tituloExtra: String? = null) {
+            pdf.finishPage(page)
+            pageNumber++
+            pageInfo = android.graphics.pdf.PdfDocument.PageInfo
+                .Builder(pageWidth, pageHeight, pageNumber)
+                .create()
+            page = pdf.startPage(pageInfo)
+            canvas = page.canvas
+            y = drawHeader(canvas, pageWidth.toFloat(), margin)
+            if (!tituloExtra.isNullOrBlank()) {
+                y = drawSectionTitle(canvas, tituloExtra, margin, y)
+            }
+        }
+
         // ---------- CLIENTE ----------
+        if (y > bottomLimit) novaPagina()
         y = drawSectionTitle(canvas, "Dados do Cliente", margin, y)
         y = drawMultiline(
             canvas,
@@ -67,6 +83,7 @@ object PdfUtils {
         )
 
         // ---------- ATENDIMENTO ----------
+        if (y > bottomLimit) novaPagina()
         y = drawSectionTitle(canvas, "Dados do Atendimento", margin, y)
         y = drawMultiline(
             canvas,
@@ -82,6 +99,7 @@ object PdfUtils {
         )
 
         // ---------- OCORRÊNCIA ----------
+        if (y > bottomLimit) novaPagina()
         y = drawSectionTitle(canvas, "Ocorrência", margin, y)
         y = drawMultiline(
             canvas,
@@ -92,6 +110,7 @@ object PdfUtils {
         )
 
         // ---------- SOLUÇÃO ----------
+        if (y > bottomLimit) novaPagina()
         y = drawSectionTitle(canvas, "Solução proposta", margin, y)
         y = drawMultiline(
             canvas,
@@ -102,6 +121,7 @@ object PdfUtils {
         )
 
         // ---------- PEÇAS ----------
+        if (y > bottomLimit) novaPagina()
         y = drawSectionTitle(canvas, "Lista de peças", margin, y)
         y = drawMultiline(
             canvas,
@@ -122,15 +142,8 @@ object PdfUtils {
 
         // ---------- IMAGENS ----------
         if (imagens.isNotEmpty()) {
-            if (y > pageHeight - 200) {
-                pdf.finishPage(page)
-                pageNumber++
-                pageInfo = android.graphics.pdf.PdfDocument.PageInfo
-                    .Builder(pageWidth, pageHeight, pageNumber)
-                    .create()
-                page = pdf.startPage(pageInfo)
-                canvas = page.canvas
-                y = drawHeader(canvas, pageWidth.toFloat(), margin)
+            if (y > bottomLimit - 200f) {
+                novaPagina()
             }
 
             y = drawSectionTitle(canvas, "Imagens do atendimento", margin, y)
@@ -150,15 +163,7 @@ object PdfUtils {
                 val drawHeight = bitmap.height * scale
 
                 if (y + drawHeight + 40 > pageHeight) {
-                    pdf.finishPage(page)
-                    pageNumber++
-                    pageInfo = android.graphics.pdf.PdfDocument.PageInfo
-                        .Builder(pageWidth, pageHeight, pageNumber)
-                        .create()
-                    page = pdf.startPage(pageInfo)
-                    canvas = page.canvas
-                    y = drawHeader(canvas, pageWidth.toFloat(), margin)
-                    y = drawSectionTitle(canvas, "Imagens do atendimento (cont.)", margin, y)
+                    novaPagina("Imagens do atendimento (cont.)")
                 }
 
                 val left = margin
@@ -185,7 +190,7 @@ object PdfUtils {
     }
 
     // ============================================================
-    // 2) PDF ESPECÍFICO – COMPRESSOR
+    // 2) PDF ESPECÍFICO – COMPRESSOR (com checklist paginado)
     // ============================================================
     fun gerarPdfRelatorioCompressor(
         context: Context,
@@ -206,14 +211,30 @@ object PdfUtils {
 
         val margin = 40f
         val contentWidth = pageWidth - margin * 2
+        val bottomLimit = pageHeight - 60f
         var y = 0f
+
+        fun novaPagina(tituloExtra: String? = null) {
+            pdf.finishPage(page)
+            pageNumber++
+            pageInfo = android.graphics.pdf.PdfDocument.PageInfo
+                .Builder(pageWidth, pageHeight, pageNumber)
+                .create()
+            page = pdf.startPage(pageInfo)
+            canvas = page.canvas
+            y = drawHeader(canvas, pageWidth.toFloat(), margin)
+            if (!tituloExtra.isNullOrBlank()) {
+                y = drawSectionTitle(canvas, tituloExtra, margin, y)
+            }
+        }
 
         // Cabeçalho padrão SOUTECH
         y = drawHeader(canvas, pageWidth.toFloat(), margin)
 
         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
 
-        // Dados do cliente
+        // ===== Dados do cliente =====
+        if (y > bottomLimit) novaPagina()
         y = drawSectionTitle(canvas, "Dados do Cliente", margin, y)
         y = drawMultiline(
             canvas,
@@ -231,7 +252,8 @@ object PdfUtils {
             contentWidth
         )
 
-        // Dados do atendimento – Compressor
+        // ===== Dados do atendimento – Compressor =====
+        if (y > bottomLimit) novaPagina()
         y = drawSectionTitle(canvas, "Dados do Atendimento – Compressor", margin, y)
         y = drawMultiline(
             canvas,
@@ -246,37 +268,39 @@ object PdfUtils {
             contentWidth
         )
 
-        // Checklist montado no campo ocorrencia
+        // ===== Checklist de inspeção (PAGINADO) =====
+        if (y > bottomLimit) novaPagina()
         y = drawSectionTitle(canvas, "Checklist de inspeção", margin, y)
-        y = drawMultiline(
-            canvas,
-            relatorio.ocorrencia ?: "-",
-            margin,
-            y,
-            contentWidth
-        )
 
-        // Observações gerais (campo solucaoProposta)
-        y = drawSectionTitle(canvas, "Observações gerais", margin, y)
-        y = drawMultiline(
-            canvas,
-            relatorio.solucaoProposta ?: "-",
-            margin,
-            y,
-            contentWidth
-        )
+        val linhasChecklist = (relatorio.ocorrencia ?: "")
+            .split("\n")
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
 
-        // Imagens
+        for (linhaTexto in linhasChecklist) {
+            if (y > bottomLimit) {
+                novaPagina("Checklist de inspeção (cont.)")
+            }
+            y = drawMultiline(canvas, linhaTexto, margin, y, contentWidth)
+        }
+
+        // ===== Observações gerais =====
+        if (!relatorio.solucaoProposta.isNullOrBlank()) {
+            if (y > bottomLimit) novaPagina()
+            y = drawSectionTitle(canvas, "Observações gerais", margin, y)
+            y = drawMultiline(
+                canvas,
+                relatorio.solucaoProposta ?: "-",
+                margin,
+                y,
+                contentWidth
+            )
+        }
+
+        // ===== Imagens =====
         if (imagens.isNotEmpty()) {
-            if (y > pageHeight - 200) {
-                pdf.finishPage(page)
-                pageNumber++
-                pageInfo = android.graphics.pdf.PdfDocument.PageInfo
-                    .Builder(pageWidth, pageHeight, pageNumber)
-                    .create()
-                page = pdf.startPage(pageInfo)
-                canvas = page.canvas
-                y = drawHeader(canvas, pageWidth.toFloat(), margin)
+            if (y > bottomLimit - 200f) {
+                novaPagina()
             }
 
             y = drawSectionTitle(canvas, "Imagens do atendimento", margin, y)
@@ -295,15 +319,7 @@ object PdfUtils {
                 val drawHeight = bitmap.height * scale
 
                 if (y + drawHeight + 40 > pageHeight) {
-                    pdf.finishPage(page)
-                    pageNumber++
-                    pageInfo = android.graphics.pdf.PdfDocument.PageInfo
-                        .Builder(pageWidth, pageHeight, pageNumber)
-                        .create()
-                    page = pdf.startPage(pageInfo)
-                    canvas = page.canvas
-                    y = drawHeader(canvas, pageWidth.toFloat(), margin)
-                    y = drawSectionTitle(canvas, "Imagens do atendimento (cont.)", margin, y)
+                    novaPagina("Imagens do atendimento (cont.)")
                 }
 
                 val left = margin
