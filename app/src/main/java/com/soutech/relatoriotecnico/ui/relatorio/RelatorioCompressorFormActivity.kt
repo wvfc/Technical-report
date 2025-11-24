@@ -75,7 +75,7 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
         return true
     }
 
-    // ---------- SPINNER DO TIPO DE MANUTENÇÃO ----------
+    // --------- Tipo de manutenção ---------
 
     private fun configurarSpinnersTipoManutencao() {
         val tipos = listOf("Preventiva", "Preditiva", "Corretiva", "Inspeção")
@@ -84,7 +84,7 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
         binding.spTipoManutencao.adapter = adapterTipo
     }
 
-    // ---------- SPINNERS DO CHECKLIST (OK / REPARADO / A REVISAR) ----------
+    // --------- Spinners OK / Reparado / Necessita reparo ---------
 
     private fun configurarSpinnersChecklist() {
         val statusOpcoes = listOf(
@@ -139,13 +139,13 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
         binding.spItem38Status.adapter = adapterStatus
         binding.spItem39Status.adapter = adapterStatus
 
-        // Secador de refrigeração 40–42
+        // Secador 40–42
         binding.spItem40Status.adapter = adapterStatus
         binding.spItem41Status.adapter = adapterStatus
         binding.spItem42Status.adapter = adapterStatus
     }
 
-    // ---------- CLIENTES / DATA / HORA ----------
+    // --------- Clientes / datas ---------
 
     private fun carregarClientes() {
         val db = AppDatabase.getInstance(this)
@@ -198,7 +198,7 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
         ).show()
     }
 
-    // ---------- SALVAR / GERAR PDF ----------
+    // --------- Salvar / PDF ---------
 
     private fun salvarRelatorio() {
         if (clientes.isEmpty()) {
@@ -284,7 +284,7 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
         }
     }
 
-    // ---------- ESTRUTURA DO CHECKLIST ----------
+    // --------- Checklist ---------
 
     data class ChecklistItem(
         val numero: Int,
@@ -297,254 +297,218 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
         val itens = mutableListOf<ChecklistItem>()
 
         // ===== INSPEÇÕES GERAIS – 1 a 29 =====
-
         itens += ChecklistItem(
             1,
             "Total de horas de funcionamento (em carga)",
             binding.spItem1Status,
             listOf(binding.edItem1Valor)
         )
-
         itens += ChecklistItem(
             2,
             "Pressão de descarga do pacote (carga / alívio)",
             binding.spItem2Status,
             listOf(binding.edItem2Valor)
         )
-
         itens += ChecklistItem(
             3,
-            "Temperatura de descarga do pacote a plena carga (°F / °C)",
+            "Temp. de descarga do pacote a plena carga (°F / °C)",
             binding.spItem3Status,
             listOf(binding.edItem3Valor)
         )
-
         itens += ChecklistItem(
             4,
-            "Temperatura de descarga da unidade compressoa a plena carga (°F / °C)",
+            "Temp. de descarga unidade compressoa a plena carga (°F / °C)",
             binding.spItem4Status,
             listOf(binding.edItem4Valor)
         )
-
         itens += ChecklistItem(
             5,
-            "Temperatura de injeção do óleo a plena carga (°F / °C)",
+            "Temp. injeção do óleo a plena carga (°F / °C)",
             binding.spItem5Status,
             listOf(binding.edItem5Valor)
         )
-
         itens += ChecklistItem(
             6,
             "Pressão do cárter em alívio (PSIG / BarG)",
             binding.spItem6Status,
             listOf(binding.edItem6Valor)
         )
-
         itens += ChecklistItem(
             7,
             "Vácuo na admissão em alívio (PSIG / BarG)",
             binding.spItem7Status,
             listOf(binding.edItem7Valor)
         )
-
         itens += ChecklistItem(
             8,
             "Condição do filtro de admissão",
             binding.spItem8Status,
             listOf(binding.edItem8Obs)
         )
-
         itens += ChecklistItem(
             9,
-            "Última substituição do filtro de admissão",
+            "Última substituição do filtro de admissão (Data / Horas)",
             binding.spItem9Status,
             listOf(binding.edItem9Data, binding.edItem9Horas)
         )
-
         itens += ChecklistItem(
             10,
             "Verificar nível do óleo refrigerante",
             binding.spItem10Status,
             listOf(binding.edItem10Obs)
         )
-
         itens += ChecklistItem(
             11,
             "Inspecionar vazamentos de óleo",
             binding.spItem11Status,
             listOf(binding.edItem11Obs)
         )
-
         itens += ChecklistItem(
             12,
             "Substituição do filtro de óleo (2.000 h ou 1 ano)",
             binding.spItem12Status,
             listOf(binding.edItem12Obs)
         )
-
         itens += ChecklistItem(
             13,
             "Queda de pressão do separador de óleo do pacote (PSIG / BarG)",
             binding.spItem13Status,
             listOf(binding.edItem13Valor)
         )
-
         itens += ChecklistItem(
             14,
             "Data da última substituição do elemento separador",
             binding.spItem14Status,
             listOf(binding.edItem14Data)
         )
-
         itens += ChecklistItem(
             15,
             "Inspecionar e limpar orifício e tela do separador",
             binding.spItem15Status,
             listOf(binding.edItem15Obs)
         )
-
         itens += ChecklistItem(
             16,
             "Inspecionar e limpar o respiro da caixa de engrenagens",
             binding.spItem16Status,
             listOf(binding.edItem16Obs)
         )
-
         itens += ChecklistItem(
             17,
             "Temperatura ambiente da instalação (°F / °C)",
             binding.spItem17Status,
             listOf(binding.edItem17Valor)
         )
-
         itens += ChecklistItem(
             18,
-            "Temperatura da válvula de controle termostático (°F / °C) e abertura",
+            "Temp. da válvula de controle termostático (°F / °C) e abertura",
             binding.spItem18Status,
             listOf(binding.edItem18Temp, binding.edItem18Abertura)
         )
-
         itens += ChecklistItem(
             19,
             "Alinhamento da correia verificado e em boas condições (A / B / C)",
             binding.spItem19Status,
             listOf(binding.edItem19A, binding.edItem19B, binding.edItem19C)
         )
-
         itens += ChecklistItem(
             20,
             "Sistema de tensão da correia verificado",
             binding.spItem20Status,
             listOf(binding.edItem20Obs)
         )
-
         itens += ChecklistItem(
             21,
             "Inspecionar por vazamentos de ar",
             binding.spItem21Status,
             listOf(binding.edItem21Obs)
         )
-
         itens += ChecklistItem(
             22,
             "Inspecionar os núcleos dos trocadores de calor",
             binding.spItem22Status,
             listOf(binding.edItem22Obs)
         )
-
         itens += ChecklistItem(
             23,
             "Inspecionar e limpar o dreno de condensado",
             binding.spItem23Status,
             listOf(binding.edItem23Obs)
         )
-
         itens += ChecklistItem(
             24,
             "Inspecionar o motor principal e o ventilador",
             binding.spItem24Status,
             listOf(binding.edItem24Obs)
         )
-
         itens += ChecklistItem(
             25,
-            "Última lubrificação do motor principal",
+            "Última lubrificação do motor principal (Data / Horas)",
             binding.spItem25Status,
             listOf(binding.edItem25Data, binding.edItem25Horas)
         )
-
         itens += ChecklistItem(
             26,
-            "Última lubrificação do motor do ventilador",
+            "Última lubrificação do motor do ventilador (Data / Horas)",
             binding.spItem26Status,
             listOf(binding.edItem26Data, binding.edItem26Horas)
         )
-
         itens += ChecklistItem(
             27,
             "Válvula de segurança instalada e operacional",
             binding.spItem27Status,
             listOf(binding.edItem27Obs)
         )
-
         itens += ChecklistItem(
             28,
             "Tipo do óleo refrigerante",
             binding.spItem28Status,
             listOf(binding.edItem28Tipo)
         )
-
         itens += ChecklistItem(
             29,
-            "Última troca do óleo refrigerante",
+            "Última troca do óleo refrigerante (Data / Horas)",
             binding.spItem29Status,
             listOf(binding.edItem29Data, binding.edItem29Horas)
         )
 
         // ===== INSPEÇÕES ELÉTRICAS – 30 a 39 =====
-
         itens += ChecklistItem(
             30,
             "Tensão (plena carga) L1 / L2 / L3",
             binding.spItem30Status,
             listOf(binding.edItem30L1, binding.edItem30L2, binding.edItem30L3)
         )
-
         itens += ChecklistItem(
             31,
             "Tensão (sem carga) L1 / L2 / L3",
             binding.spItem31Status,
             listOf(binding.edItem31L1, binding.edItem31L2, binding.edItem31L3)
         )
-
         itens += ChecklistItem(
             32,
             "Corrente do motor (plena carga) T1 / T2 / T3",
             binding.spItem32Status,
             listOf(binding.edItem32T1, binding.edItem32T2, binding.edItem32T3)
         )
-
         itens += ChecklistItem(
             33,
             "Corrente do motor (sem carga) T1 / T2 / T3",
             binding.spItem33Status,
             listOf(binding.edItem33T1, binding.edItem33T2, binding.edItem33T3)
         )
-
         itens += ChecklistItem(
             34,
             "Queda de tensão através da chave de partida L1 / L2 / L3",
             binding.spItem34Status,
             listOf(binding.edItem34L1, binding.edItem34L2, binding.edItem34L3)
         )
-
         itens += ChecklistItem(
             35,
             "Corrente total do pacote (plena carga) L1 / L2 / L3",
             binding.spItem35Status,
             listOf(binding.edItem35L1, binding.edItem35L2, binding.edItem35L3)
         )
-
         itens += ChecklistItem(
             36,
             "Dados da placa de identificação do motor (HP/kW, RPM, V, A)",
@@ -556,44 +520,38 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
                 binding.edItem36A
             )
         )
-
         itens += ChecklistItem(
             37,
             "Inspecionar os contatores",
             binding.spItem37Status,
             listOf(binding.edItem37Obs)
         )
-
         itens += ChecklistItem(
             38,
             "Verificar as conexões elétricas",
             binding.spItem38Status,
             listOf(binding.edItem38Obs)
         )
-
         itens += ChecklistItem(
             39,
-            "Temperatura operacional HAT (°C) / corte de alta temperatura",
+            "Temp. operacional HAT (°C) / corte de alta temperatura",
             binding.spItem39Status,
             listOf(binding.edItem39Valor)
         )
 
         // ===== SECADOR DE REFRIGERAÇÃO – 40 a 42 =====
-
         itens += ChecklistItem(
             40,
             "Ponto de orvalho (°C)",
             binding.spItem40Status,
             listOf(binding.edItem40PontoOrvalho)
         )
-
         itens += ChecklistItem(
             41,
             "Pré-filtro (referência / observações)",
             binding.spItem41Status,
             listOf(binding.edItem41Ref)
         )
-
         itens += ChecklistItem(
             42,
             "Pós-filtro (referência / observações)",
@@ -601,14 +559,10 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
             listOf(binding.edItem42Ref)
         )
 
-        // ===== MONTA TEXTO FINAL =====
-
         val sb = StringBuilder()
-
         for (item in itens) {
             val status = item.statusSpinner.selectedItem?.toString()
                 ?.takeIf { it.isNotBlank() } ?: "-"
-
             val valores = item.campos
                 .map { it.text.toString().trim() }
                 .filter { it.isNotEmpty() }
