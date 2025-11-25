@@ -23,4 +23,6 @@
     <!-- Botões em azul cinzento -->
     <color name="buttonPrimary">#546E7A</color>       <!-- botões principais -->
     <color name="buttonSecondary">#B0BEC5</color>     <!-- botões secundários (ex.: VOLTAR) -->
+
+<color name="ic_launcher_background_relatorio">#0D47A1</color>
 </resources>
