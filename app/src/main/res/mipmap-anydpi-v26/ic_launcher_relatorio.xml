@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Fundo do ícone -->
     <background android:drawable="@color/ic_launcher_background_relatorio" />
-    <foreground android:drawable="@drawable/logo_relatorio" />
+    <!-- Logo do app (vindo de drawable) -->
+    <foreground android:drawable="@drawable/ic_relatorio" />
 </adaptive-icon>
