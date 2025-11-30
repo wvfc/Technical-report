@@ -1,13 +1,16 @@
 package com.soutech.relatoriotecnico.ui.login
 
-
-
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.soutech.relatoriotecnico.R
+import com.soutech.relatoriotecnico.core.NetworkUtils
+import com.soutech.relatoriotecnico.core.SessionManager
+import com.soutech.relatoriotecnico.ui.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
         // TROCAR PARA O ENDEREÇO DO SEU SERVIDOR
-        private const val BASE_URL = "https://airvision.soutechautomacao.com"
+        private const val BASE_URL = "http://SEU_SERVIDOR:8000"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +38,6 @@ class LoginActivity : AppCompatActivity() {
         // Se já está autorizado, tenta verificar online. Se offline, entra direto.
         if (sessionManager.isAuthorized()) {
             if (NetworkUtils.isOnline(this)) {
-                // Verifica se ainda está liberado no servidor
                 lifecycleScope.launch {
                     val blocked = !checkRemoteStatus()
                     if (blocked) {
@@ -46,7 +48,6 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             } else {
-                // Offline, mas já tinha sessão salva -> entra direto
                 abrirMain()
             }
         } else {
@@ -134,7 +135,6 @@ class LoginActivity : AppCompatActivity() {
             }
 
             if (result.first) {
-                // Login OK
                 tvStatus.text = ""
                 abrirMain()
             } else {
@@ -166,7 +166,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun abrirMain() {
-        // TROCAR MainActivity::class.java pela sua Activity principal
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
