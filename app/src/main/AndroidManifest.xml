@@ -42,15 +42,20 @@
             android:name=".ui.cliente.ClienteListaActivity"
             android:exported="false" />
 
-        <!-- Tela principal / launcher -->
+        <!-- Tela de LOGIN (nova tela inicial / launcher) -->
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Tela principal após login -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="false" />
 
         <!-- FileProvider para compartilhar PDFs -->
         <provider
