@@ -26,9 +26,10 @@ class LoginActivity : AppCompatActivity() {
     private val client = OkHttpClient()
 
     companion object {
-        // TROCAR PARA O ENDEREÇO DO SEU SERVIDOR
+    // sem /admin aqui!
         private const val BASE_URL = "https://airvision.soutechautomacao.com"
-    }
+   }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
