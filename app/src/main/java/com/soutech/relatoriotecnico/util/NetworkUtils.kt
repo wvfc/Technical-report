@@ -1,7 +1,5 @@
 package com.soutech.relatoriotecnico.core
 
-package com.seuapp.login
-
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
