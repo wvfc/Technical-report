@@ -27,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
     // sem /admin aqui!
-        private const val BASE_URL = "http://192.168.4.29:8000"
+        private const val BASE_URL = "https://airvision.soutechautomacao.com"
    }
 
 
