@@ -27,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
         // TROCAR PARA O ENDEREÇO DO SEU SERVIDOR
-        private const val BASE_URL = "http://SEU_SERVIDOR:8000"
+        private const val BASE_URL = "https://airvision.soutechautomacao.com"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
