@@ -204,19 +204,20 @@ class RelatorioListaActivity : AppCompatActivity() {
         val dateIso = obj.optString("date", "")
         val pdfUrl = if (obj.isNull("pdf_url")) null else obj.getString("pdf_url")
 
-        // Número de série ainda não vem da API de Report; futuramente dá pra expandir isso
-        val serialNumber: String? = null
+       val clientName = if (obj.isNull("client_name")) null else obj.getString("client_name")
+       val serialNumber = if (obj.isNull("serial_number")) null else obj.getString("serial_number")
 
-        return RelatorioDto(
+       return RelatorioDto(
             id = id,
             type = type,
             clientId = clientId,
-            clientName = mapaClientes[clientId],
+            clientName = clientName,
             machineId = machineId,
             serialNumber = serialNumber,
             title = title,
             dateIso = dateIso,
             pdfUrl = pdfUrl
-        )
-    }
+      )
+   }
+
 }
