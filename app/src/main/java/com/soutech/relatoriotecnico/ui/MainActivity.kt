@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.soutech.relatoriotecnico.databinding.ActivityMainBinding
 import com.soutech.relatoriotecnico.ui.cliente.ClienteFormActivity
 import com.soutech.relatoriotecnico.ui.cliente.ClienteListaActivity
+import com.soutech.relatoriotecnico.ui.maquina.CadastroMaquinaActivity
+import com.soutech.relatoriotecnico.ui.maquina.MaquinasCadastradasActivity
 import com.soutech.relatoriotecnico.ui.relatorio.RelatorioListaActivity
 import com.soutech.relatoriotecnico.ui.relatorio.TipoRelatorioActivity
 
@@ -38,7 +40,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         // =============== NOVO RELATÓRIO ===============
-        // Mantém o fluxo atual: abre TipoRelatorioActivity (onde você escolhe compressor / geral)
         binding.btnNovoRelatorio.setOnClickListener {
             startActivity(Intent(this, TipoRelatorioActivity::class.java))
         }
@@ -57,19 +58,18 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, ClienteListaActivity::class.java))
         }
 
-        // Abaixo ainda não existem Activities no seu projeto, então por enquanto mostramos um aviso.
-        // Quando criarmos as telas, é só trocar os Toast por Intent para as novas Activities.
-
+        // Máquinas – agora abrindo as telas novas
         binding.btnCadastroMaquina.setOnClickListener {
-            Toast.makeText(this, "Cadastro de máquina em desenvolvimento", Toast.LENGTH_SHORT).show()
-        }
-
-        binding.btnCadastroTecnico.setOnClickListener {
-            Toast.makeText(this, "Cadastro de técnico em desenvolvimento", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, CadastroMaquinaActivity::class.java))
         }
 
         binding.btnMaquinasCadastradas.setOnClickListener {
-            Toast.makeText(this, "Lista de máquinas em desenvolvimento", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, MaquinasCadastradasActivity::class.java))
+        }
+
+        // Técnicos – ainda em desenvolvimento
+        binding.btnCadastroTecnico.setOnClickListener {
+            Toast.makeText(this, "Cadastro de técnico em desenvolvimento", Toast.LENGTH_SHORT).show()
         }
 
         binding.btnTecnicosCadastrados.setOnClickListener {
