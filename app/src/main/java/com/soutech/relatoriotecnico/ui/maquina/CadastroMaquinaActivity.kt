@@ -3,6 +3,11 @@ package com.soutech.relatoriotecnico.ui.maquina
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
+
+
+import android.widget.AdapterView
+import android.widget.Spinner
+
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -129,23 +134,22 @@ class CadastroMaquinaActivity : AppCompatActivity() {
         }
     }
 
-    // Pequena extensão para Spinner (ajuda a evitar código verboso de listener)
-    private fun <T> android.widget.Spinner.setOnItemSelectedListener(
-        onItemSelected: (parent: android.widget.AdapterView<*>, view: View?, position: Int, id: Long) -> Unit
-    ) {
-        this.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: android.widget.AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                onItemSelected(parent, view, position, id)
-            }
-
-            override fun onNothingSelected(parent: android.widget.AdapterView<*>) {}
+   private fun Spinner.setOnItemSelectedListener(
+    onItemSelected: (parent: AdapterView<*>, view: View?, position: Int, id: Long) -> Unit
+) {
+    this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(
+            parent: AdapterView<*>,
+            view: View?,
+            position: Int,
+            id: Long
+        ) {
+            onItemSelected(parent, view, position, id)
         }
+
+        override fun onNothingSelected(parent: AdapterView<*>) {}
     }
+}
 
     private fun salvarMaquina() {
         val token = sessionManager.getToken()
