@@ -1,26 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:padding="16dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/backgroundApp"
-    android:padding="8dp">
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btnVoltar"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Voltar"
-        android:backgroundTint="@color/buttonSecondary"
-        android:textColor="@color/white"
+        android:text="Histórico de Relatórios"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Filtro por data -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp">
+
+        <EditText
+            android:id="@+id/etDataDe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Data de (AAAA-MM-DD)" />
+
+        <EditText
+            android:id="@+id/etDataAte"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Data até (AAAA-MM-DD)"
+            android:layout_marginStart="8dp" />
+    </LinearLayout>
+
+    <!-- Filtro por cliente -->
+    <Spinner
+        android:id="@+id/spinnerClienteFiltro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp" />
 
-    <ListView
-        android:id="@+id/listRelatorios"
+    <!-- Filtro por nº de série -->
+    <EditText
+        android:id="@+id/etNumeroSerieFiltro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nº de série da máquina (opcional)"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/btnAplicarFiltro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Aplicar filtros"
+        android:layout_marginBottom="12dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRelatorios"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:divider="@color/divider"
-        android:dividerHeight="1dp" />
+        android:layout_weight="1" />
 
 </LinearLayout>
