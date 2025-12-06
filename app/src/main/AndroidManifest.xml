@@ -79,6 +79,16 @@
          android:exported="false" />
 
 
+       <activity
+         android:name=".ui.tecnico.CadastroTecnicoActivity"
+         android:exported="false" />
+
+       <activity
+         android:name=".ui.tecnico.TecnicosCadastradosActivity"
+         android:exported="false" />
+
+
+
     </application>
 
 </manifest>
