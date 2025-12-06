@@ -4,9 +4,11 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.Spinner
 import android.widget.ArrayAdapter
 import android.widget.EditText
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +31,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+
 
 // DTOs simples para clientes e técnicos vindos da API
 data class ClienteRemoto(
@@ -326,22 +329,23 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
     }
 
     // Helper pra Spinner (listener simplificado)
-    private fun <T> Spinner.setOnItemSelectedListener(
-        onItemSelected: (parent: android.widget.AdapterView<*>, view: android.view.View?, position: Int, id: Long) -> Unit
-    ) {
-        this.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: android.widget.AdapterView<*>,
-                view: android.view.View?,
-                position: Int,
-                id: Long
-            ) {
-                onItemSelected(parent, view, position, id)
-            }
-
-            override fun onNothingSelected(parent: android.widget.AdapterView<*>) {}
+    // Helper pra Spinner (listener simplificado) – SEM genérico
+private fun Spinner.setOnItemSelectedListener(
+    onItemSelected: (parent: AdapterView<*>, view: View?, position: Int, id: Long) -> Unit
+) {
+    this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(
+            parent: AdapterView<*>,
+            view: View?,
+            position: Int,
+            id: Long
+        ) {
+            onItemSelected(parent, view, position, id)
         }
+
+        override fun onNothingSelected(parent: AdapterView<*>) {}
     }
+}
 
     // =========================================================================
     //  UTILITÁRIOS DE DATA/HORA
