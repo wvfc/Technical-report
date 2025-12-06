@@ -67,7 +67,17 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider>
+    </provider>
+
+
+        <activity
+         android:name=".ui.maquina.CadastroMaquinaActivity"
+         android:exported="false" />
+
+       <activity
+         android:name=".ui.maquina.MaquinasCadastradasActivity"
+         android:exported="false" />
+
 
     </application>
 
