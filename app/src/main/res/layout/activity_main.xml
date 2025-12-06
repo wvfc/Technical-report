@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundLight">
 
+    <!-- BARRA SUPERIOR -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
@@ -33,6 +34,64 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <!-- IMAGEM DE FUNDO / AIR END -->
+            <ImageView
+                android:id="@+id/imgAirend"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/airend"
+                android:contentDescription="@string/app_name"
+                android:layout_marginBottom="16dp" />
+
+            <!-- AJUDA TÉCNICO -->
+            <TextView
+                android:id="@+id/tvAjudaTecnico"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ajuda Técnico"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp" />
+
+            <Button
+                android:id="@+id/btnSenhasIHMs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Senhas e IHMs"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:layout_marginBottom="8dp" />
+
+            <Button
+                android:id="@+id/btnPdfsMaquinas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="PDFs Máquinas"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:layout_marginBottom="8dp" />
+
+            <Button
+                android:id="@+id/btnDuvidasComuns"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dúvidas Comuns"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:layout_marginBottom="16dp" />
+
+            <!-- NOVO RELATÓRIO -->
+            <TextView
+                android:id="@+id/tvNovoRelatorio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Novo relatório"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp" />
+
             <Button
                 android:id="@+id/btnNovoRelatorio"
                 android:layout_width="match_parent"
@@ -40,7 +99,17 @@
                 android:text="Novo relatório"
                 android:backgroundTint="@color/colorPrimary"
                 android:textColor="@color/white"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="16dp" />
+
+            <!-- HISTÓRICO DE RELATÓRIOS -->
+            <TextView
+                android:id="@+id/tvHistoricoTitulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Histórico de relatórios"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp" />
 
             <Button
                 android:id="@+id/btnHistoricoRelatorios"
@@ -49,16 +118,44 @@
                 android:text="Histórico de relatórios"
                 android:backgroundTint="@color/colorPrimary"
                 android:textColor="@color/white"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="16dp" />
+
+            <!-- CADASTROS -->
+            <TextView
+                android:id="@+id/tvCadastrosTitulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cadastros"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp" />
 
             <Button
                 android:id="@+id/btnCadastroCliente"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Cadastro de cliente"
+                android:text="Cadastrar cliente"
                 android:backgroundTint="@color/colorPrimary"
                 android:textColor="@color/white"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="8dp" />
+
+            <Button
+                android:id="@+id/btnCadastroMaquina"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cadastrar máquina"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:layout_marginBottom="8dp" />
+
+            <Button
+                android:id="@+id/btnCadastroTecnico"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cadastrar técnico"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:layout_marginBottom="16dp" />
 
             <Button
                 android:id="@+id/btnClientesCadastrados"
@@ -67,7 +164,25 @@
                 android:text="Clientes cadastrados"
                 android:backgroundTint="@color/colorPrimary"
                 android:textColor="@color/white"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="8dp" />
+
+            <Button
+                android:id="@+id/btnMaquinasCadastradas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Máquinas cadastradas"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:layout_marginBottom="8dp" />
+
+            <Button
+                android:id="@+id/btnTecnicosCadastrados"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Técnicos cadastrados"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:layout_marginBottom="16dp" />
 
         </LinearLayout>
     </ScrollView>
