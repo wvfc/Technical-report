@@ -2,12 +2,9 @@ package com.soutech.relatoriotecnico.ui.maquina
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ArrayAdapter
-
-
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Spinner
-
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -18,9 +15,9 @@ import com.soutech.relatoriotecnico.databinding.ActivityCadastroMaquinaBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
@@ -134,22 +131,23 @@ class CadastroMaquinaActivity : AppCompatActivity() {
         }
     }
 
-   private fun Spinner.setOnItemSelectedListener(
-    onItemSelected: (parent: AdapterView<*>, view: View?, position: Int, id: Long) -> Unit
-) {
-    this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-        override fun onItemSelected(
-            parent: AdapterView<*>,
-            view: View?,
-            position: Int,
-            id: Long
-        ) {
-            onItemSelected(parent, view, position, id)
-        }
+    // Helper pra Spinner, sem genérico
+    private fun Spinner.setOnItemSelectedListener(
+        onItemSelected: (parent: AdapterView<*>, view: View?, position: Int, id: Long) -> Unit
+    ) {
+        this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                onItemSelected(parent, view, position, id)
+            }
 
-        override fun onNothingSelected(parent: AdapterView<*>) {}
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
     }
-}
 
     private fun salvarMaquina() {
         val token = sessionManager.getToken()
