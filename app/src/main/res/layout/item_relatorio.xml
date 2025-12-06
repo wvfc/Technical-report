@@ -1,8 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/txtTitulo"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="12dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:textSize="16sp"
-    android:textColor="@color/textPrimary" />
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/tvTituloRelatorio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Título"
+        android:textStyle="bold"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvLinha2Relatorio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tipo / Data"
+        android:layout_marginTop="2dp" />
+
+    <TextView
+        android:id="@+id/tvLinha3Relatorio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cliente / Nº série"
+        android:layout_marginTop="2dp" />
+
+    <Button
+        android:id="@+id/btnWhatsapp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enviar por WhatsApp"
+        android:layout_marginTop="8dp" />
+
+</LinearLayout>
