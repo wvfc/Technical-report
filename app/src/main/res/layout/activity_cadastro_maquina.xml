@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cadastrar Máquina"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Cliente (spinner) -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cliente"
+            android:layout_marginBottom="4dp" />
+
+        <Spinner
+            android:id="@+id/spinnerCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Marca -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Marca do fabricante"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/etMarca"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ex: Atlas Copco, Schulz, Ingersoll..."
+            android:layout_marginBottom="12dp" />
+
+        <!-- Modelo máquina -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Modelo da máquina"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/etModelo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ex: GA37, SRP4015..."
+            android:layout_marginBottom="12dp" />
+
+        <!-- Modelo IHM -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Modelo da IHM"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/etModeloIhm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ex: Elektronikon, SMC, Logix..."
+            android:layout_marginBottom="12dp" />
+
+        <!-- Número de série -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Número de série"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/etNumeroSerie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nº de série da máquina"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Foto plaqueta (por enquanto URL / texto) -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="URL da foto da plaqueta (provisório)"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/etFotoPlaqueta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ex: https://.../plaqueta.jpg"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Foto compressor (por enquanto URL / texto) -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="URL da foto do compressor (provisório)"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/etFotoCompressor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ex: https://.../compressor.jpg"
+            android:layout_marginBottom="20dp" />
+
+        <Button
+            android:id="@+id/btnSalvarMaquina"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Salvar máquina" />
+
+    </LinearLayout>
+</ScrollView>
