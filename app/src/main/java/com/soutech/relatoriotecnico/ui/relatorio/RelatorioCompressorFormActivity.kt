@@ -12,26 +12,52 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.soutech.relatoriotecnico.R
-import com.soutech.relatoriotecnico.data.AppDatabase
-import com.soutech.relatoriotecnico.data.ClienteEntity
-import com.soutech.relatoriotecnico.data.ImagemRelatorioEntity
-import com.soutech.relatoriotecnico.data.RelatorioEntity
+import com.soutech.relatoriotecnico.core.ApiConfig
+import com.soutech.relatoriotecnico.core.NetworkUtils
+import com.soutech.relatoriotecnico.core.SessionManager
 import com.soutech.relatoriotecnico.databinding.ActivityRelatorioCompressorFormBinding
-import com.soutech.relatoriotecnico.util.PdfUtils
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONArray
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
+// DTOs simples para clientes e técnicos vindos da API
+data class ClienteRemoto(
+    val id: Int,
+    val nomeFantasia: String
+)
+
+data class TecnicoRemoto(
+    val id: Int,
+    val nome: String
+)
+
 class RelatorioCompressorFormActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRelatorioCompressorFormBinding
-    private var clientes: List<ClienteEntity> = emptyList()
-    private val imagensUris: MutableList<Uri> = mutableListOf()
     private val sdfDataHora = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
 
-    // Seleção de imagens
+    // HTTP / sessão
+    private val httpClient = OkHttpClient()
+    private lateinit var sessionManager: SessionManager
+
+    // Listas vindas do servidor
+    private var clientes: List<ClienteRemoto> = emptyList()
+    private var tecnicos: List<TecnicoRemoto> = emptyList()
+    private var tecnicoSelecionadoId: Int? = null
+
+    // Seleção de imagens (por enquanto só salvamos as URIs localmente; depois podemos mandar pro servidor)
+    private val imagensUris: MutableList<Uri> = mutableListOf()
+
     private val pickerImagens = registerForActivityResult(
         ActivityResultContracts.OpenMultipleDocuments()
     ) { uris ->
@@ -54,8 +80,11 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
         supportActionBar?.title = "Relatório – Compressor"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        configurarSpinners()
+        sessionManager = SessionManager(this)
+
+        configurarSpinnersFixos()
         carregarClientes()
+        carregarTecnicos()
 
         binding.edDataEntrada.setOnClickListener { escolherDataHora(binding.edDataEntrada) }
         binding.edDataSaida.setOnClickListener { escolherDataHora(binding.edDataSaida) }
@@ -79,10 +108,10 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
     }
 
     // =========================================================================
-    //  SPINNERS: tipo de manutenção, cliente e status dos itens
+    //  SPINNERS: tipo de manutenção, status dos itens (fixos) e técnico (via API)
     // =========================================================================
 
-    private fun configurarSpinners() {
+    private fun configurarSpinnersFixos() {
         // Tipo de manutenção
         val tipos = listOf("Preventiva", "Preditiva", "Corretiva", "Inspeção")
         val adapterTipo = ArrayAdapter(
@@ -157,26 +186,160 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
     }
 
     private fun carregarClientes() {
-        val db = AppDatabase.getInstance(this)
-        lifecycleScope.launch {
-            clientes = db.clienteDao().listarTodos()
-            val nomes = clientes.map { it.nomeFantasia }
+        val token = sessionManager.getToken()
+        if (token.isNullOrEmpty()) {
+            Toast.makeText(this, "Sessão expirada. Faça login novamente.", Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
 
-            val adapter = ArrayAdapter(
-                this@RelatorioCompressorFormActivity,
-                R.layout.spinner_item_dark,
-                nomes
-            )
-            adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_dark)
-            binding.spCliente.adapter = adapter
+        if (!NetworkUtils.isOnline(this)) {
+            Toast.makeText(this, "Sem conexão com a internet.", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        lifecycleScope.launch {
+            val resultado = withContext(Dispatchers.IO) {
+                try {
+                    val url = "${ApiConfig.BASE_URL}/api/clients"
+                    val request = Request.Builder()
+                        .url(url)
+                        .get()
+                        .addHeader("X-Auth-Token", token)
+                        .build()
+                    val response = httpClient.newCall(request).execute()
+                    val bodyStr = response.body?.string() ?: ""
+
+                    if (!response.isSuccessful) {
+                        return@withContext Pair(false, "Erro ao carregar clientes: ${response.code}")
+                    }
+
+                    val arr = JSONArray(bodyStr)
+                    val lista = mutableListOf<ClienteRemoto>()
+                    for (i in 0 until arr.length()) {
+                        val obj = arr.getJSONObject(i)
+                        val id = obj.getInt("id")
+                        val nome = obj.optString("name", "Sem nome")
+                        lista.add(ClienteRemoto(id, nome))
+                    }
+                    clientes = lista
+                    Pair(true, "OK")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Pair(false, "Erro: ${e.message}")
+                }
+            }
+
+            if (!resultado.first) {
+                Toast.makeText(this@RelatorioCompressorFormActivity, resultado.second, Toast.LENGTH_LONG).show()
+            }
 
             if (clientes.isEmpty()) {
                 Toast.makeText(
                     this@RelatorioCompressorFormActivity,
-                    "Cadastre um cliente antes de criar relatórios.",
+                    "Cadastre um cliente no sistema antes de criar relatórios.",
                     Toast.LENGTH_LONG
                 ).show()
+            } else {
+                val nomes = clientes.map { it.nomeFantasia }
+                val adapter = ArrayAdapter(
+                    this@RelatorioCompressorFormActivity,
+                    R.layout.spinner_item_dark,
+                    nomes
+                )
+                adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_dark)
+                binding.spCliente.adapter = adapter
             }
+        }
+    }
+
+    private fun carregarTecnicos() {
+        val token = sessionManager.getToken()
+        if (token.isNullOrEmpty()) {
+            Toast.makeText(this, "Sessão expirada. Faça login novamente.", Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
+
+        if (!NetworkUtils.isOnline(this)) {
+            Toast.makeText(this, "Sem conexão com a internet.", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        lifecycleScope.launch {
+            val resultado = withContext(Dispatchers.IO) {
+                try {
+                    val url = "${ApiConfig.BASE_URL}/api/technicians"
+                    val request = Request.Builder()
+                        .url(url)
+                        .get()
+                        .addHeader("X-Auth-Token", token)
+                        .build()
+                    val response = httpClient.newCall(request).execute()
+                    val bodyStr = response.body?.string() ?: ""
+
+                    if (!response.isSuccessful) {
+                        return@withContext Pair(false, "Erro ao carregar técnicos: ${response.code}")
+                    }
+
+                    val arr = JSONArray(bodyStr)
+                    val lista = mutableListOf<TecnicoRemoto>()
+                    for (i in 0 until arr.length()) {
+                        val obj = arr.getJSONObject(i)
+                        val id = obj.getInt("id")
+                        val nome = obj.optString("name", "Sem nome")
+                        lista.add(TecnicoRemoto(id, nome))
+                    }
+                    tecnicos = lista
+                    Pair(true, "OK")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Pair(false, "Erro: ${e.message}")
+                }
+            }
+
+            if (!resultado.first) {
+                Toast.makeText(this@RelatorioCompressorFormActivity, resultado.second, Toast.LENGTH_LONG).show()
+            }
+
+            if (tecnicos.isEmpty()) {
+                Toast.makeText(
+                    this@RelatorioCompressorFormActivity,
+                    "Nenhum técnico cadastrado. Cadastre um técnico primeiro.",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                val nomes = tecnicos.map { it.nome }
+                val adapter = ArrayAdapter(
+                    this@RelatorioCompressorFormActivity,
+                    R.layout.spinner_item_dark,
+                    nomes
+                )
+                adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_dark)
+                binding.spinnerTecnico.adapter = adapter
+
+                binding.spinnerTecnico.setOnItemSelectedListener { _, _, position, _ ->
+                    tecnicoSelecionadoId = tecnicos[position].id
+                }
+            }
+        }
+    }
+
+    // Helper pra Spinner (listener simplificado)
+    private fun <T> Spinner.setOnItemSelectedListener(
+        onItemSelected: (parent: android.widget.AdapterView<*>, view: android.view.View?, position: Int, id: Long) -> Unit
+    ) {
+        this.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: android.widget.AdapterView<*>,
+                view: android.view.View?,
+                position: Int,
+                id: Long
+            ) {
+                onItemSelected(parent, view, position, id)
+            }
+
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>) {}
         }
     }
 
@@ -212,7 +375,7 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
     }
 
     // =========================================================================
-    //  SALVAR RELATÓRIO
+    //  SALVAR RELATÓRIO (ENVIA PARA O SERVIDOR)
     // =========================================================================
 
     private fun salvarRelatorio() {
@@ -243,69 +406,84 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
             return
         }
 
-        val dataEntrada = sdfDataHora.parse(dataEntradaStr)?.time ?: Date().time
-        val dataSaida = sdfDataHora.parse(dataSaidaStr)?.time ?: Date().time
-
+        // Ainda não estamos usando os timestamps no backend, mas podemos mandar dentro do content
         val checklistResumo = montarResumoChecklist()
 
-        val db = AppDatabase.getInstance(this)
-        lifecycleScope.launch {
-            val relatorio = RelatorioEntity(
-                id = 0,
-                clienteId = cliente.id,
-                dataEntrada = dataEntrada,
-                dataSaida = dataSaida,
-                modeloMaquina = modelo,
-                tipoManutencao = "$tipo (Compressor)",
-                ocorrencia = checklistResumo,
-                solucaoProposta = observacoes,
-                pecasTexto = null,
-                pdfPath = null
-            )
-
-            val relId = db.relatorioDao().inserir(relatorio)
-
-            // Imagens
-            val imagens = imagensUris.mapIndexed { idx, uri ->
-                ImagemRelatorioEntity(
-                    relatorioId = relId,
-                    uri = uri.toString(),
-                    ordem = idx
-                )
-            }
-            if (imagens.isNotEmpty()) {
-                db.imagemDao().inserirLista(imagens)
-            }
-
-            val clienteDb = db.clienteDao().buscarPorId(cliente.id)
-            val imagensSalvas = db.imagemDao().listarPorRelatorio(relId)
-
-            val pdfFile = PdfUtils.gerarPdfRelatorioCompressor(
-                context = this@RelatorioCompressorFormActivity,
-                relatorio = relatorio.copy(id = relId),
-                cliente = clienteDb ?: cliente,
-                imagens = imagensSalvas
-            )
-
-            db.relatorioDao().atualizar(
-                relatorio.copy(
-                    id = relId,
-                    pdfPath = pdfFile.absolutePath
-                )
-            )
-
-            Toast.makeText(
-                this@RelatorioCompressorFormActivity,
-                "Relatório de compressor salvo e PDF gerado.",
-                Toast.LENGTH_LONG
-            ).show()
-
+        val token = sessionManager.getToken()
+        if (token.isNullOrEmpty()) {
+            Toast.makeText(this, "Sessão expirada. Faça login novamente.", Toast.LENGTH_LONG).show()
             finish()
+            return
+        }
+
+        if (!NetworkUtils.isOnline(this)) {
+            Toast.makeText(this, "Sem conexão com a internet.", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        binding.btnSalvarRelatorio.isEnabled = false
+
+        lifecycleScope.launch {
+            val resultado = withContext(Dispatchers.IO) {
+                try {
+                    // JSON com todos os dados detalhados do relatório
+                    val contentJson = JSONObject().apply {
+                        put("data_entrada", dataEntradaStr)
+                        put("data_saida", dataSaidaStr)
+                        put("modelo_maquina", modelo)
+                        put("tipo_manutencao", tipo)
+                        put("observacoes", observacoes)
+                        put("checklist_resumo", checklistResumo)
+                        // Se quiser, pode adicionar as URIs das imagens:
+                        put("imagens_uris", JSONArray(imagensUris.map { it.toString() }))
+                    }
+
+                    val bodyJson = JSONObject().apply {
+                        put("type", "compressor")
+                        put("client_id", cliente.id)
+                        put("machine_id", JSONObject.NULL)      // podemos ligar a uma máquina depois
+                        put("technician_id", tecnicoSelecionadoId ?: JSONObject.NULL)
+                        put("title", "Relatório compressor - $modelo")
+                        put("content", contentJson.toString())
+                        // pdf_url deixamos NULL por enquanto; quando gerarmos o PDF no servidor, ele atualiza.
+                        put("pdf_url", JSONObject.NULL)
+                    }
+
+                    val mediaType = "application/json; charset=utf-8".toMediaType()
+                    val body = bodyJson.toString().toRequestBody(mediaType)
+
+                    val request = Request.Builder()
+                        .url("${ApiConfig.BASE_URL}/api/reports")
+                        .post(body)
+                        .addHeader("X-Auth-Token", token)
+                        .build()
+
+                    val response = httpClient.newCall(request).execute()
+                    val bodyStr = response.body?.string() ?: ""
+
+                    if (!response.isSuccessful) {
+                        return@withContext Pair(false, "Erro ao salvar relatório: ${response.code} - $bodyStr")
+                    }
+
+                    Pair(true, "Relatório de compressor salvo no servidor.")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Pair(false, "Erro: ${e.message}")
+                }
+            }
+
+            if (resultado.first) {
+                Toast.makeText(this@RelatorioCompressorFormActivity, resultado.second, Toast.LENGTH_LONG).show()
+                finish()
+            } else {
+                Toast.makeText(this@RelatorioCompressorFormActivity, resultado.second, Toast.LENGTH_LONG).show()
+                binding.btnSalvarRelatorio.isEnabled = true
+            }
         }
     }
 
     // =========================================================================
-    //  CHECKLIST 1–42
+    //  CHECKLIST 1–42 (mantido do seu código original)
     // =========================================================================
 
     private data class ChecklistItem(
