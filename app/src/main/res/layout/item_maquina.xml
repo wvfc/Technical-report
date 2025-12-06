@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/tvLinha1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Marca / Modelo"
+        android:textStyle="bold"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvLinha2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nº de série"
+        android:layout_marginTop="2dp" />
+
+    <TextView
+        android:id="@+id/tvLinha3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cliente"
+        android:layout_marginTop="2dp" />
+
+</LinearLayout>
