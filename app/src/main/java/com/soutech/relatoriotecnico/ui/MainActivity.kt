@@ -13,6 +13,9 @@ import com.soutech.relatoriotecnico.ui.maquina.CadastroMaquinaActivity
 import com.soutech.relatoriotecnico.ui.maquina.MaquinasCadastradasActivity
 import com.soutech.relatoriotecnico.ui.relatorio.RelatorioListaActivity
 import com.soutech.relatoriotecnico.ui.relatorio.TipoRelatorioActivity
+import com.soutech.relatoriotecnico.ui.tecnico.CadastroTecnicoActivity
+import com.soutech.relatoriotecnico.ui.tecnico.TecnicosCadastradosActivity
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -69,12 +72,13 @@ class MainActivity : AppCompatActivity() {
 
         // Técnicos – ainda em desenvolvimento
         binding.btnCadastroTecnico.setOnClickListener {
-            Toast.makeText(this, "Cadastro de técnico em desenvolvimento", Toast.LENGTH_SHORT).show()
-        }
+            startActivity(Intent(this, CadastroTecnicoActivity::class.java))
+        } 
 
         binding.btnTecnicosCadastrados.setOnClickListener {
-            Toast.makeText(this, "Lista de técnicos em desenvolvimento", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, TecnicosCadastradosActivity::class.java))
         }
+
     }
 
     private fun abrirPdf(url: String) {
