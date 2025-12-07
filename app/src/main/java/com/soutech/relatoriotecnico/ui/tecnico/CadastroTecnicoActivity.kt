@@ -28,13 +28,17 @@ class CadastroTecnicoActivity : AppCompatActivity() {
         binding = ActivityCadastroTecnicoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = "Cadastrar Técnico"
+        supportActionBar?.title = "Cadastro de Técnico"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         sessionManager = SessionManager(this)
 
         binding.btnSalvarTecnico.setOnClickListener {
             salvarTecnico()
+        }
+
+        binding.btnVoltar.setOnClickListener {
+            finish()
         }
     }
 
@@ -44,8 +48,8 @@ class CadastroTecnicoActivity : AppCompatActivity() {
     }
 
     private fun salvarTecnico() {
-        val nome = binding.edNomeTecnico.text.toString().trim()
-        val funcao = binding.edFuncaoTecnico.text.toString().trim()
+        val nome = binding.etNomeTecnico.text.toString().trim()
+        val funcao = binding.etFuncaoTecnico.text.toString().trim()
 
         if (nome.isEmpty()) {
             Toast.makeText(this, "Informe o nome do técnico.", Toast.LENGTH_SHORT).show()
@@ -69,18 +73,13 @@ class CadastroTecnicoActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val resultado = withContext(Dispatchers.IO) {
                 try {
-                    val json = JSONObject().apply {
+                    val bodyJson = JSONObject().apply {
                         put("name", nome)
-                        // se não informar função, manda NULL explícito p/ evitar ambiguidade
-                        if (funcao.isNotEmpty()) {
-                            put("role", funcao)
-                        } else {
-                            put("role", JSONObject.NULL)
-                        }
+                        put("role", if (funcao.isEmpty()) JSONObject.NULL else funcao)
                     }
 
                     val mediaType = "application/json; charset=utf-8".toMediaType()
-                    val body = json.toString().toRequestBody(mediaType)
+                    val body = bodyJson.toString().toRequestBody(mediaType)
 
                     val request = Request.Builder()
                         .url("${ApiConfig.BASE_URL}/api/technicians")
@@ -89,10 +88,13 @@ class CadastroTecnicoActivity : AppCompatActivity() {
                         .build()
 
                     val response = httpClient.newCall(request).execute()
-                    val bodyStr = response.body?.string() ?: ""
+                    val respText = response.body?.string() ?: ""
 
                     if (!response.isSuccessful) {
-                        return@withContext Pair(false, "Erro: ${response.code} - $bodyStr")
+                        return@withContext Pair(
+                            false,
+                            "Erro ao salvar técnico: ${response.code} - $respText"
+                        )
                     }
 
                     Pair(true, "Técnico salvo com sucesso.")
