@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         // ================== AJUDA TÉCNICO (abre PDFs) ==================
 
         binding.btnSenhasIhms.setOnClickListener {
-            abrirPdf("https://login.soutechautomacao.com/static/pdfs/")
+            abrirPdf("https://login.soutechautomacao.com/static/pdfs/senhas_ihm.pdf")
         }
 
         binding.btnPdfsMaquinas.setOnClickListener {
