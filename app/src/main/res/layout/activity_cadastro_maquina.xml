@@ -44,13 +44,13 @@
                 android:layout_marginBottom="4dp" />
 
             <Spinner
-                android:id="@+id/spClienteMaquina"
+                android:id="@+id/spinnerCliente"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp" />
 
             <EditText
-                android:id="@+id/edMarcaFabricante"
+                android:id="@+id/etMarca"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Marca do fabricante"
@@ -66,7 +66,7 @@
                 android:layout_marginBottom="16dp" />
 
             <EditText
-                android:id="@+id/edModeloMaquina"
+                android:id="@+id/etModelo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Modelo da máquina"
@@ -82,7 +82,7 @@
                 android:layout_marginBottom="16dp" />
 
             <EditText
-                android:id="@+id/edModeloIhm"
+                android:id="@+id/etModeloIhm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Modelo da IHM"
@@ -98,7 +98,7 @@
                 android:layout_marginBottom="16dp" />
 
             <EditText
-                android:id="@+id/edNumeroSerie"
+                android:id="@+id/etNumeroSerie"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Número de série"
@@ -114,7 +114,7 @@
                 android:layout_marginBottom="16dp" />
 
             <Button
-                android:id="@+id/btnFotoPlaqueta"
+                android:id="@+id/etFotoPlaqueta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Selecionar foto da plaqueta"
@@ -123,7 +123,7 @@
                 android:layout_marginBottom="12dp" />
 
             <Button
-                android:id="@+id/btnFotoCompressor"
+                android:id="@+id/etFotoCompressor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Selecionar foto do compressor"
