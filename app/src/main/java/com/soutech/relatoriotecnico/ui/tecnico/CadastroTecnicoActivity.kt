@@ -20,8 +20,8 @@ import org.json.JSONObject
 class CadastroTecnicoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCadastroTecnicoBinding
-    private val client = OkHttpClient()
     private lateinit var sessionManager: SessionManager
+    private val httpClient = OkHttpClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +29,7 @@ class CadastroTecnicoActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportActionBar?.title = "Cadastrar Técnico"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         sessionManager = SessionManager(this)
 
@@ -37,19 +38,24 @@ class CadastroTecnicoActivity : AppCompatActivity() {
         }
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
+    }
+
     private fun salvarTecnico() {
+        val nome = binding.edNomeTecnico.text.toString().trim()
+        val funcao = binding.edFuncaoTecnico.text.toString().trim()
+
+        if (nome.isEmpty()) {
+            Toast.makeText(this, "Informe o nome do técnico.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val token = sessionManager.getToken()
         if (token.isNullOrEmpty()) {
             Toast.makeText(this, "Sessão expirada. Faça login novamente.", Toast.LENGTH_LONG).show()
             finish()
-            return
-        }
-
-        val nome = binding.etNomeTecnico.text.toString().trim()
-        val funcao = binding.etFuncaoTecnico.text.toString().trim()
-
-        if (nome.isEmpty()) {
-            Toast.makeText(this, "Informe o nome do técnico.", Toast.LENGTH_LONG).show()
             return
         }
 
@@ -61,11 +67,16 @@ class CadastroTecnicoActivity : AppCompatActivity() {
         binding.btnSalvarTecnico.isEnabled = false
 
         lifecycleScope.launch {
-            val result = withContext(Dispatchers.IO) {
+            val resultado = withContext(Dispatchers.IO) {
                 try {
                     val json = JSONObject().apply {
                         put("name", nome)
-                        put("role", if (funcao.isEmpty()) JSONObject.NULL else funcao)
+                        // se não informar função, manda NULL explícito p/ evitar ambiguidade
+                        if (funcao.isNotEmpty()) {
+                            put("role", funcao)
+                        } else {
+                            put("role", JSONObject.NULL)
+                        }
                     }
 
                     val mediaType = "application/json; charset=utf-8".toMediaType()
@@ -77,25 +88,25 @@ class CadastroTecnicoActivity : AppCompatActivity() {
                         .addHeader("X-Auth-Token", token)
                         .build()
 
-                    val response = client.newCall(request).execute()
+                    val response = httpClient.newCall(request).execute()
                     val bodyStr = response.body?.string() ?: ""
 
                     if (!response.isSuccessful) {
                         return@withContext Pair(false, "Erro: ${response.code} - $bodyStr")
                     }
 
-                    Pair(true, "Técnico cadastrado com sucesso.")
+                    Pair(true, "Técnico salvo com sucesso.")
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Pair(false, "Erro: ${e.message}")
                 }
             }
 
-            if (result.first) {
-                Toast.makeText(this@CadastroTecnicoActivity, result.second, Toast.LENGTH_LONG).show()
+            if (resultado.first) {
+                Toast.makeText(this@CadastroTecnicoActivity, resultado.second, Toast.LENGTH_LONG).show()
                 finish()
             } else {
-                Toast.makeText(this@CadastroTecnicoActivity, result.second, Toast.LENGTH_LONG).show()
+                Toast.makeText(this@CadastroTecnicoActivity, resultado.second, Toast.LENGTH_LONG).show()
                 binding.btnSalvarTecnico.isEnabled = true
             }
         }
