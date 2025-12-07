@@ -1,6 +1,7 @@
 package com.soutech.relatoriotecnico.ui.relatorio
 
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -32,7 +33,6 @@ class RelatorioListaActivity : AppCompatActivity() {
     private val listaClientes = mutableListOf<ClienteFiltroDto>()
     private val mapaClientes = mutableMapOf<Int, String>()
     private val listaRelatorios = mutableListOf<RelatorioDto>()
-    private val mapaMaquinasSerial = mutableMapOf<Int, String?>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -170,10 +170,6 @@ class RelatorioListaActivity : AppCompatActivity() {
                     val arr = JSONArray(bodyStr)
                     listaRelatorios.clear()
 
-                    // também puxar máquinas uma vez (opcional) se quiser o nº de série consistente
-                    // mas como o backend já aceita filtro por serial, aqui vamos depender de pdf_url/serial em content no futuro
-                    // por enquanto, deixamos número de série vazio, a não ser que venha no próprio JSON
-
                     for (i in 0 until arr.length()) {
                         val obj = arr.getJSONObject(i)
                         val rel = parseRelatorio(obj)
@@ -188,10 +184,23 @@ class RelatorioListaActivity : AppCompatActivity() {
             }
 
             if (!result.first) {
-                Toast.makeText(this@RelatorioListaActivity, result.second, Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@RelatorioListaActivity,
+                    result.second,
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
-            binding.rvRelatorios.adapter = RelatorioAdapter(this@RelatorioListaActivity, listaRelatorios.toList())
+            // Atualiza UI / mensagem de vazio
+            if (listaRelatorios.isEmpty()) {
+                binding.rvRelatorios.visibility = View.GONE
+                binding.tvVazio.visibility = View.VISIBLE
+            } else {
+                binding.rvRelatorios.visibility = View.VISIBLE
+                binding.tvVazio.visibility = View.GONE
+                binding.rvRelatorios.adapter =
+                    RelatorioAdapter(this@RelatorioListaActivity, listaRelatorios.toList())
+            }
         }
     }
 
@@ -204,10 +213,11 @@ class RelatorioListaActivity : AppCompatActivity() {
         val dateIso = obj.optString("date", "")
         val pdfUrl = if (obj.isNull("pdf_url")) null else obj.getString("pdf_url")
 
-       val clientName = if (obj.isNull("client_name")) null else obj.getString("client_name")
-       val serialNumber = if (obj.isNull("serial_number")) null else obj.getString("serial_number")
+        val clientName = if (obj.isNull("client_name")) null else obj.getString("client_name")
+        val serialNumber =
+            if (obj.isNull("serial_number")) null else obj.getString("serial_number")
 
-       return RelatorioDto(
+        return RelatorioDto(
             id = id,
             type = type,
             clientId = clientId,
@@ -217,7 +227,6 @@ class RelatorioListaActivity : AppCompatActivity() {
             title = title,
             dateIso = dateIso,
             pdfUrl = pdfUrl
-      )
-   }
-
+        )
+    }
 }
