@@ -1,6 +1,7 @@
 package com.soutech.relatoriotecnico.ui.maquina
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -146,10 +147,22 @@ class MaquinasCadastradasActivity : AppCompatActivity() {
             }
 
             if (!result.first) {
-                Toast.makeText(this@MaquinasCadastradasActivity, result.second, Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@MaquinasCadastradasActivity,
+                    result.second,
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
-            binding.rvMaquinas.adapter = MaquinaAdapter(listaMaquinas.toList())
+            // Mostra mensagem se estiver vazio
+            if (listaMaquinas.isEmpty()) {
+                binding.rvMaquinas.visibility = View.GONE
+                binding.tvVazio.visibility = View.VISIBLE
+            } else {
+                binding.rvMaquinas.visibility = View.VISIBLE
+                binding.tvVazio.visibility = View.GONE
+                binding.rvMaquinas.adapter = MaquinaAdapter(listaMaquinas.toList())
+            }
         }
     }
 
