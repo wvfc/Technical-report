@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         // =============== AJUDA TÉCNICO (abre PDFs) ===============
-        binding.btnSenhasIHMs.setOnClickListener {
+        binding.btnSenhasIhms.setOnClickListener {
             abrirPdf("https://login.soutechautomacao.com/static/pdfs/senhas_ihm.pdf")
         }
 
