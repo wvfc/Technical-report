@@ -36,10 +36,7 @@ class CadastroTecnicoActivity : AppCompatActivity() {
         binding.btnSalvarTecnico.setOnClickListener {
             salvarTecnico()
         }
-
-        binding.btnVoltar.setOnClickListener {
-            finish()
-        }
+        // Também não usamos btnVoltar aqui, pois o layout não tem esse botão.
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -74,6 +71,7 @@ class CadastroTecnicoActivity : AppCompatActivity() {
             val resultado = withContext(Dispatchers.IO) {
                 try {
                     val bodyJson = JSONObject().apply {
+                        // campos conforme TechnicianCreate do backend
                         put("name", nome)
                         put("role", if (funcao.isEmpty()) JSONObject.NULL else funcao)
                     }
