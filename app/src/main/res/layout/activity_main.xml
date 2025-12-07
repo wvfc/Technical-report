@@ -34,152 +34,166 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- Imagem da unidade IR (airend.png) -->
-            <ImageView
-                android:id="@+id/imgHeader"
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:src="@drawable/airend"
-                android:scaleType="centerCrop"
-                android:layout_marginBottom="24dp" />
-
             <!-- Bloco Ajuda Técnico -->
-            <TextView
+            <Button
+                android:id="@+id/btnGrupoAjuda"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Ajuda Técnico"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginBottom="8dp" />
-
-            <Button
-                android:id="@+id/btnSenhasIhms"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Senhas e IHMs"
                 android:backgroundTint="@color/colorPrimary"
                 android:textColor="@color/white"
                 android:layout_marginBottom="8dp" />
 
-            <Button
-                android:id="@+id/btnPdfsMaquinas"
+            <LinearLayout
+                android:id="@+id/layoutAjuda"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="PDFs Máquinas"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp">
+
+                <Button
+                    android:id="@+id/btnSenhasIhms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Senhas e IHMs"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="8dp" />
+
+                <Button
+                    android:id="@+id/btnPdfsMaquinas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="PDFs Máquinas"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="8dp" />
+
+                <Button
+                    android:id="@+id/btnDuvidasComuns"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Dúvidas Comuns"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+            <!-- Bloco Relatórios -->
+            <Button
+                android:id="@+id/btnGrupoRelatorios"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Relatórios"
                 android:backgroundTint="@color/colorPrimary"
                 android:textColor="@color/white"
                 android:layout_marginBottom="8dp" />
 
-            <Button
-                android:id="@+id/btnDuvidasComuns"
+            <LinearLayout
+                android:id="@+id/layoutRelatorios"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Dúvidas Comuns"
-                android:backgroundTint="@color/colorPrimary"
-                android:textColor="@color/white"
-                android:layout_marginBottom="16dp" />
+                android:visibility="gone"
+                android:layout_marginBottom="16dp">
 
-            <!-- Bloco Novo Relatório -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Novo Relatório"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginBottom="8dp" />
+                <Button
+                    android:id="@+id/btnNovoRelatorioCompressor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Relatório Compressor"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="8dp" />
 
-            <Button
-                android:id="@+id/btnNovoRelatorio"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Relatório Compressor"
-                android:backgroundTint="@color/colorPrimary"
-                android:textColor="@color/white"
-                android:layout_marginBottom="8dp" />
+                <Button
+                    android:id="@+id/btnNovoRelatorioGeral"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Relatório Geral"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="8dp" />
 
-            <Button
-                android:id="@+id/btnNovoRelatorioGeral"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Relatório Geral"
-                android:backgroundTint="@color/colorPrimary"
-                android:textColor="@color/white"
-                android:layout_marginBottom="16dp" />
-
-            <Button
-                android:id="@+id/btnHistoricoRelatorios"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Histórico de Relatórios"
-                android:backgroundTint="@color/colorPrimary"
-                android:textColor="@color/white"
-                android:layout_marginBottom="24dp" />
+                <Button
+                    android:id="@+id/btnHistoricoRelatorios"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Histórico de Relatórios"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="@color/white" />
+            </LinearLayout>
 
             <!-- Bloco Cadastros -->
-            <TextView
+            <Button
+                android:id="@+id/btnGrupoCadastros"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Cadastros"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginBottom="8dp" />
-
-            <Button
-                android:id="@+id/btnCadastroCliente"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Cadastrar Cliente"
                 android:backgroundTint="@color/colorPrimary"
                 android:textColor="@color/white"
                 android:layout_marginBottom="8dp" />
 
-            <Button
-                android:id="@+id/btnCadastroMaquina"
+            <LinearLayout
+                android:id="@+id/layoutCadastros"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Cadastrar Máquina"
-                android:backgroundTint="@color/colorPrimary"
-                android:textColor="@color/white"
-                android:layout_marginBottom="8dp" />
+                android:visibility="gone">
 
-            <Button
-                android:id="@+id/btnCadastroTecnico"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Cadastrar Técnico"
-                android:backgroundTint="@color/colorPrimary"
-                android:textColor="@color/white"
-                android:layout_marginBottom="8dp" />
+                <Button
+                    android:id="@+id/btnCadastroCliente"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cadastrar Cliente"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="8dp" />
 
-            <Button
-                android:id="@+id/btnClientesCadastrados"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Clientes Cadastrados"
-                android:backgroundTint="@color/colorPrimary"
-                android:textColor="@color/white"
-                android:layout_marginBottom="8dp" />
+                <Button
+                    android:id="@+id/btnCadastroMaquina"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cadastrar Máquina"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="8dp" />
 
-            <Button
-                android:id="@+id/btnMaquinasCadastradas"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Máquinas Cadastradas"
-                android:backgroundTint="@color/colorPrimary"
-                android:textColor="@color/white"
-                android:layout_marginBottom="8dp" />
+                <Button
+                    android:id="@+id/btnCadastroTecnico"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cadastrar Técnico"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="8dp" />
 
-            <Button
-                android:id="@+id/btnTecnicosCadastrados"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Técnicos Cadastrados"
-                android:backgroundTint="@color/colorPrimary"
-                android:textColor="@color/white"
-                android:layout_marginBottom="16dp" />
+                <Button
+                    android:id="@+id/btnClientesCadastrados"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Clientes Cadastrados"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="8dp" />
+
+                <Button
+                    android:id="@+id/btnMaquinasCadastradas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Máquinas Cadastradas"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="8dp" />
+
+                <Button
+                    android:id="@+id/btnTecnicosCadastrados"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Técnicos Cadastrados"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="@color/white" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
