@@ -1,13 +1,10 @@
 package com.soutech.relatoriotecnico.ui.maquina
 
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.soutech.relatoriotecnico.R
 import com.soutech.relatoriotecnico.core.ApiConfig
 import com.soutech.relatoriotecnico.core.NetworkUtils
 import com.soutech.relatoriotecnico.core.SessionManager
@@ -22,9 +19,10 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 
+// DTO simples para o spinner de clientes
 data class ClienteRemotoMaquina(
     val id: Int,
-    val nome: String
+    val nomeFantasia: String
 )
 
 class CadastroMaquinaActivity : AppCompatActivity() {
@@ -34,7 +32,6 @@ class CadastroMaquinaActivity : AppCompatActivity() {
     private val httpClient = OkHttpClient()
 
     private var clientes: List<ClienteRemotoMaquina> = emptyList()
-    private var clienteSelecionadoId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,15 +43,14 @@ class CadastroMaquinaActivity : AppCompatActivity() {
 
         sessionManager = SessionManager(this)
 
+        // Carregar clientes para o spinner
         carregarClientes()
 
         binding.btnSalvarMaquina.setOnClickListener {
             salvarMaquina()
         }
-
-        binding.btnVoltar.setOnClickListener {
-            finish()
-        }
+        // NÃO usamos btnVoltar aqui, já que o layout não tem esse botão.
+        // O usuário pode voltar pelo botão do Android ou pelo ícone da ActionBar.
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -62,9 +58,8 @@ class CadastroMaquinaActivity : AppCompatActivity() {
         return true
     }
 
-    // -------------------------------------------------------------------------
-    // CARREGAR CLIENTES PARA O SPINNER
-    // -------------------------------------------------------------------------
+    // ==================== CARREGAR CLIENTES (API) ====================
+
     private fun carregarClientes() {
         val token = sessionManager.getToken()
         if (token.isNullOrEmpty()) {
@@ -91,10 +86,7 @@ class CadastroMaquinaActivity : AppCompatActivity() {
                     val bodyStr = response.body?.string() ?: ""
 
                     if (!response.isSuccessful) {
-                        return@withContext Pair(
-                            false,
-                            "Erro ao carregar clientes: ${response.code} - $bodyStr"
-                        )
+                        return@withContext Pair(false, "Erro ao carregar clientes: ${response.code}")
                     }
 
                     val arr = JSONArray(bodyStr)
@@ -115,7 +107,6 @@ class CadastroMaquinaActivity : AppCompatActivity() {
 
             if (!resultado.first) {
                 Toast.makeText(this@CadastroMaquinaActivity, resultado.second, Toast.LENGTH_LONG).show()
-                return@launch
             }
 
             if (clientes.isEmpty()) {
@@ -124,54 +115,33 @@ class CadastroMaquinaActivity : AppCompatActivity() {
                     "Cadastre um cliente antes de cadastrar máquinas.",
                     Toast.LENGTH_LONG
                 ).show()
-                return@launch
+            } else {
+                val nomes = clientes.map { it.nomeFantasia }
+                val adapter = ArrayAdapter(
+                    this@CadastroMaquinaActivity,
+                    android.R.layout.simple_spinner_item,
+                    nomes
+                )
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                binding.spinnerCliente.adapter = adapter
             }
-
-            val nomes = mutableListOf("Selecione o cliente")
-            nomes.addAll(clientes.map { it.nome })
-
-            val adapter = ArrayAdapter(
-                this@CadastroMaquinaActivity,
-                R.layout.spinner_item_dark,
-                nomes
-            )
-            adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_dark)
-            binding.spinnerCliente.adapter = adapter
-
-            binding.spinnerCliente.isEnabled = true
-            binding.spinnerCliente.isClickable = true
-
-            binding.spinnerCliente.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>,
-                        view: View?,
-                        position: Int,
-                        id: Long
-                    ) {
-                        clienteSelecionadoId = if (position <= 0) {
-                            null
-                        } else {
-                            clientes[position - 1].id
-                        }
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>) {
-                        clienteSelecionadoId = null
-                    }
-                }
         }
     }
 
-    // -------------------------------------------------------------------------
-    // SALVAR MÁQUINA
-    // -------------------------------------------------------------------------
+    // ==================== SALVAR MÁQUINA (API) ====================
+
     private fun salvarMaquina() {
-        val clienteId = clienteSelecionadoId
-        if (clienteId == null) {
+        if (clientes.isEmpty()) {
+            Toast.makeText(this, "Cadastre pelo menos um cliente primeiro.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val idxCliente = binding.spinnerCliente.selectedItemPosition
+        if (idxCliente < 0) {
             Toast.makeText(this, "Selecione um cliente.", Toast.LENGTH_SHORT).show()
             return
         }
+        val cliente = clientes[idxCliente]
 
         val marca = binding.etMarca.text.toString().trim()
         val modelo = binding.etModelo.text.toString().trim()
@@ -183,7 +153,7 @@ class CadastroMaquinaActivity : AppCompatActivity() {
         if (marca.isEmpty() || modelo.isEmpty() || numeroSerie.isEmpty()) {
             Toast.makeText(
                 this,
-                "Preencha marca, modelo e número de série.",
+                "Informe pelo menos marca, modelo e número de série.",
                 Toast.LENGTH_SHORT
             ).show()
             return
@@ -207,7 +177,8 @@ class CadastroMaquinaActivity : AppCompatActivity() {
             val resultado = withContext(Dispatchers.IO) {
                 try {
                     val bodyJson = JSONObject().apply {
-                        put("client_id", clienteId)
+                        // Nomes EXATOS usados no backend (MachineCreate)
+                        put("client_id", cliente.id)
                         put("brand", marca)
                         put("model", modelo)
                         put("ihm_model", if (modeloIhm.isEmpty()) JSONObject.NULL else modeloIhm)
