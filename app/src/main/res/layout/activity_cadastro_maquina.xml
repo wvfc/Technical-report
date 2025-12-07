@@ -1,124 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="@color/backgroundLight">
 
+    <!-- Barra de título -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="80dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center_vertical"
+        android:padding="16dp">
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tvTituloCadastroMaquina"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cadastrar Máquina"
+            android:textColor="@color/white"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Cliente (spinner) -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cliente"
-            android:layout_marginBottom="4dp" />
-
-        <Spinner
-            android:id="@+id/spinnerCliente"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp" />
-
-        <!-- Marca -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Marca do fabricante"
-            android:layout_marginBottom="4dp" />
-
-        <EditText
-            android:id="@+id/etMarca"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ex: Atlas Copco, Schulz, Ingersoll..."
-            android:layout_marginBottom="12dp" />
-
-        <!-- Modelo máquina -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Modelo da máquina"
-            android:layout_marginBottom="4dp" />
-
-        <EditText
-            android:id="@+id/etModelo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ex: GA37, SRP4015..."
-            android:layout_marginBottom="12dp" />
-
-        <!-- Modelo IHM -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Modelo da IHM"
-            android:layout_marginBottom="4dp" />
-
-        <EditText
-            android:id="@+id/etModeloIhm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ex: Elektronikon, SMC, Logix..."
-            android:layout_marginBottom="12dp" />
-
-        <!-- Número de série -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Número de série"
-            android:layout_marginBottom="4dp" />
-
-        <EditText
-            android:id="@+id/etNumeroSerie"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Nº de série da máquina"
-            android:layout_marginBottom="12dp" />
-
-        <!-- Foto plaqueta (por enquanto URL / texto) -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="URL da foto da plaqueta (provisório)"
-            android:layout_marginBottom="4dp" />
-
-        <EditText
-            android:id="@+id/etFotoPlaqueta"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ex: https://.../plaqueta.jpg"
-            android:layout_marginBottom="12dp" />
-
-        <!-- Foto compressor (por enquanto URL / texto) -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="URL da foto do compressor (provisório)"
-            android:layout_marginBottom="4dp" />
-
-        <EditText
-            android:id="@+id/etFotoCompressor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ex: https://.../compressor.jpg"
-            android:layout_marginBottom="20dp" />
-
-        <Button
-            android:id="@+id/btnSalvarMaquina"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Salvar máquina" />
-
+            android:textStyle="bold" />
     </LinearLayout>
-</ScrollView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Cliente dono da máquina -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cliente"
+                android:textSize="14sp"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="4dp" />
+
+            <Spinner
+                android:id="@+id/spClienteMaquina"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
+            <EditText
+                android:id="@+id/edMarcaFabricante"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Marca do fabricante"
+                android:padding="8dp"
+                android:background="@android:color/transparent"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/darker_gray" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginBottom="16dp" />
+
+            <EditText
+                android:id="@+id/edModeloMaquina"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Modelo da máquina"
+                android:padding="8dp"
+                android:background="@android:color/transparent"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/darker_gray" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginBottom="16dp" />
+
+            <EditText
+                android:id="@+id/edModeloIhm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Modelo da IHM"
+                android:padding="8dp"
+                android:background="@android:color/transparent"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/darker_gray" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginBottom="16dp" />
+
+            <EditText
+                android:id="@+id/edNumeroSerie"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Número de série"
+                android:padding="8dp"
+                android:background="@android:color/transparent"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/darker_gray" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginBottom="16dp" />
+
+            <Button
+                android:id="@+id/btnFotoPlaqueta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Selecionar foto da plaqueta"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:layout_marginBottom="12dp" />
+
+            <Button
+                android:id="@+id/btnFotoCompressor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Selecionar foto do compressor"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:layout_marginBottom="24dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnSalvarMaquina"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SALVAR MÁQUINA"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:layout_margin="16dp" />
+
+</LinearLayout>
