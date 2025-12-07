@@ -1,13 +1,13 @@
 package com.soutech.relatoriotecnico.ui.maquina
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.soutech.relatoriotecnico.R
 import com.soutech.relatoriotecnico.core.ApiConfig
 import com.soutech.relatoriotecnico.core.NetworkUtils
 import com.soutech.relatoriotecnico.core.SessionManager
@@ -24,7 +24,7 @@ import org.json.JSONObject
 
 data class ClienteRemotoMaquina(
     val id: Int,
-    val nomeFantasia: String
+    val nome: String
 )
 
 class CadastroMaquinaActivity : AppCompatActivity() {
@@ -36,49 +36,24 @@ class CadastroMaquinaActivity : AppCompatActivity() {
     private var clientes: List<ClienteRemotoMaquina> = emptyList()
     private var clienteSelecionadoId: Int? = null
 
-    private var plaquetaUri: Uri? = null
-    private var compressorUri: Uri? = null
-
-    private val pickerPlaqueta = registerForActivityResult(
-        ActivityResultContracts.OpenDocument()
-    ) { uri ->
-        if (uri != null) {
-            plaquetaUri = uri
-            binding.btnFotoPlaqueta.text = "Plaqueta selecionada"
-        }
-    }
-
-    private val pickerCompressor = registerForActivityResult(
-        ActivityResultContracts.OpenDocument()
-    ) { uri ->
-        if (uri != null) {
-            compressorUri = uri
-            binding.btnFotoCompressor.text = "Foto do compressor selecionada"
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCadastroMaquinaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = "Cadastrar Máquina"
+        supportActionBar?.title = "Cadastro de Máquina"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         sessionManager = SessionManager(this)
 
         carregarClientes()
 
-        binding.btnFotoPlaqueta.setOnClickListener {
-            pickerPlaqueta.launch(arrayOf("image/*"))
-        }
-
-        binding.btnFotoCompressor.setOnClickListener {
-            pickerCompressor.launch(arrayOf("image/*"))
-        }
-
         binding.btnSalvarMaquina.setOnClickListener {
             salvarMaquina()
+        }
+
+        binding.btnVoltar.setOnClickListener {
+            finish()
         }
     }
 
@@ -88,9 +63,8 @@ class CadastroMaquinaActivity : AppCompatActivity() {
     }
 
     // -------------------------------------------------------------------------
-    // Carregar clientes do servidor para o spinner
+    // CARREGAR CLIENTES PARA O SPINNER
     // -------------------------------------------------------------------------
-
     private fun carregarClientes() {
         val token = sessionManager.getToken()
         if (token.isNullOrEmpty()) {
@@ -107,9 +81,8 @@ class CadastroMaquinaActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val resultado = withContext(Dispatchers.IO) {
                 try {
-                    val url = "${ApiConfig.BASE_URL}/api/clients"
                     val request = Request.Builder()
-                        .url(url)
+                        .url("${ApiConfig.BASE_URL}/api/clients")
                         .get()
                         .addHeader("X-Auth-Token", token)
                         .build()
@@ -118,7 +91,10 @@ class CadastroMaquinaActivity : AppCompatActivity() {
                     val bodyStr = response.body?.string() ?: ""
 
                     if (!response.isSuccessful) {
-                        return@withContext Pair(false, "Erro ao carregar clientes: ${response.code}")
+                        return@withContext Pair(
+                            false,
+                            "Erro ao carregar clientes: ${response.code} - $bodyStr"
+                        )
                     }
 
                     val arr = JSONArray(bodyStr)
@@ -151,24 +127,34 @@ class CadastroMaquinaActivity : AppCompatActivity() {
                 return@launch
             }
 
-            val nomes = clientes.map { it.nomeFantasia }
+            // placeholder + nomes
+            val nomes = mutableListOf("Selecione o cliente")
+            nomes.addAll(clientes.map { it.nome })
 
-            val adapter = android.widget.ArrayAdapter(
+            val adapter = ArrayAdapter(
                 this@CadastroMaquinaActivity,
-                android.R.layout.simple_spinner_item,
+                R.layout.spinner_item_dark,
                 nomes
             )
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_dark)
+            binding.spinnerCliente.adapter = adapter
 
-            binding.spClienteMaquina.adapter = adapter
-            binding.spClienteMaquina.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            // habilita spinner
+            binding.spinnerCliente.isEnabled = true
+            binding.spinnerCliente.isClickable = true
+
+            binding.spinnerCliente.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>,
                     view: View?,
                     position: Int,
                     id: Long
                 ) {
-                    clienteSelecionadoId = clientes[position].id
+                    clienteSelecionadoId = if (position <= 0) {
+                        null
+                    } else {
+                        clientes[position - 1].id
+                    }
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>) {
@@ -179,24 +165,26 @@ class CadastroMaquinaActivity : AppCompatActivity() {
     }
 
     // -------------------------------------------------------------------------
-    // Salvar máquina no servidor
+    // SALVAR MÁQUINA
     // -------------------------------------------------------------------------
-
     private fun salvarMaquina() {
-        if (clientes.isEmpty()) {
-            Toast.makeText(this, "Cadastre pelo menos um cliente.", Toast.LENGTH_SHORT).show()
+        val clienteId = clienteSelecionadoId
+        if (clienteId == null) {
+            Toast.makeText(this, "Selecione um cliente.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val marca = binding.edMarcaFabricante.text.toString().trim()
-        val modelo = binding.edModeloMaquina.text.toString().trim()
-        val modeloIhm = binding.edModeloIhm.text.toString().trim()
-        val numeroSerie = binding.edNumeroSerie.text.toString().trim()
+        val marca = binding.etMarca.text.toString().trim()
+        val modelo = binding.etModelo.text.toString().trim()
+        val modeloIhm = binding.etModeloIhm.text.toString().trim()
+        val numeroSerie = binding.etNumeroSerie.text.toString().trim()
+        val fotoPlaqueta = binding.etFotoPlaqueta.text.toString().trim()
+        val fotoCompressor = binding.etFotoCompressor.text.toString().trim()
 
-        if (marca.isEmpty() || modelo.isEmpty() || clienteSelecionadoId == null) {
+        if (marca.isEmpty() || modelo.isEmpty() || numeroSerie.isEmpty()) {
             Toast.makeText(
                 this,
-                "Informe cliente, marca e modelo da máquina.",
+                "Preencha marca, modelo e número de série.",
                 Toast.LENGTH_SHORT
             ).show()
             return
@@ -219,28 +207,19 @@ class CadastroMaquinaActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val resultado = withContext(Dispatchers.IO) {
                 try {
-                    val json = JSONObject().apply {
-                        put("client_id", clienteSelecionadoId ?: JSONObject.NULL)
+                    val bodyJson = JSONObject().apply {
+                        // Nomes 100% alinhados com o backend (MachineCreate)
+                        put("client_id", clienteId)
                         put("brand", marca)
                         put("model", modelo)
-                        put("ihm_model",
-                            if (modeloIhm.isNotBlank()) modeloIhm else JSONObject.NULL
-                        )
-                        put("serial_number",
-                            if (numeroSerie.isNotBlank()) numeroSerie else JSONObject.NULL
-                        )
-                        put(
-                            "plaqueta_uri",
-                            plaquetaUri?.toString() ?: JSONObject.NULL
-                        )
-                        put(
-                            "compressor_uri",
-                            compressorUri?.toString() ?: JSONObject.NULL
-                        )
+                        put("ihm_model", if (modeloIhm.isEmpty()) JSONObject.NULL else modeloIhm)
+                        put("serial_number", numeroSerie)
+                        put("plate_photo_url", if (fotoPlaqueta.isEmpty()) JSONObject.NULL else fotoPlaqueta)
+                        put("compressor_photo_url", if (fotoCompressor.isEmpty()) JSONObject.NULL else fotoCompressor)
                     }
 
                     val mediaType = "application/json; charset=utf-8".toMediaType()
-                    val body = json.toString().toRequestBody(mediaType)
+                    val body = bodyJson.toString().toRequestBody(mediaType)
 
                     val request = Request.Builder()
                         .url("${ApiConfig.BASE_URL}/api/machines")
@@ -249,10 +228,13 @@ class CadastroMaquinaActivity : AppCompatActivity() {
                         .build()
 
                     val response = httpClient.newCall(request).execute()
-                    val bodyStr = response.body?.string() ?: ""
+                    val respText = response.body?.string() ?: ""
 
                     if (!response.isSuccessful) {
-                        return@withContext Pair(false, "Erro: ${response.code} - $bodyStr")
+                        return@withContext Pair(
+                            false,
+                            "Erro ao salvar máquina: ${response.code} - $respText"
+                        )
                     }
 
                     Pair(true, "Máquina salva com sucesso.")
