@@ -7,7 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import com.soutech.relatoriotecnico.core.ApiConfig
 import com.soutech.relatoriotecnico.core.NetworkUtils
 import com.soutech.relatoriotecnico.core.SessionManager
-import com.soutech.relatoriotecnico.databinding.ActivityCadastroClienteBinding
+import com.soutech.relatoriotecnico.databinding.ActivityClienteFormBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -17,15 +17,15 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 
-class CadastroClienteActivity : AppCompatActivity() {
+class ClienteFormActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityCadastroClienteBinding
+    private lateinit var binding: ActivityClienteFormBinding
     private lateinit var sessionManager: SessionManager
     private val httpClient = OkHttpClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCadastroClienteBinding.inflate(layoutInflater)
+        binding = ActivityClienteFormBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         supportActionBar?.title = "Cadastro de Cliente"
@@ -75,7 +75,7 @@ class CadastroClienteActivity : AppCompatActivity() {
             val resultado = withContext(Dispatchers.IO) {
                 try {
                     val bodyJson = JSONObject().apply {
-                        // ATENÇÃO: nomes precisam bater com o backend (name, cnpj, address)
+                        // nomes EXATOS do backend
                         put("name", nome)
                         put("cnpj", if (cnpj.isEmpty()) JSONObject.NULL else cnpj)
                         put("address", if (endereco.isEmpty()) JSONObject.NULL else endereco)
@@ -108,10 +108,10 @@ class CadastroClienteActivity : AppCompatActivity() {
             }
 
             if (resultado.first) {
-                Toast.makeText(this@CadastroClienteActivity, resultado.second, Toast.LENGTH_LONG).show()
+                Toast.makeText(this@ClienteFormActivity, resultado.second, Toast.LENGTH_LONG).show()
                 finish()
             } else {
-                Toast.makeText(this@CadastroClienteActivity, resultado.second, Toast.LENGTH_LONG).show()
+                Toast.makeText(this@ClienteFormActivity, resultado.second, Toast.LENGTH_LONG).show()
                 binding.btnSalvarCliente.isEnabled = true
             }
         }
