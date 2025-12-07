@@ -48,12 +48,17 @@ class ClienteFormActivity : AppCompatActivity() {
     }
 
     private fun salvarCliente() {
-        val nome = binding.etNomeCliente.text.toString().trim()
+        val razaoSocial = binding.edRazaoSocial.text.toString().trim()
+        val nomeFantasia = binding.etNomeCliente.text.toString().trim()
         val cnpj = binding.etCnpj.text.toString().trim()
         val endereco = binding.etEndereco.text.toString().trim()
+        val email = binding.edEmail.text.toString().trim()
+        val telefone = binding.edTelefone.text.toString().trim()
+        val whatsapp = binding.edWhatsapp.text.toString().trim()
 
-        if (nome.isEmpty()) {
-            Toast.makeText(this, "Informe o nome do cliente.", Toast.LENGTH_SHORT).show()
+        // Nome fantasia obrigatório (pode ajustar se quiser exigir razão social também)
+        if (nomeFantasia.isEmpty()) {
+            Toast.makeText(this, "Informe o nome fantasia do cliente.", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -69,16 +74,37 @@ class ClienteFormActivity : AppCompatActivity() {
             return
         }
 
+        // Monta um "endereço completo" com todos os dados adicionais,
+        // aproveitando o campo address do backend sem precisar alterar o modelo.
+        val enderecoCompleto = buildString {
+            if (endereco.isNotEmpty()) append("Endereço: $endereco\n")
+            if (razaoSocial.isNotEmpty()) append("Razão Social: $razaoSocial\n")
+            if (email.isNotEmpty()) append("E-mail: $email\n")
+            if (telefone.isNotEmpty()) append("Telefone: $telefone\n")
+            if (whatsapp.isNotEmpty()) append("WhatsApp: $whatsapp\n")
+        }.trim()
+
         binding.btnSalvarCliente.isEnabled = false
 
         lifecycleScope.launch {
             val resultado = withContext(Dispatchers.IO) {
                 try {
-                    val bodyJson = JSONObject().apply {
-                        // nomes EXATOS do backend
-                        put("name", nome)
-                        put("cnpj", if (cnpj.isEmpty()) JSONObject.NULL else cnpj)
-                        put("address", if (endereco.isEmpty()) JSONObject.NULL else endereco)
+                    val bodyJson = JSONObject()
+
+                    // nomes EXATOS esperados pelo backend FastAPI
+                    bodyJson.put("name", nomeFantasia)
+
+                    // Evita Overload resolution ambiguity usando if separado
+                    if (cnpj.isEmpty()) {
+                        bodyJson.put("cnpj", JSONObject.NULL)
+                    } else {
+                        bodyJson.put("cnpj", cnpj)
+                    }
+
+                    if (enderecoCompleto.isEmpty()) {
+                        bodyJson.put("address", JSONObject.NULL)
+                    } else {
+                        bodyJson.put("address", enderecoCompleto)
                     }
 
                     val mediaType = "application/json; charset=utf-8".toMediaType()
