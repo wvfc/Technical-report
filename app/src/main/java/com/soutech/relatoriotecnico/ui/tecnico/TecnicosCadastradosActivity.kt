@@ -1,6 +1,7 @@
 package com.soutech.relatoriotecnico.ui.tecnico
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -40,6 +41,7 @@ class TecnicosCadastradosActivity : AppCompatActivity() {
             carregarTecnicos()
         }
 
+        // carrega na abertura da tela
         carregarTecnicos()
     }
 
@@ -101,10 +103,22 @@ class TecnicosCadastradosActivity : AppCompatActivity() {
             }
 
             if (!result.first) {
-                Toast.makeText(this@TecnicosCadastradosActivity, result.second, Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this@TecnicosCadastradosActivity,
+                    result.second,
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
-            binding.rvTecnicos.adapter = TecnicoAdapter(listaTecnicos.toList())
+            // atualiza lista / mensagem de vazio
+            if (listaTecnicos.isEmpty()) {
+                binding.rvTecnicos.visibility = View.GONE
+                binding.tvVazio.visibility = View.VISIBLE
+            } else {
+                binding.rvTecnicos.visibility = View.VISIBLE
+                binding.tvVazio.visibility = View.GONE
+                binding.rvTecnicos.adapter = TecnicoAdapter(listaTecnicos.toList())
+            }
         }
     }
 
