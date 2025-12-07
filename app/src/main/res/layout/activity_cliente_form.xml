@@ -21,7 +21,7 @@
             android:layout_marginBottom="8dp"/>
 
         <EditText
-            android:id="@+id/edNomeFantasia"
+            android:id="@+id/etNomeCliente"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nome Fantasia"
@@ -31,7 +31,8 @@
             android:layout_marginBottom="8dp"/>
 
         <EditText
-            android:id="@+id/edDocumento"
+            android:id="@+id/etCnpj"
+            
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="CNPJ/CPF"
@@ -41,7 +42,7 @@
             android:layout_marginBottom="8dp"/>
 
         <EditText
-            android:id="@+id/edEndereco"
+            android:id="@+id/etEndereco"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Endereço"
