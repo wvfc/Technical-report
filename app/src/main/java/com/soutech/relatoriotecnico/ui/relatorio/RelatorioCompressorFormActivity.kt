@@ -29,9 +29,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
-
 
 // DTOs simples para clientes e técnicos vindos da API
 data class ClienteRemoto(
@@ -214,7 +212,7 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
                     val bodyStr = response.body?.string() ?: ""
 
                     if (!response.isSuccessful) {
-                        return@withContext Pair(false, "Erro ao carregar clientes: ${response.code}")
+                        return@withContext Pair(false, "Erro ao carregar clientes: ${response.code} - $bodyStr")
                     }
 
                     val arr = JSONArray(bodyStr)
@@ -244,7 +242,10 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
                     Toast.LENGTH_LONG
                 ).show()
             } else {
-                val nomes = clientes.map { it.nomeFantasia }
+                // adiciona placeholder "Selecione o cliente"
+                val nomes = mutableListOf("Selecione o cliente")
+                nomes.addAll(clientes.map { it.nomeFantasia })
+
                 val adapter = ArrayAdapter(
                     this@RelatorioCompressorFormActivity,
                     R.layout.spinner_item_dark,
@@ -252,6 +253,12 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
                 )
                 adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_dark)
                 binding.spCliente.adapter = adapter
+
+                // garante que o spinner está interativo
+                binding.spCliente.isEnabled = true
+                binding.spCliente.isClickable = true
+                binding.spCliente.isFocusable = true
+                binding.spCliente.isFocusableInTouchMode = true
             }
         }
     }
@@ -282,7 +289,7 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
                     val bodyStr = response.body?.string() ?: ""
 
                     if (!response.isSuccessful) {
-                        return@withContext Pair(false, "Erro ao carregar técnicos: ${response.code}")
+                        return@withContext Pair(false, "Erro ao carregar técnicos: ${response.code} - $bodyStr")
                     }
 
                     val arr = JSONArray(bodyStr)
@@ -328,24 +335,23 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
         }
     }
 
-    // Helper pra Spinner (listener simplificado)
-    // Helper pra Spinner (listener simplificado) – SEM genérico
-private fun Spinner.setOnItemSelectedListener(
-    onItemSelected: (parent: AdapterView<*>, view: View?, position: Int, id: Long) -> Unit
-) {
-    this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-        override fun onItemSelected(
-            parent: AdapterView<*>,
-            view: View?,
-            position: Int,
-            id: Long
-        ) {
-            onItemSelected(parent, view, position, id)
-        }
+    // Helper pra Spinner (listener simplificado) – extensão SEM genérico
+    private fun Spinner.setOnItemSelectedListener(
+        onItemSelected: (parent: AdapterView<*>, view: View?, position: Int, id: Long) -> Unit
+    ) {
+        this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                onItemSelected(parent, view, position, id)
+            }
 
-        override fun onNothingSelected(parent: AdapterView<*>) {}
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
     }
-}
 
     // =========================================================================
     //  UTILITÁRIOS DE DATA/HORA
@@ -388,12 +394,14 @@ private fun Spinner.setOnItemSelectedListener(
             return
         }
 
-        val idxCliente = binding.spCliente.selectedItemPosition
-        if (idxCliente < 0) {
+        val idxSpinner = binding.spCliente.selectedItemPosition
+        if (idxSpinner <= 0) {
+            // posição 0 é o "Selecione o cliente"
             Toast.makeText(this, "Selecione um cliente.", Toast.LENGTH_SHORT).show()
             return
         }
-        val cliente = clientes[idxCliente]
+        // como temos placeholder, o índice real é -1
+        val cliente = clientes[idxSpinner - 1]
 
         val dataEntradaStr = binding.edDataEntrada.text.toString().trim()
         val dataSaidaStr = binding.edDataSaida.text.toString().trim()
@@ -410,7 +418,6 @@ private fun Spinner.setOnItemSelectedListener(
             return
         }
 
-        // Ainda não estamos usando os timestamps no backend, mas podemos mandar dentro do content
         val checklistResumo = montarResumoChecklist()
 
         val token = sessionManager.getToken()
