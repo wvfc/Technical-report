@@ -3,8 +3,8 @@ package com.soutech.relatoriotecnico.ui.maquina
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Toast
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.soutech.relatoriotecnico.R
@@ -127,7 +127,6 @@ class CadastroMaquinaActivity : AppCompatActivity() {
                 return@launch
             }
 
-            // placeholder + nomes
             val nomes = mutableListOf("Selecione o cliente")
             nomes.addAll(clientes.map { it.nome })
 
@@ -139,28 +138,28 @@ class CadastroMaquinaActivity : AppCompatActivity() {
             adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_dark)
             binding.spinnerCliente.adapter = adapter
 
-            // habilita spinner
             binding.spinnerCliente.isEnabled = true
             binding.spinnerCliente.isClickable = true
 
-            binding.spinnerCliente.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    clienteSelecionadoId = if (position <= 0) {
-                        null
-                    } else {
-                        clientes[position - 1].id
+            binding.spinnerCliente.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        clienteSelecionadoId = if (position <= 0) {
+                            null
+                        } else {
+                            clientes[position - 1].id
+                        }
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>) {
+                        clienteSelecionadoId = null
                     }
                 }
-
-                override fun onNothingSelected(parent: AdapterView<*>) {
-                    clienteSelecionadoId = null
-                }
-            }
         }
     }
 
@@ -208,7 +207,6 @@ class CadastroMaquinaActivity : AppCompatActivity() {
             val resultado = withContext(Dispatchers.IO) {
                 try {
                     val bodyJson = JSONObject().apply {
-                        // Nomes 100% alinhados com o backend (MachineCreate)
                         put("client_id", clienteId)
                         put("brand", marca)
                         put("model", modelo)
