@@ -4,29 +4,34 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.soutech.relatoriotecnico.data.AppDatabase
-import com.soutech.relatoriotecnico.data.ClienteEntity
-import com.soutech.relatoriotecnico.databinding.ActivityClienteFormBinding
+import com.soutech.relatoriotecnico.core.ApiConfig
+import com.soutech.relatoriotecnico.core.NetworkUtils
+import com.soutech.relatoriotecnico.core.SessionManager
+import com.soutech.relatoriotecnico.databinding.ActivityCadastroClienteBinding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 
-class ClienteFormActivity : AppCompatActivity() {
+class CadastroClienteActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityClienteFormBinding
-    private var clienteId: Long? = null
+    private lateinit var binding: ActivityCadastroClienteBinding
+    private lateinit var sessionManager: SessionManager
+    private val httpClient = OkHttpClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityClienteFormBinding.inflate(layoutInflater)
+        binding = ActivityCadastroClienteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = "Cadastro de cliente"
+        supportActionBar?.title = "Cadastro de Cliente"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        clienteId = intent.getLongExtra("clienteId", -1L).takeIf { it > 0 }
-
-        if (clienteId != null) {
-            carregarCliente(clienteId!!)
-        }
+        sessionManager = SessionManager(this)
 
         binding.btnSalvarCliente.setOnClickListener {
             salvarCliente()
@@ -35,7 +40,6 @@ class ClienteFormActivity : AppCompatActivity() {
         binding.btnVoltar.setOnClickListener {
             finish()
         }
-
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -43,65 +47,73 @@ class ClienteFormActivity : AppCompatActivity() {
         return true
     }
 
-    private fun carregarCliente(id: Long) {
-        val db = AppDatabase.getInstance(this)
-        lifecycleScope.launch {
-            val cliente = db.clienteDao().buscarPorId(id)
-            cliente?.let {
-                binding.edRazaoSocial.setText(it.razaoSocial)
-                binding.edNomeFantasia.setText(it.nomeFantasia)
-                binding.edDocumento.setText(it.documento ?: "")
-                binding.edEndereco.setText(it.endereco ?: "")
-                binding.edEmail.setText(it.email ?: "")
-                binding.edTelefone.setText(it.telefone ?: "")
-                binding.edWhatsapp.setText(it.whatsapp ?: "")
-            }
-        }
-    }
-
     private fun salvarCliente() {
-        val razao = binding.edRazaoSocial.text.toString().trim()
-        val fantasia = binding.edNomeFantasia.text.toString().trim()
-        val documento = binding.edDocumento.text.toString().trim().ifEmpty { null }
-        val endereco = binding.edEndereco.text.toString().trim().ifEmpty { null }
-        val email = binding.edEmail.text.toString().trim().ifEmpty { null }
-        val telefone = binding.edTelefone.text.toString().trim().ifEmpty { null }
-        val whatsapp = binding.edWhatsapp.text.toString().trim().ifEmpty { null }
+        val nome = binding.etNomeCliente.text.toString().trim()
+        val cnpj = binding.etCnpj.text.toString().trim()
+        val endereco = binding.etEndereco.text.toString().trim()
 
-        if (razao.isEmpty() || fantasia.isEmpty()) {
-            Toast.makeText(this, "Razão Social e Nome Fantasia são obrigatórios.", Toast.LENGTH_SHORT).show()
+        if (nome.isEmpty()) {
+            Toast.makeText(this, "Informe o nome do cliente.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val db = AppDatabase.getInstance(this)
-        lifecycleScope.launch {
-            if (clienteId == null) {
-                val novo = ClienteEntity(
-                    razaoSocial = razao,
-                    nomeFantasia = fantasia,
-                    documento = documento,
-                    endereco = endereco,
-                    email = email,
-                    telefone = telefone,
-                    whatsapp = whatsapp
-                )
-                db.clienteDao().inserir(novo)
-                Toast.makeText(this@ClienteFormActivity, "Cliente cadastrado.", Toast.LENGTH_SHORT).show()
-            } else {
-                val existente = ClienteEntity(
-                    id = clienteId!!,
-                    razaoSocial = razao,
-                    nomeFantasia = fantasia,
-                    documento = documento,
-                    endereco = endereco,
-                    email = email,
-                    telefone = telefone,
-                    whatsapp = whatsapp
-                )
-                db.clienteDao().atualizar(existente)
-                Toast.makeText(this@ClienteFormActivity, "Cliente atualizado.", Toast.LENGTH_SHORT).show()
-            }
+        val token = sessionManager.getToken()
+        if (token.isNullOrEmpty()) {
+            Toast.makeText(this, "Sessão expirada. Faça login novamente.", Toast.LENGTH_LONG).show()
             finish()
+            return
+        }
+
+        if (!NetworkUtils.isOnline(this)) {
+            Toast.makeText(this, "Sem conexão com a internet.", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        binding.btnSalvarCliente.isEnabled = false
+
+        lifecycleScope.launch {
+            val resultado = withContext(Dispatchers.IO) {
+                try {
+                    val bodyJson = JSONObject().apply {
+                        // ATENÇÃO: nomes precisam bater com o backend (name, cnpj, address)
+                        put("name", nome)
+                        put("cnpj", if (cnpj.isEmpty()) JSONObject.NULL else cnpj)
+                        put("address", if (endereco.isEmpty()) JSONObject.NULL else endereco)
+                    }
+
+                    val mediaType = "application/json; charset=utf-8".toMediaType()
+                    val body = bodyJson.toString().toRequestBody(mediaType)
+
+                    val request = Request.Builder()
+                        .url("${ApiConfig.BASE_URL}/api/clients")
+                        .post(body)
+                        .addHeader("X-Auth-Token", token)
+                        .build()
+
+                    val response = httpClient.newCall(request).execute()
+                    val respText = response.body?.string() ?: ""
+
+                    if (!response.isSuccessful) {
+                        return@withContext Pair(
+                            false,
+                            "Erro ao salvar cliente: ${response.code} - $respText"
+                        )
+                    }
+
+                    Pair(true, "Cliente salvo com sucesso.")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Pair(false, "Erro: ${e.message}")
+                }
+            }
+
+            if (resultado.first) {
+                Toast.makeText(this@CadastroClienteActivity, resultado.second, Toast.LENGTH_LONG).show()
+                finish()
+            } else {
+                Toast.makeText(this@CadastroClienteActivity, resultado.second, Toast.LENGTH_LONG).show()
+                binding.btnSalvarCliente.isEnabled = true
+            }
         }
     }
 }
