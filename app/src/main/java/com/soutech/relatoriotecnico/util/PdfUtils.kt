@@ -128,9 +128,21 @@ object PdfUtils {
         if (imagens.isNotEmpty()) {
             if (y > bottomLimit - 200f) novaPagina()
             y = drawSectionTitle(canvas, "Imagens do atendimento", margin, y)
-            y = desenharImagens(context, pdf, canvas, imagens, margin, y, contentWidth, pageWidth, pageHeight) { novoCanvas ->
-                canvas = novoCanvas
-                y
+
+            for (img in imagens) {
+                val bitmap = carregarBitmapSegura(context, img.uri) ?: continue
+                val scale = minOf(contentWidth / bitmap.width, 250f / bitmap.height)
+                val drawWidth = bitmap.width * scale
+                val drawHeight = bitmap.height * scale
+
+                if (y + drawHeight + 40 > pageHeight) {
+                    novaPagina("Imagens do atendimento (cont.)")
+                }
+
+                val dest = RectF(margin, y + 12f, margin + drawWidth, y + 12f + drawHeight)
+                canvas.drawBitmap(bitmap, null, dest, null)
+                bitmap.recycle()
+                y = dest.bottom + 16f
             }
         }
 
@@ -209,19 +221,18 @@ object PdfUtils {
             margin, y, contentWidth
         )
 
-        // Checklist (usa checklistResumo)
+        // Checklist
         val checklistTexto = relatorio.checklistResumo ?: ""
         if (checklistTexto.isNotBlank()) {
             if (y > bottomLimit) novaPagina()
             y = drawSectionTitle(canvas, "Checklist de inspeção", margin, y)
-            val linhas = checklistTexto.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
-            for (linha in linhas) {
+            for (linha in checklistTexto.split("\n").map { it.trim() }.filter { it.isNotEmpty() }) {
                 if (y > bottomLimit) novaPagina("Checklist de inspeção (cont.)")
                 y = drawMultiline(canvas, linha, margin, y, contentWidth)
             }
         }
 
-        // Observações gerais (usa observacoes)
+        // Observações gerais
         val obs = relatorio.observacoes
         if (!obs.isNullOrBlank()) {
             if (y > bottomLimit) novaPagina()
@@ -240,9 +251,21 @@ object PdfUtils {
         if (imagens.isNotEmpty()) {
             if (y > bottomLimit - 200f) novaPagina()
             y = drawSectionTitle(canvas, "Imagens do atendimento", margin, y)
-            desenharImagens(context, pdf, canvas, imagens, margin, y, contentWidth, pageWidth, pageHeight) { novoCanvas ->
-                canvas = novoCanvas
-                y
+
+            for (img in imagens) {
+                val bitmap = carregarBitmapSegura(context, img.uri) ?: continue
+                val scale = minOf(contentWidth / bitmap.width, 250f / bitmap.height)
+                val drawWidth = bitmap.width * scale
+                val drawHeight = bitmap.height * scale
+
+                if (y + drawHeight + 40 > pageHeight) {
+                    novaPagina("Imagens do atendimento (cont.)")
+                }
+
+                val dest = RectF(margin, y + 12f, margin + drawWidth, y + 12f + drawHeight)
+                canvas.drawBitmap(bitmap, null, dest, null)
+                bitmap.recycle()
+                y = dest.bottom + 16f
             }
         }
 
@@ -254,58 +277,15 @@ object PdfUtils {
     // HELPERS PRIVADOS
     // ============================================================
 
-    private fun desenharImagens(
-        context: Context,
-        pdf: android.graphics.pdf.PdfDocument,
-        canvasInicial: Canvas,
-        imagens: List<ImagemRelatorioEntity>,
-        margin: Float,
-        yInicial: Float,
-        contentWidth: Float,
-        pageWidth: Int,
-        pageHeight: Int,
-        atualizarCanvas: (Canvas) -> Float
-    ): Float {
-        var canvas = canvasInicial
-        var y = yInicial
-        val maxImageHeight = 250f
-        val bottomLimit = pageHeight - 60f
-
-        for (img in imagens) {
-            val bitmap = carregarBitmapSegura(context, img.uri) ?: continue
-            val scale = minOf(contentWidth / bitmap.width, maxImageHeight / bitmap.height)
-            val drawWidth = bitmap.width * scale
-            val drawHeight = bitmap.height * scale
-
-            if (y + drawHeight + 40 > pageHeight) {
-                pdf.finishPage(pdf.pages.last())
-                val pageInfo = android.graphics.pdf.PdfDocument.PageInfo
-                    .Builder(pageWidth, pageHeight, pdf.pages.size + 1).create()
-                val newPage = pdf.startPage(pageInfo)
-                canvas = newPage.canvas
-                y = drawHeader(canvas, pageWidth.toFloat(), margin)
-                y = drawSectionTitle(canvas, "Imagens do atendimento (cont.)", margin, y)
-            }
-
-            val left = margin
-            val top = y + 12f
-            val dest = RectF(left, top, left + drawWidth, top + drawHeight)
-            canvas.drawBitmap(bitmap, null, dest, null)
-            bitmap.recycle()
-            y = dest.bottom + 16f
-        }
-        return y
-    }
-
     private fun salvarPdf(
         pdf: android.graphics.pdf.PdfDocument,
         context: Context,
         fileName: String
     ): File {
         val dir = File(context.getExternalFilesDir(null), "relatorios")
-        val criado = if (!dir.exists()) dir.mkdirs() else true
-        if (!criado) {
-            Log.w(TAG, "Não foi possível criar o diretório: ${dir.absolutePath}")
+        if (!dir.exists()) {
+            val criado = dir.mkdirs()
+            if (!criado) Log.w(TAG, "Não foi possível criar o diretório: ${dir.absolutePath}")
         }
         val file = File(dir, fileName)
         FileOutputStream(file).use { out -> pdf.writeTo(out) }
@@ -378,9 +358,7 @@ object PdfUtils {
         if (uriStr.isNullOrBlank()) return null
         return try {
             val uri = Uri.parse(uriStr)
-            context.contentResolver.openInputStream(uri)?.use { input ->
-                BitmapFactory.decodeStream(input)
-            }
+            context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it) }
         } catch (e: Exception) {
             Log.w(TAG, "Falha ao carregar imagem do URI $uriStr", e)
             null
