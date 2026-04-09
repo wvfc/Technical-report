@@ -16,7 +16,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase
         ImagemRelatorioEntity::class,
         ConfigLogoEntity::class
     ],
-    version = 2
+    version = 2,
+    exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun clienteDao(): ClienteDao
