@@ -4,24 +4,19 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.soutech.relatoriotecnico.core.ApiConfig
-import com.soutech.relatoriotecnico.core.NetworkUtils
-import com.soutech.relatoriotecnico.core.SessionManager
+import com.soutech.relatoriotecnico.data.AppDatabase
+import com.soutech.relatoriotecnico.data.ClienteEntity
 import com.soutech.relatoriotecnico.databinding.ActivityClienteFormBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
 
 class ClienteFormActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityClienteFormBinding
-    private lateinit var sessionManager: SessionManager
-    private val httpClient = OkHttpClient()
+
+    // Preenchido ao editar um cliente existente
+    private var clienteEditando: ClienteEntity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +26,11 @@ class ClienteFormActivity : AppCompatActivity() {
         supportActionBar?.title = "Cadastro de Cliente"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        sessionManager = SessionManager(this)
+        val clienteId = intent.getLongExtra("clienteId", -1L).takeIf { it > 0 }
+
+        if (clienteId != null) {
+            carregarCliente(clienteId)
+        }
 
         binding.btnSalvarCliente.setOnClickListener {
             salvarCliente()
@@ -47,6 +46,26 @@ class ClienteFormActivity : AppCompatActivity() {
         return true
     }
 
+    private fun carregarCliente(clienteId: Long) {
+        val db = AppDatabase.getInstance(this)
+        lifecycleScope.launch {
+            val cliente = withContext(Dispatchers.IO) {
+                db.clienteDao().buscarPorId(clienteId)
+            }
+            cliente?.let {
+                clienteEditando = it
+                binding.edRazaoSocial.setText(it.razaoSocial)
+                binding.etNomeCliente.setText(it.nomeFantasia)
+                binding.etCnpj.setText(it.documento ?: "")
+                binding.etEndereco.setText(it.endereco ?: "")
+                binding.edEmail.setText(it.email ?: "")
+                binding.edTelefone.setText(it.telefone ?: "")
+                binding.edWhatsapp.setText(it.whatsapp ?: "")
+                supportActionBar?.title = "Editar Cliente"
+            }
+        }
+    }
+
     private fun salvarCliente() {
         val razaoSocial = binding.edRazaoSocial.text.toString().trim()
         val nomeFantasia = binding.etNomeCliente.text.toString().trim()
@@ -56,90 +75,53 @@ class ClienteFormActivity : AppCompatActivity() {
         val telefone = binding.edTelefone.text.toString().trim()
         val whatsapp = binding.edWhatsapp.text.toString().trim()
 
-        // Nome fantasia obrigatório (pode ajustar se quiser exigir razão social também)
         if (nomeFantasia.isEmpty()) {
             Toast.makeText(this, "Informe o nome fantasia do cliente.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val token = sessionManager.getToken()
-        if (token.isNullOrEmpty()) {
-            Toast.makeText(this, "Sessão expirada. Faça login novamente.", Toast.LENGTH_LONG).show()
-            finish()
-            return
-        }
-
-        if (!NetworkUtils.isOnline(this)) {
-            Toast.makeText(this, "Sem conexão com a internet.", Toast.LENGTH_LONG).show()
-            return
-        }
-
-        // Monta um "endereço completo" com todos os dados adicionais,
-        // aproveitando o campo address do backend sem precisar alterar o modelo.
-        val enderecoCompleto = buildString {
-            if (endereco.isNotEmpty()) append("Endereço: $endereco\n")
-            if (razaoSocial.isNotEmpty()) append("Razão Social: $razaoSocial\n")
-            if (email.isNotEmpty()) append("E-mail: $email\n")
-            if (telefone.isNotEmpty()) append("Telefone: $telefone\n")
-            if (whatsapp.isNotEmpty()) append("WhatsApp: $whatsapp\n")
-        }.trim()
-
         binding.btnSalvarCliente.isEnabled = false
 
         lifecycleScope.launch {
-            val resultado = withContext(Dispatchers.IO) {
-                try {
-                    val bodyJson = JSONObject()
+            withContext(Dispatchers.IO) {
+                val db = AppDatabase.getInstance(this@ClienteFormActivity)
+                val editando = clienteEditando
 
-                    // nomes EXATOS esperados pelo backend FastAPI
-                    bodyJson.put("name", nomeFantasia)
-
-                    // Evita Overload resolution ambiguity usando if separado
-                    if (cnpj.isEmpty()) {
-                        bodyJson.put("cnpj", JSONObject.NULL)
-                    } else {
-                        bodyJson.put("cnpj", cnpj)
-                    }
-
-                    if (enderecoCompleto.isEmpty()) {
-                        bodyJson.put("address", JSONObject.NULL)
-                    } else {
-                        bodyJson.put("address", enderecoCompleto)
-                    }
-
-                    val mediaType = "application/json; charset=utf-8".toMediaType()
-                    val body = bodyJson.toString().toRequestBody(mediaType)
-
-                    val request = Request.Builder()
-                        .url("${ApiConfig.BASE_URL}/api/clients")
-                        .post(body)
-                        .addHeader("X-Auth-Token", token)
-                        .build()
-
-                    val response = httpClient.newCall(request).execute()
-                    val respText = response.body?.string() ?: ""
-
-                    if (!response.isSuccessful) {
-                        return@withContext Pair(
-                            false,
-                            "Erro ao salvar cliente: ${response.code} - $respText"
+                if (editando != null) {
+                    // Atualiza cliente existente
+                    db.clienteDao().atualizar(
+                        editando.copy(
+                            razaoSocial = razaoSocial,
+                            nomeFantasia = nomeFantasia,
+                            documento = cnpj.ifEmpty { null },
+                            endereco = endereco.ifEmpty { null },
+                            email = email.ifEmpty { null },
+                            telefone = telefone.ifEmpty { null },
+                            whatsapp = whatsapp.ifEmpty { null }
                         )
-                    }
-
-                    Pair(true, "Cliente salvo com sucesso.")
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Pair(false, "Erro: ${e.message}")
+                    )
+                } else {
+                    // Insere novo cliente
+                    db.clienteDao().inserir(
+                        ClienteEntity(
+                            razaoSocial = razaoSocial,
+                            nomeFantasia = nomeFantasia,
+                            documento = cnpj.ifEmpty { null },
+                            endereco = endereco.ifEmpty { null },
+                            email = email.ifEmpty { null },
+                            telefone = telefone.ifEmpty { null },
+                            whatsapp = whatsapp.ifEmpty { null }
+                        )
+                    )
                 }
             }
 
-            if (resultado.first) {
-                Toast.makeText(this@ClienteFormActivity, resultado.second, Toast.LENGTH_LONG).show()
-                finish()
-            } else {
-                Toast.makeText(this@ClienteFormActivity, resultado.second, Toast.LENGTH_LONG).show()
-                binding.btnSalvarCliente.isEnabled = true
-            }
+            Toast.makeText(
+                this@ClienteFormActivity,
+                "Cliente salvo com sucesso.",
+                Toast.LENGTH_LONG
+            ).show()
+            finish()
         }
     }
 }

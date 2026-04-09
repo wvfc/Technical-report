@@ -13,6 +13,7 @@ import com.soutech.relatoriotecnico.data.RelatorioEntity
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 object PdfUtils {
@@ -29,13 +30,12 @@ object PdfUtils {
         imagens: List<ImagemRelatorioEntity>
     ): File {
         val pdf = android.graphics.pdf.PdfDocument()
-        val pageWidth = 595  // A4 (72 dpi)
+        val pageWidth = 595
         val pageHeight = 842
 
         var pageNumber = 1
         var pageInfo = android.graphics.pdf.PdfDocument.PageInfo
-            .Builder(pageWidth, pageHeight, pageNumber)
-            .create()
+            .Builder(pageWidth, pageHeight, pageNumber).create()
         var page = pdf.startPage(pageInfo)
         var canvas = page.canvas
 
@@ -44,7 +44,6 @@ object PdfUtils {
         val bottomLimit = pageHeight - 60f
         var y = 0f
 
-        // ---------- CABEÇALHO ----------
         y = drawHeader(canvas, pageWidth.toFloat(), margin)
 
         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
@@ -53,8 +52,7 @@ object PdfUtils {
             pdf.finishPage(page)
             pageNumber++
             pageInfo = android.graphics.pdf.PdfDocument.PageInfo
-                .Builder(pageWidth, pageHeight, pageNumber)
-                .create()
+                .Builder(pageWidth, pageHeight, pageNumber).create()
             page = pdf.startPage(pageInfo)
             canvas = page.canvas
             y = drawHeader(canvas, pageWidth.toFloat(), margin)
@@ -63,134 +61,85 @@ object PdfUtils {
             }
         }
 
-        // ---------- CLIENTE ----------
+        // Cliente
         if (y > bottomLimit) novaPagina()
         y = drawSectionTitle(canvas, "Dados do Cliente", margin, y)
         y = drawMultiline(
             canvas,
-            """
-            Nome fantasia: ${cliente.nomeFantasia}
-            Razão social: ${cliente.razaoSocial ?: "-"}
-            CNPJ/CPF: ${cliente.documento ?: "-"}
-            Endereço: ${cliente.endereco ?: "-"}
-            E-mail: ${cliente.email ?: "-"}
-            Telefone: ${cliente.telefone ?: "-"}
-            WhatsApp: ${cliente.whatsapp ?: "-"}
-            """.trimIndent(),
-            margin,
-            y,
-            contentWidth
+            buildString {
+                appendLine("Nome fantasia: ${cliente.nomeFantasia}")
+                if (cliente.razaoSocial.isNotEmpty()) appendLine("Razão social: ${cliente.razaoSocial}")
+                if (!cliente.documento.isNullOrBlank()) appendLine("CNPJ/CPF: ${cliente.documento}")
+                if (!cliente.endereco.isNullOrBlank()) appendLine("Endereço: ${cliente.endereco}")
+                if (!cliente.email.isNullOrBlank()) appendLine("E-mail: ${cliente.email}")
+                if (!cliente.telefone.isNullOrBlank()) appendLine("Telefone: ${cliente.telefone}")
+                if (!cliente.whatsapp.isNullOrBlank()) appendLine("WhatsApp: ${cliente.whatsapp}")
+            }.trimEnd(),
+            margin, y, contentWidth
         )
 
-        // ---------- ATENDIMENTO ----------
+        // Atendimento
         if (y > bottomLimit) novaPagina()
         y = drawSectionTitle(canvas, "Dados do Atendimento", margin, y)
         y = drawMultiline(
             canvas,
-            """
-            Entrada: ${sdf.format(relatorio.dataEntrada)}
-            Saída: ${sdf.format(relatorio.dataSaida)}
-            Modelo da máquina: ${relatorio.modeloMaquina}
-            Tipo de manutenção: ${relatorio.tipoManutencao}
-            """.trimIndent(),
-            margin,
-            y,
-            contentWidth
+            buildString {
+                appendLine("Entrada: ${sdf.format(Date(relatorio.dataEntrada))}")
+                appendLine("Saída: ${sdf.format(Date(relatorio.dataSaida))}")
+                appendLine("Modelo da máquina: ${relatorio.modeloMaquina}")
+                append("Tipo de manutenção: ${relatorio.tipoManutencao}")
+            },
+            margin, y, contentWidth
         )
 
-        // ---------- OCORRÊNCIA ----------
-        if (y > bottomLimit) novaPagina()
-        y = drawSectionTitle(canvas, "Ocorrência", margin, y)
-        y = drawMultiline(
-            canvas,
-            relatorio.ocorrencia ?: "-",
-            margin,
-            y,
-            contentWidth
-        )
+        // Ocorrência
+        if (relatorio.ocorrencia.isNotBlank()) {
+            if (y > bottomLimit) novaPagina()
+            y = drawSectionTitle(canvas, "Ocorrência", margin, y)
+            y = drawMultiline(canvas, relatorio.ocorrencia, margin, y, contentWidth)
+        }
 
-        // ---------- SOLUÇÃO ----------
-        if (y > bottomLimit) novaPagina()
-        y = drawSectionTitle(canvas, "Solução proposta", margin, y)
-        y = drawMultiline(
-            canvas,
-            relatorio.solucaoProposta ?: "-",
-            margin,
-            y,
-            contentWidth
-        )
+        // Solução proposta
+        if (relatorio.solucaoProposta.isNotBlank()) {
+            if (y > bottomLimit) novaPagina()
+            y = drawSectionTitle(canvas, "Solução proposta", margin, y)
+            y = drawMultiline(canvas, relatorio.solucaoProposta, margin, y, contentWidth)
+        }
 
-        // ---------- PEÇAS ----------
-        if (y > bottomLimit) novaPagina()
-        y = drawSectionTitle(canvas, "Lista de peças", margin, y)
-        y = drawMultiline(
-            canvas,
-            (relatorio.pecasTexto ?: "-").replace(";", "\n"),
-            margin,
-            y,
-            contentWidth
-        )
+        // Peças
+        if (!relatorio.pecasTexto.isNullOrBlank()) {
+            if (y > bottomLimit) novaPagina()
+            y = drawSectionTitle(canvas, "Lista de peças", margin, y)
+            y = drawMultiline(
+                canvas,
+                relatorio.pecasTexto.replace(";", "\n"),
+                margin, y, contentWidth
+            )
+        }
 
         y += 16f
         y = drawMultiline(
             canvas,
             "Assinatura do responsável: ____________________________",
-            margin,
-            y,
-            contentWidth
+            margin, y, contentWidth
         )
 
-        // ---------- IMAGENS ----------
+        // Imagens
         if (imagens.isNotEmpty()) {
-            if (y > bottomLimit - 200f) {
-                novaPagina()
-            }
-
+            if (y > bottomLimit - 200f) novaPagina()
             y = drawSectionTitle(canvas, "Imagens do atendimento", margin, y)
-
-            val maxImageWidth = contentWidth
-            val maxImageHeight = 250f
-
-            for (img in imagens) {
-                val bitmap = carregarBitmapSegura(context, img.uri) ?: continue
-
-                val scale = minOf(
-                    maxImageWidth / bitmap.width,
-                    maxImageHeight / bitmap.height
-                )
-
-                val drawWidth = bitmap.width * scale
-                val drawHeight = bitmap.height * scale
-
-                if (y + drawHeight + 40 > pageHeight) {
-                    novaPagina("Imagens do atendimento (cont.)")
-                }
-
-                val left = margin
-                val top = y + 12f
-                val dest = RectF(left, top, left + drawWidth, top + drawHeight)
-                canvas.drawBitmap(bitmap, null, dest, null)
-                bitmap.recycle()
-
-                y = dest.bottom + 16f
+            y = desenharImagens(context, pdf, canvas, imagens, margin, y, contentWidth, pageWidth, pageHeight) { novoCanvas ->
+                canvas = novoCanvas
+                y
             }
         }
 
         pdf.finishPage(page)
-
-        val dir = File(context.getExternalFilesDir(null), "relatorios")
-        if (!dir.exists()) dir.mkdirs()
-
-        val fileName = "relatorio_${relatorio.id}_${System.currentTimeMillis()}.pdf"
-        val file = File(dir, fileName)
-        FileOutputStream(file).use { out -> pdf.writeTo(out) }
-        pdf.close()
-
-        return file
+        return salvarPdf(pdf, context, "relatorio_${relatorio.id}_${System.currentTimeMillis()}.pdf")
     }
 
     // ============================================================
-    // 2) PDF ESPECÍFICO – COMPRESSOR (com checklist paginado)
+    // 2) PDF COMPRESSOR (com checklist paginado)
     // ============================================================
     fun gerarPdfRelatorioCompressor(
         context: Context,
@@ -204,8 +153,7 @@ object PdfUtils {
 
         var pageNumber = 1
         var pageInfo = android.graphics.pdf.PdfDocument.PageInfo
-            .Builder(pageWidth, pageHeight, pageNumber)
-            .create()
+            .Builder(pageWidth, pageHeight, pageNumber).create()
         var page = pdf.startPage(pageInfo)
         var canvas = page.canvas
 
@@ -218,8 +166,7 @@ object PdfUtils {
             pdf.finishPage(page)
             pageNumber++
             pageInfo = android.graphics.pdf.PdfDocument.PageInfo
-                .Builder(pageWidth, pageHeight, pageNumber)
-                .create()
+                .Builder(pageWidth, pageHeight, pageNumber).create()
             page = pdf.startPage(pageInfo)
             canvas = page.canvas
             y = drawHeader(canvas, pageWidth.toFloat(), margin)
@@ -228,170 +175,178 @@ object PdfUtils {
             }
         }
 
-        // Cabeçalho padrão SOUTECH
         y = drawHeader(canvas, pageWidth.toFloat(), margin)
-
         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
 
-        // ===== Dados do cliente =====
+        // Cliente
         if (y > bottomLimit) novaPagina()
         y = drawSectionTitle(canvas, "Dados do Cliente", margin, y)
         y = drawMultiline(
             canvas,
-            """
-            Nome fantasia: ${cliente.nomeFantasia}
-            Razão social: ${cliente.razaoSocial ?: "-"}
-            CNPJ/CPF: ${cliente.documento ?: "-"}
-            Endereço: ${cliente.endereco ?: "-"}
-            E-mail: ${cliente.email ?: "-"}
-            Telefone: ${cliente.telefone ?: "-"}
-            WhatsApp: ${cliente.whatsapp ?: "-"}
-            """.trimIndent(),
-            margin,
-            y,
-            contentWidth
+            buildString {
+                appendLine("Nome fantasia: ${cliente.nomeFantasia}")
+                if (cliente.razaoSocial.isNotEmpty()) appendLine("Razão social: ${cliente.razaoSocial}")
+                if (!cliente.documento.isNullOrBlank()) appendLine("CNPJ/CPF: ${cliente.documento}")
+                if (!cliente.endereco.isNullOrBlank()) appendLine("Endereço: ${cliente.endereco}")
+                if (!cliente.email.isNullOrBlank()) appendLine("E-mail: ${cliente.email}")
+                if (!cliente.telefone.isNullOrBlank()) appendLine("Telefone: ${cliente.telefone}")
+                if (!cliente.whatsapp.isNullOrBlank()) appendLine("WhatsApp: ${cliente.whatsapp}")
+            }.trimEnd(),
+            margin, y, contentWidth
         )
 
-        // ===== Dados do atendimento – Compressor =====
+        // Atendimento
         if (y > bottomLimit) novaPagina()
         y = drawSectionTitle(canvas, "Dados do Atendimento – Compressor", margin, y)
         y = drawMultiline(
             canvas,
-            """
-            Entrada: ${sdf.format(relatorio.dataEntrada)}
-            Saída: ${sdf.format(relatorio.dataSaida)}
-            Modelo do compressor: ${relatorio.modeloMaquina}
-            Tipo de manutenção: ${relatorio.tipoManutencao}
-            """.trimIndent(),
-            margin,
-            y,
-            contentWidth
+            buildString {
+                appendLine("Entrada: ${sdf.format(Date(relatorio.dataEntrada))}")
+                appendLine("Saída: ${sdf.format(Date(relatorio.dataSaida))}")
+                appendLine("Modelo do compressor: ${relatorio.modeloMaquina}")
+                append("Tipo de manutenção: ${relatorio.tipoManutencao}")
+            },
+            margin, y, contentWidth
         )
 
-        // ===== Checklist de inspeção (PAGINADO) =====
-        if (y > bottomLimit) novaPagina()
-        y = drawSectionTitle(canvas, "Checklist de inspeção", margin, y)
-
-        val linhasChecklist = (relatorio.ocorrencia ?: "")
-            .split("\n")
-            .map { it.trim() }
-            .filter { it.isNotEmpty() }
-
-        for (linhaTexto in linhasChecklist) {
-            if (y > bottomLimit) {
-                novaPagina("Checklist de inspeção (cont.)")
+        // Checklist (usa checklistResumo)
+        val checklistTexto = relatorio.checklistResumo ?: ""
+        if (checklistTexto.isNotBlank()) {
+            if (y > bottomLimit) novaPagina()
+            y = drawSectionTitle(canvas, "Checklist de inspeção", margin, y)
+            val linhas = checklistTexto.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
+            for (linha in linhas) {
+                if (y > bottomLimit) novaPagina("Checklist de inspeção (cont.)")
+                y = drawMultiline(canvas, linha, margin, y, contentWidth)
             }
-            y = drawMultiline(canvas, linhaTexto, margin, y, contentWidth)
         }
 
-        // ===== Observações gerais =====
-        if (!relatorio.solucaoProposta.isNullOrBlank()) {
+        // Observações gerais (usa observacoes)
+        val obs = relatorio.observacoes
+        if (!obs.isNullOrBlank()) {
             if (y > bottomLimit) novaPagina()
             y = drawSectionTitle(canvas, "Observações gerais", margin, y)
-            y = drawMultiline(
-                canvas,
-                relatorio.solucaoProposta ?: "-",
-                margin,
-                y,
-                contentWidth
-            )
+            y = drawMultiline(canvas, obs, margin, y, contentWidth)
         }
 
-        // ===== Imagens =====
+        y += 16f
+        y = drawMultiline(
+            canvas,
+            "Assinatura do responsável: ____________________________",
+            margin, y, contentWidth
+        )
+
+        // Imagens
         if (imagens.isNotEmpty()) {
-            if (y > bottomLimit - 200f) {
-                novaPagina()
-            }
-
+            if (y > bottomLimit - 200f) novaPagina()
             y = drawSectionTitle(canvas, "Imagens do atendimento", margin, y)
-
-            val maxImageWidth = contentWidth
-            val maxImageHeight = 250f
-
-            for (img in imagens) {
-                val bitmap = carregarBitmapSegura(context, img.uri) ?: continue
-
-                val scale = minOf(
-                    maxImageWidth / bitmap.width,
-                    maxImageHeight / bitmap.height
-                )
-                val drawWidth = bitmap.width * scale
-                val drawHeight = bitmap.height * scale
-
-                if (y + drawHeight + 40 > pageHeight) {
-                    novaPagina("Imagens do atendimento (cont.)")
-                }
-
-                val left = margin
-                val top = y + 12f
-                val dest = RectF(left, top, left + drawWidth, top + drawHeight)
-                canvas.drawBitmap(bitmap, null, dest, null)
-                bitmap.recycle()
-
-                y = dest.bottom + 16f
+            desenharImagens(context, pdf, canvas, imagens, margin, y, contentWidth, pageWidth, pageHeight) { novoCanvas ->
+                canvas = novoCanvas
+                y
             }
         }
 
         pdf.finishPage(page)
-
-        val dir = File(context.getExternalFilesDir(null), "relatorios")
-        if (!dir.exists()) dir.mkdirs()
-        val fileName = "relatorio_compressor_${relatorio.id}_${System.currentTimeMillis()}.pdf"
-        val file = File(dir, fileName)
-        FileOutputStream(file).use { out -> pdf.writeTo(out) }
-        pdf.close()
-
-        return file
+        return salvarPdf(pdf, context, "relatorio_compressor_${relatorio.id}_${System.currentTimeMillis()}.pdf")
     }
 
     // ============================================================
-    // HELPERS COMUNS
+    // HELPERS PRIVADOS
     // ============================================================
+
+    private fun desenharImagens(
+        context: Context,
+        pdf: android.graphics.pdf.PdfDocument,
+        canvasInicial: Canvas,
+        imagens: List<ImagemRelatorioEntity>,
+        margin: Float,
+        yInicial: Float,
+        contentWidth: Float,
+        pageWidth: Int,
+        pageHeight: Int,
+        atualizarCanvas: (Canvas) -> Float
+    ): Float {
+        var canvas = canvasInicial
+        var y = yInicial
+        val maxImageHeight = 250f
+        val bottomLimit = pageHeight - 60f
+
+        for (img in imagens) {
+            val bitmap = carregarBitmapSegura(context, img.uri) ?: continue
+            val scale = minOf(contentWidth / bitmap.width, maxImageHeight / bitmap.height)
+            val drawWidth = bitmap.width * scale
+            val drawHeight = bitmap.height * scale
+
+            if (y + drawHeight + 40 > pageHeight) {
+                pdf.finishPage(pdf.pages.last())
+                val pageInfo = android.graphics.pdf.PdfDocument.PageInfo
+                    .Builder(pageWidth, pageHeight, pdf.pages.size + 1).create()
+                val newPage = pdf.startPage(pageInfo)
+                canvas = newPage.canvas
+                y = drawHeader(canvas, pageWidth.toFloat(), margin)
+                y = drawSectionTitle(canvas, "Imagens do atendimento (cont.)", margin, y)
+            }
+
+            val left = margin
+            val top = y + 12f
+            val dest = RectF(left, top, left + drawWidth, top + drawHeight)
+            canvas.drawBitmap(bitmap, null, dest, null)
+            bitmap.recycle()
+            y = dest.bottom + 16f
+        }
+        return y
+    }
+
+    private fun salvarPdf(
+        pdf: android.graphics.pdf.PdfDocument,
+        context: Context,
+        fileName: String
+    ): File {
+        val dir = File(context.getExternalFilesDir(null), "relatorios")
+        val criado = if (!dir.exists()) dir.mkdirs() else true
+        if (!criado) {
+            Log.w(TAG, "Não foi possível criar o diretório: ${dir.absolutePath}")
+        }
+        val file = File(dir, fileName)
+        FileOutputStream(file).use { out -> pdf.writeTo(out) }
+        pdf.close()
+        return file
+    }
 
     private fun drawHeader(canvas: Canvas, pageWidth: Float, margin: Float): Float {
         val headerHeight = 70f
-
-        val headerPaint = Paint().apply {
-            color = Color.parseColor("#45132D") // vinho SOUTECH
-        }
-        canvas.drawRect(0f, 0f, pageWidth, headerHeight, headerPaint)
-
-        val titlePaint = TextPaint().apply {
-            color = Color.WHITE
-            textSize = 20f
-            isFakeBoldText = true
-        }
+        canvas.drawRect(
+            0f, 0f, pageWidth, headerHeight,
+            Paint().apply { color = Color.parseColor("#45132D") }
+        )
         canvas.drawText(
             "RELATÓRIO TÉCNICO DE MANUTENÇÃO",
             margin,
             headerHeight / 2f + 6f,
-            titlePaint
+            TextPaint().apply {
+                color = Color.WHITE
+                textSize = 20f
+                isFakeBoldText = true
+            }
         )
-
         return headerHeight + 24f
     }
 
-    private fun drawSectionTitle(
-        canvas: Canvas,
-        text: String,
-        margin: Float,
-        yStart: Float
-    ): Float {
-        val paintBg = Paint().apply {
-            color = Color.parseColor("#EEEEEE")
-        }
-        val paintText = TextPaint().apply {
-            color = Color.parseColor("#333333")
-            textSize = 13f
-            isFakeBoldText = true
-        }
-
+    private fun drawSectionTitle(canvas: Canvas, text: String, margin: Float, yStart: Float): Float {
         val top = yStart + 8f
         val bottom = top + 26f
-
-        canvas.drawRect(margin, top, canvas.width - margin, bottom, paintBg)
-        canvas.drawText(text, margin + 8f, bottom - 8f, paintText)
-
+        canvas.drawRect(
+            margin, top, canvas.width - margin, bottom,
+            Paint().apply { color = Color.parseColor("#EEEEEE") }
+        )
+        canvas.drawText(
+            text, margin + 8f, bottom - 8f,
+            TextPaint().apply {
+                color = Color.parseColor("#333333")
+                textSize = 13f
+                isFakeBoldText = true
+            }
+        )
         return bottom + 8f
     }
 
@@ -403,29 +358,22 @@ object PdfUtils {
         contentWidth: Float
     ): Float {
         if (text.isBlank()) return yStart + 8f
-
         val paint = TextPaint().apply {
             color = Color.parseColor("#222222")
             textSize = 12f
         }
-
         val layout = StaticLayout.Builder
             .obtain(text, 0, text.length, paint, contentWidth.toInt())
             .setAlignment(Layout.Alignment.ALIGN_NORMAL)
             .setLineSpacing(0f, 1.1f)
             .build()
-
         canvas.save()
         canvas.translate(margin, yStart)
         layout.draw(canvas)
         canvas.restore()
-
         return yStart + layout.height + 8f
     }
 
-    /**
-     * Carrega bitmap a partir do campo uri da entidade, tratando content:// e file://.
-     */
     private fun carregarBitmapSegura(context: Context, uriStr: String?): Bitmap? {
         if (uriStr.isNullOrBlank()) return null
         return try {

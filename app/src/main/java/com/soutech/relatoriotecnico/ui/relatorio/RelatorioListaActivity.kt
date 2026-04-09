@@ -1,5 +1,6 @@
 package com.soutech.relatoriotecnico.ui.relatorio
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
@@ -7,32 +8,23 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.soutech.relatoriotecnico.core.ApiConfig
-import com.soutech.relatoriotecnico.core.NetworkUtils
-import com.soutech.relatoriotecnico.core.SessionManager
+import com.soutech.relatoriotecnico.data.AppDatabase
+import com.soutech.relatoriotecnico.data.ClienteEntity
+import com.soutech.relatoriotecnico.data.RelatorioComCliente
 import com.soutech.relatoriotecnico.databinding.ActivityRelatorioListaBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import org.json.JSONArray
-import org.json.JSONObject
-
-data class ClienteFiltroDto(
-    val id: Int?,
-    val name: String
-)
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class RelatorioListaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRelatorioListaBinding
-    private val client = OkHttpClient()
-    private lateinit var sessionManager: SessionManager
+    private val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
-    private val listaClientes = mutableListOf<ClienteFiltroDto>()
-    private val mapaClientes = mutableMapOf<Int, String>()
-    private val listaRelatorios = mutableListOf<RelatorioDto>()
+    private val listaClientes = mutableListOf<ClienteEntity?>()
+    private var todosRelatorios: List<RelatorioComCliente> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,67 +33,34 @@ class RelatorioListaActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Histórico de Relatórios"
 
-        sessionManager = SessionManager(this)
-
         binding.rvRelatorios.layoutManager = LinearLayoutManager(this)
 
         binding.btnAplicarFiltro.setOnClickListener {
-            carregarRelatorios()
+            aplicarFiltros()
         }
 
-        carregarClientesEMaquinasEReports()
+        carregarDados()
     }
 
-    private fun carregarClientesEMaquinasEReports() {
-        if (!NetworkUtils.isOnline(this)) {
-            Toast.makeText(this, "Sem conexão com a internet.", Toast.LENGTH_LONG).show()
-            return
-        }
+    override fun onResume() {
+        super.onResume()
+        carregarDados()
+    }
 
-        val token = sessionManager.getToken()
-        if (token.isNullOrEmpty()) {
-            Toast.makeText(this, "Sessão expirada. Faça login novamente.", Toast.LENGTH_LONG).show()
-            finish()
-            return
-        }
-
+    private fun carregarDados() {
         lifecycleScope.launch {
-            // 1) Carregar clientes
-            withContext(Dispatchers.IO) {
-                try {
-                    val url = "${ApiConfig.BASE_URL}/api/clients"
-                    val request = Request.Builder()
-                        .url(url)
-                        .get()
-                        .addHeader("X-Auth-Token", token)
-                        .build()
+            val db = AppDatabase.getInstance(this@RelatorioListaActivity)
 
-                    val response = client.newCall(request).execute()
-                    val bodyStr = response.body?.string() ?: ""
+            // Carrega clientes e relatórios em paralelo
+            val clientes = withContext(Dispatchers.IO) { db.clienteDao().listarTodos() }
+            todosRelatorios = withContext(Dispatchers.IO) { db.relatorioDao().listarComCliente() }
 
-                    if (response.isSuccessful) {
-                        val arr = JSONArray(bodyStr)
-                        listaClientes.clear()
-                        mapaClientes.clear()
+            // Popula spinner de clientes (null = "Todos")
+            listaClientes.clear()
+            listaClientes.add(null)
+            listaClientes.addAll(clientes)
 
-                        // opção "Todos"
-                        listaClientes.add(ClienteFiltroDto(null, "Todos os clientes"))
-
-                        for (i in 0 until arr.length()) {
-                            val obj = arr.getJSONObject(i)
-                            val id = obj.getInt("id")
-                            val name = obj.optString("name", "Sem nome")
-                            listaClientes.add(ClienteFiltroDto(id, name))
-                            mapaClientes[id] = name
-                        }
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-
-            // 2) popular spinner
-            val nomes = listaClientes.map { it.name }
+            val nomes = listaClientes.map { it?.nomeFantasia ?: "Todos os clientes" }
             val adapter = ArrayAdapter(
                 this@RelatorioListaActivity,
                 android.R.layout.simple_spinner_item,
@@ -110,123 +69,66 @@ class RelatorioListaActivity : AppCompatActivity() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinnerClienteFiltro.adapter = adapter
 
-            // 3) Carregar relatórios
-            carregarRelatorios()
+            aplicarFiltros()
         }
     }
 
-    private fun carregarRelatorios() {
-        if (!NetworkUtils.isOnline(this)) {
-            Toast.makeText(this, "Sem conexão com a internet.", Toast.LENGTH_LONG).show()
-            return
-        }
-
-        val token = sessionManager.getToken()
-        if (token.isNullOrEmpty()) {
-            Toast.makeText(this, "Sessão expirada. Faça login novamente.", Toast.LENGTH_LONG).show()
-            finish()
-            return
-        }
-
+    private fun aplicarFiltros() {
         val dataDe = binding.etDataDe.text.toString().trim()
         val dataAte = binding.etDataAte.text.toString().trim()
-        val numeroSerie = binding.etNumeroSerieFiltro.text.toString().trim()
-
+        val termoBusca = binding.etNumeroSerieFiltro.text.toString().trim()
         val posCliente = binding.spinnerClienteFiltro.selectedItemPosition
-        val clienteIdSelecionado = listaClientes.getOrNull(posCliente)?.id
+        val clienteSelecionado = listaClientes.getOrNull(posCliente)
 
-        lifecycleScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                try {
-                    val urlBase = "${ApiConfig.BASE_URL}/api/reports"
-                    val params = mutableListOf<String>()
+        val tsInicio: Long? = if (dataDe.isNotEmpty()) {
+            try { sdf.parse(dataDe)?.time } catch (_: Exception) { null }
+        } else null
 
-                    if (dataDe.isNotEmpty()) params.add("date_from=$dataDe")
-                    if (dataAte.isNotEmpty()) params.add("date_to=$dataAte")
-                    if (clienteIdSelecionado != null) params.add("client_id=$clienteIdSelecionado")
-                    if (numeroSerie.isNotEmpty()) params.add("serial_number=$numeroSerie")
+        val tsFim: Long? = if (dataAte.isNotEmpty()) {
+            try {
+                val d = sdf.parse(dataAte)
+                if (d != null) d.time + 86_399_999L else null // até o final do dia
+            } catch (_: Exception) { null }
+        } else null
 
-                    val query = if (params.isNotEmpty()) {
-                        "?" + params.joinToString("&")
-                    } else {
-                        ""
-                    }
-
-                    val url = urlBase + query
-
-                    val request = Request.Builder()
-                        .url(url)
-                        .get()
-                        .addHeader("X-Auth-Token", token)
-                        .build()
-
-                    val response = client.newCall(request).execute()
-                    val bodyStr = response.body?.string() ?: ""
-
-                    if (!response.isSuccessful) {
-                        return@withContext Pair(false, "Erro: ${response.code} - $bodyStr")
-                    }
-
-                    val arr = JSONArray(bodyStr)
-                    listaRelatorios.clear()
-
-                    for (i in 0 until arr.length()) {
-                        val obj = arr.getJSONObject(i)
-                        val rel = parseRelatorio(obj)
-                        listaRelatorios.add(rel)
-                    }
-
-                    Pair(true, "OK")
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Pair(false, "Erro: ${e.message}")
-                }
-            }
-
-            if (!result.first) {
-                Toast.makeText(
-                    this@RelatorioListaActivity,
-                    result.second,
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-
-            // Atualiza UI / mensagem de vazio
-            if (listaRelatorios.isEmpty()) {
-                binding.rvRelatorios.visibility = View.GONE
-                binding.tvVazio.visibility = View.VISIBLE
-            } else {
-                binding.rvRelatorios.visibility = View.VISIBLE
-                binding.tvVazio.visibility = View.GONE
-                binding.rvRelatorios.adapter =
-                    RelatorioAdapter(this@RelatorioListaActivity, listaRelatorios.toList())
-            }
+        val filtrados = todosRelatorios.filter { item ->
+            val passCliente = clienteSelecionado == null || item.cliente.id == clienteSelecionado.id
+            val passDataInicio = tsInicio == null || item.relatorio.dataEntrada >= tsInicio
+            val passDataFim = tsFim == null || item.relatorio.dataEntrada <= tsFim
+            val passBusca = termoBusca.isEmpty() ||
+                item.relatorio.modeloMaquina.contains(termoBusca, ignoreCase = true) ||
+                item.cliente.nomeFantasia.contains(termoBusca, ignoreCase = true)
+            passCliente && passDataInicio && passDataFim && passBusca
         }
-    }
 
-    private fun parseRelatorio(obj: JSONObject): RelatorioDto {
-        val id = obj.getInt("id")
-        val type = obj.optString("type", "")
-        val clientId = obj.getInt("client_id")
-        val machineId = if (obj.isNull("machine_id")) null else obj.getInt("machine_id")
-        val title = obj.optString("title", "")
-        val dateIso = obj.optString("date", "")
-        val pdfUrl = if (obj.isNull("pdf_url")) null else obj.getString("pdf_url")
+        if (filtrados.isEmpty()) {
+            binding.rvRelatorios.visibility = View.GONE
+            binding.tvVazio.visibility = View.VISIBLE
+        } else {
+            binding.rvRelatorios.visibility = View.VISIBLE
+            binding.tvVazio.visibility = View.GONE
 
-        val clientName = if (obj.isNull("client_name")) null else obj.getString("client_name")
-        val serialNumber =
-            if (obj.isNull("serial_number")) null else obj.getString("serial_number")
+            val dtos = filtrados.map { item ->
+                RelatorioDto(
+                    id = item.relatorio.id,
+                    tipo = item.relatorio.tipoRelatorio,
+                    clienteNome = item.cliente.nomeFantasia,
+                    modeloMaquina = item.relatorio.modeloMaquina,
+                    tipoManutencao = item.relatorio.tipoManutencao,
+                    dataEntrada = item.relatorio.dataEntrada,
+                    pdfPath = item.relatorio.pdfPath
+                )
+            }
 
-        return RelatorioDto(
-            id = id,
-            type = type,
-            clientId = clientId,
-            clientName = clientName,
-            machineId = machineId,
-            serialNumber = serialNumber,
-            title = title,
-            dateIso = dateIso,
-            pdfUrl = pdfUrl
-        )
+            binding.rvRelatorios.adapter = RelatorioAdapter(
+                context = this,
+                itens = dtos,
+                onItemClick = { dto ->
+                    val intent = Intent(this, RelatorioDetalheActivity::class.java)
+                    intent.putExtra("relatorioId", dto.id)
+                    startActivity(intent)
+                }
+            )
+        }
     }
 }
