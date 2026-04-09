@@ -5,33 +5,18 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.soutech.relatoriotecnico.core.ApiConfig
-import com.soutech.relatoriotecnico.core.NetworkUtils
-import com.soutech.relatoriotecnico.core.SessionManager
+import com.soutech.relatoriotecnico.data.AppDatabase
+import com.soutech.relatoriotecnico.data.ClienteEntity
+import com.soutech.relatoriotecnico.data.MaquinaEntity
 import com.soutech.relatoriotecnico.databinding.ActivityCadastroMaquinaBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONArray
-import org.json.JSONObject
-
-// DTO simples para o spinner de clientes
-data class ClienteRemotoMaquina(
-    val id: Int,
-    val nomeFantasia: String
-)
 
 class CadastroMaquinaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCadastroMaquinaBinding
-    private lateinit var sessionManager: SessionManager
-    private val httpClient = OkHttpClient()
-
-    private var clientes: List<ClienteRemotoMaquina> = emptyList()
+    private var clientes: List<ClienteEntity> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,16 +26,11 @@ class CadastroMaquinaActivity : AppCompatActivity() {
         supportActionBar?.title = "Cadastro de Máquina"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        sessionManager = SessionManager(this)
-
-        // Carregar clientes para o spinner
         carregarClientes()
 
         binding.btnSalvarMaquina.setOnClickListener {
             salvarMaquina()
         }
-        // NÃO usamos btnVoltar aqui, já que o layout não tem esse botão.
-        // O usuário pode voltar pelo botão do Android ou pelo ícone da ActionBar.
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -58,55 +38,11 @@ class CadastroMaquinaActivity : AppCompatActivity() {
         return true
     }
 
-    // ==================== CARREGAR CLIENTES (API) ====================
-
     private fun carregarClientes() {
-        val token = sessionManager.getToken()
-        if (token.isNullOrEmpty()) {
-            Toast.makeText(this, "Sessão expirada. Faça login novamente.", Toast.LENGTH_LONG).show()
-            finish()
-            return
-        }
-
-        if (!NetworkUtils.isOnline(this)) {
-            Toast.makeText(this, "Sem conexão com a internet.", Toast.LENGTH_LONG).show()
-            return
-        }
-
+        val db = AppDatabase.getInstance(this)
         lifecycleScope.launch {
-            val resultado = withContext(Dispatchers.IO) {
-                try {
-                    val request = Request.Builder()
-                        .url("${ApiConfig.BASE_URL}/api/clients")
-                        .get()
-                        .addHeader("X-Auth-Token", token)
-                        .build()
-
-                    val response = httpClient.newCall(request).execute()
-                    val bodyStr = response.body?.string() ?: ""
-
-                    if (!response.isSuccessful) {
-                        return@withContext Pair(false, "Erro ao carregar clientes: ${response.code}")
-                    }
-
-                    val arr = JSONArray(bodyStr)
-                    val lista = mutableListOf<ClienteRemotoMaquina>()
-                    for (i in 0 until arr.length()) {
-                        val obj = arr.getJSONObject(i)
-                        val id = obj.getInt("id")
-                        val nome = obj.optString("name", "Sem nome")
-                        lista.add(ClienteRemotoMaquina(id, nome))
-                    }
-                    clientes = lista
-                    Pair(true, "OK")
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Pair(false, "Erro: ${e.message}")
-                }
-            }
-
-            if (!resultado.first) {
-                Toast.makeText(this@CadastroMaquinaActivity, resultado.second, Toast.LENGTH_LONG).show()
+            clientes = withContext(Dispatchers.IO) {
+                db.clienteDao().listarTodos()
             }
 
             if (clientes.isEmpty()) {
@@ -128,8 +64,6 @@ class CadastroMaquinaActivity : AppCompatActivity() {
         }
     }
 
-    // ==================== SALVAR MÁQUINA (API) ====================
-
     private fun salvarMaquina() {
         if (clientes.isEmpty()) {
             Toast.makeText(this, "Cadastre pelo menos um cliente primeiro.", Toast.LENGTH_SHORT).show()
@@ -137,7 +71,7 @@ class CadastroMaquinaActivity : AppCompatActivity() {
         }
 
         val idxCliente = binding.spinnerCliente.selectedItemPosition
-        if (idxCliente < 0) {
+        if (idxCliente < 0 || idxCliente >= clientes.size) {
             Toast.makeText(this, "Selecione um cliente.", Toast.LENGTH_SHORT).show()
             return
         }
@@ -159,67 +93,30 @@ class CadastroMaquinaActivity : AppCompatActivity() {
             return
         }
 
-        val token = sessionManager.getToken()
-        if (token.isNullOrEmpty()) {
-            Toast.makeText(this, "Sessão expirada. Faça login novamente.", Toast.LENGTH_LONG).show()
-            finish()
-            return
-        }
-
-        if (!NetworkUtils.isOnline(this)) {
-            Toast.makeText(this, "Sem conexão com a internet.", Toast.LENGTH_LONG).show()
-            return
-        }
-
         binding.btnSalvarMaquina.isEnabled = false
 
         lifecycleScope.launch {
-            val resultado = withContext(Dispatchers.IO) {
-                try {
-                    val bodyJson = JSONObject().apply {
-                        // Nomes EXATOS usados no backend (MachineCreate)
-                        put("client_id", cliente.id)
-                        put("brand", marca)
-                        put("model", modelo)
-                        put("ihm_model", if (modeloIhm.isEmpty()) JSONObject.NULL else modeloIhm)
-                        put("serial_number", numeroSerie)
-                        put("plate_photo_url", if (fotoPlaqueta.isEmpty()) JSONObject.NULL else fotoPlaqueta)
-                        put("compressor_photo_url", if (fotoCompressor.isEmpty()) JSONObject.NULL else fotoCompressor)
-                    }
-
-                    val mediaType = "application/json; charset=utf-8".toMediaType()
-                    val body = bodyJson.toString().toRequestBody(mediaType)
-
-                    val request = Request.Builder()
-                        .url("${ApiConfig.BASE_URL}/api/machines")
-                        .post(body)
-                        .addHeader("X-Auth-Token", token)
-                        .build()
-
-                    val response = httpClient.newCall(request).execute()
-                    val respText = response.body?.string() ?: ""
-
-                    if (!response.isSuccessful) {
-                        return@withContext Pair(
-                            false,
-                            "Erro ao salvar máquina: ${response.code} - $respText"
-                        )
-                    }
-
-                    Pair(true, "Máquina salva com sucesso.")
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Pair(false, "Erro: ${e.message}")
-                }
+            withContext(Dispatchers.IO) {
+                val db = AppDatabase.getInstance(this@CadastroMaquinaActivity)
+                db.maquinaDao().inserir(
+                    MaquinaEntity(
+                        clienteId = cliente.id,
+                        marca = marca,
+                        modelo = modelo,
+                        modeloIhm = modeloIhm.ifEmpty { null },
+                        numeroSerie = numeroSerie,
+                        fotoPlaquetaUri = fotoPlaqueta.ifEmpty { null },
+                        fotoCompressorUri = fotoCompressor.ifEmpty { null }
+                    )
+                )
             }
 
-            if (resultado.first) {
-                Toast.makeText(this@CadastroMaquinaActivity, resultado.second, Toast.LENGTH_LONG).show()
-                finish()
-            } else {
-                Toast.makeText(this@CadastroMaquinaActivity, resultado.second, Toast.LENGTH_LONG).show()
-                binding.btnSalvarMaquina.isEnabled = true
-            }
+            Toast.makeText(
+                this@CadastroMaquinaActivity,
+                "Máquina salva com sucesso.",
+                Toast.LENGTH_LONG
+            ).show()
+            finish()
         }
     }
 }

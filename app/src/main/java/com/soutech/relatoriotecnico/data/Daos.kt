@@ -20,6 +20,57 @@ interface ClienteDao {
     suspend fun deletar(cliente: ClienteEntity)
 }
 
+@Dao
+interface MaquinaDao {
+    @Query("SELECT * FROM maquinas ORDER BY modelo")
+    suspend fun listarTodos(): List<MaquinaEntity>
+
+    @Query("SELECT * FROM maquinas WHERE clienteId = :clienteId ORDER BY modelo")
+    suspend fun listarPorCliente(clienteId: Long): List<MaquinaEntity>
+
+    @Query("SELECT * FROM maquinas WHERE id = :id LIMIT 1")
+    suspend fun buscarPorId(id: Long): MaquinaEntity?
+
+    @Query("""
+        SELECT * FROM maquinas
+        WHERE modelo LIKE '%' || :termo || '%'
+           OR marca LIKE '%' || :termo || '%'
+           OR numeroSerie LIKE '%' || :termo || '%'
+        ORDER BY modelo
+    """)
+    suspend fun buscarPorTermo(termo: String): List<MaquinaEntity>
+
+    @Insert
+    suspend fun inserir(maquina: MaquinaEntity): Long
+
+    @Update
+    suspend fun atualizar(maquina: MaquinaEntity)
+
+    @Delete
+    suspend fun deletar(maquina: MaquinaEntity)
+}
+
+@Dao
+interface TecnicoDao {
+    @Query("SELECT * FROM tecnicos ORDER BY nome")
+    suspend fun listarTodos(): List<TecnicoEntity>
+
+    @Query("SELECT * FROM tecnicos WHERE id = :id LIMIT 1")
+    suspend fun buscarPorId(id: Long): TecnicoEntity?
+
+    @Query("SELECT * FROM tecnicos WHERE nome LIKE '%' || :termo || '%' ORDER BY nome")
+    suspend fun buscarPorNome(termo: String): List<TecnicoEntity>
+
+    @Insert
+    suspend fun inserir(tecnico: TecnicoEntity): Long
+
+    @Update
+    suspend fun atualizar(tecnico: TecnicoEntity)
+
+    @Delete
+    suspend fun deletar(tecnico: TecnicoEntity)
+}
+
 data class RelatorioComCliente(
     @Embedded val relatorio: RelatorioEntity,
     @Relation(
@@ -39,6 +90,10 @@ interface RelatorioDao {
     @Transaction
     @Query("SELECT * FROM relatorios ORDER BY dataEntrada DESC")
     suspend fun listarComCliente(): List<RelatorioComCliente>
+
+    @Transaction
+    @Query("SELECT * FROM relatorios WHERE clienteId = :clienteId ORDER BY dataEntrada DESC")
+    suspend fun listarPorCliente(clienteId: Long): List<RelatorioComCliente>
 
     @Transaction
     @Query("SELECT * FROM relatorios WHERE id = :id LIMIT 1")

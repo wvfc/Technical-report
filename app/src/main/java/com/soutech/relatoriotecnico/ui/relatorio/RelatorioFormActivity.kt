@@ -44,7 +44,16 @@ class RelatorioFormActivity : AppCompatActivity() {
     private val pickerImagens = registerForActivityResult(
         ActivityResultContracts.OpenMultipleDocuments()
     ) { uris ->
-        if (uris != null && uris.isNotEmpty()) {
+        if (!uris.isNullOrEmpty()) {
+            // Persistir permissão de leitura para as URIs selecionadas
+            uris.forEach { uri ->
+                try {
+                    contentResolver.takePersistableUriPermission(
+                        uri,
+                        android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+                } catch (_: Exception) {}
+            }
             imagensUris.clear()
             imagensUris.addAll(uris)
             Toast.makeText(
@@ -183,8 +192,14 @@ class RelatorioFormActivity : AppCompatActivity() {
             return
         }
 
-        val dataEntrada = sdfDataHora.parse(dataEntradaStr)?.time ?: Date().time
-        val dataSaida = sdfDataHora.parse(dataSaidaStr)?.time ?: Date().time
+        // Validação explícita das datas para evitar uso silencioso de data atual
+        val dataEntrada = sdfDataHora.parse(dataEntradaStr)?.time
+        val dataSaida = sdfDataHora.parse(dataSaidaStr)?.time
+
+        if (dataEntrada == null || dataSaida == null) {
+            Toast.makeText(this, "Data/hora inválida. Use o seletor de data.", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         val db = AppDatabase.getInstance(this)
 

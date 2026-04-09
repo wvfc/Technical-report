@@ -6,29 +6,29 @@ import android.content.SharedPreferences
 class SessionManager(context: Context) {
 
     private val prefs: SharedPreferences =
-        context.getSharedPreferences("login_prefs", Context.MODE_PRIVATE)
+        context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 
     companion object {
-        private const val KEY_TOKEN = "token"
+        private const val KEY_NOME = "nome"
         private const val KEY_EMAIL = "email"
-        private const val KEY_IS_AUTHORIZED = "is_authorized"
+        private const val KEY_CONFIGURADO = "configurado"
     }
 
-    fun saveSession(email: String, token: String) {
+    fun salvarPerfil(nome: String, email: String) {
         prefs.edit()
+            .putString(KEY_NOME, nome)
             .putString(KEY_EMAIL, email)
-            .putString(KEY_TOKEN, token)
-            .putBoolean(KEY_IS_AUTHORIZED, true)
+            .putBoolean(KEY_CONFIGURADO, true)
             .apply()
     }
 
-    fun clearSession() {
+    fun limparPerfil() {
         prefs.edit().clear().apply()
     }
 
-    fun getToken(): String? = prefs.getString(KEY_TOKEN, null)
+    fun getNome(): String? = prefs.getString(KEY_NOME, null)
 
     fun getEmail(): String? = prefs.getString(KEY_EMAIL, null)
 
-    fun isAuthorized(): Boolean = prefs.getBoolean(KEY_IS_AUTHORIZED, false)
+    fun isConfigurado(): Boolean = prefs.getBoolean(KEY_CONFIGURADO, false)
 }

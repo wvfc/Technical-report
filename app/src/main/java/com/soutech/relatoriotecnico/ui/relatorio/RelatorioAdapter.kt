@@ -2,99 +2,81 @@ package com.soutech.relatoriotecnico.ui.relatorio
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import androidx.core.content.ContextCompat.startActivity
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import com.soutech.relatoriotecnico.databinding.ItemRelatorioBinding
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 data class RelatorioDto(
-    val id: Int,
-    val type: String,
-    val clientId: Int,
-    val clientName: String?,
-    val machineId: Int?,
-    val serialNumber: String?,
-    val title: String,
-    val dateIso: String,
-    val pdfUrl: String?
+    val id: Long,
+    val tipo: String,
+    val clienteNome: String,
+    val modeloMaquina: String,
+    val tipoManutencao: String,
+    val dataEntrada: Long,
+    val pdfPath: String?
 )
 
 class RelatorioAdapter(
     private val context: Context,
-    private val itens: List<RelatorioDto>
+    private val itens: List<RelatorioDto>,
+    private val onItemClick: ((RelatorioDto) -> Unit)? = null
 ) : RecyclerView.Adapter<RelatorioAdapter.RelatorioViewHolder>() {
+
+    private val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
 
     inner class RelatorioViewHolder(val binding: ItemRelatorioBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RelatorioViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemRelatorioBinding.inflate(inflater, parent, false)
+        val binding = ItemRelatorioBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return RelatorioViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: RelatorioViewHolder, position: Int) {
         val item = itens[position]
 
-        holder.binding.tvTituloRelatorio.text = item.title
+        val tipoLabel = if (item.tipo == "compressor") "Compressor" else "Geral"
 
-        val tipo = if (item.type.equals("compressor", ignoreCase = true)) {
-            "Compressor"
-        } else {
-            "Geral"
+        holder.binding.tvTituloRelatorio.text = item.modeloMaquina.ifEmpty { "Relatório $tipoLabel" }
+        holder.binding.tvLinha2Relatorio.text = "$tipoLabel • ${sdf.format(Date(item.dataEntrada))}"
+        holder.binding.tvLinha3Relatorio.text = "Cliente: ${item.clienteNome}"
+
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(item)
         }
-
-        val dataFormatada = try {
-            val zdt = ZonedDateTime.parse(item.dateIso)
-            zdt.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
-        } catch (e: Exception) {
-            item.dateIso
-        }
-
-        holder.binding.tvLinha2Relatorio.text = "$tipo • $dataFormatada"
-
-        val cliente = item.clientName ?: "-"
-        val numeroSerie = item.serialNumber ?: "-"
-        holder.binding.tvLinha3Relatorio.text = "Cliente: $cliente • Nº série: $numeroSerie"
 
         holder.binding.btnWhatsapp.setOnClickListener {
-            enviarWhatsapp(item)
+            compartilharWhatsapp(item)
         }
     }
 
     override fun getItemCount(): Int = itens.size
 
-    private fun enviarWhatsapp(item: RelatorioDto) {
-        val cliente = item.clientName ?: "-"
-        val numeroSerie = item.serialNumber ?: "-"
-        val pdfUrl = item.pdfUrl ?: "PDF não disponível."
-
+    private fun compartilharWhatsapp(item: RelatorioDto) {
+        val tipoLabel = if (item.tipo == "compressor") "Compressor" else "Geral"
         val mensagem = """
-            Relatório Técnico - ${item.title}
-            
-            Tipo: ${item.type}
-            Cliente: $cliente
-            Nº série: $numeroSerie
-            
-            Link do relatório (PDF):
-            $pdfUrl
+            Relatório Técnico – $tipoLabel
+
+            Equipamento: ${item.modeloMaquina}
+            Manutenção: ${item.tipoManutencao}
+            Cliente: ${item.clienteNome}
+            Data: ${sdf.format(Date(item.dataEntrada))}
+            ${if (!item.pdfPath.isNullOrBlank()) "\nPDF gerado e salvo no dispositivo." else ""}
         """.trimIndent()
 
         try {
             val intent = Intent(Intent.ACTION_SEND).apply {
                 type = "text/plain"
                 putExtra(Intent.EXTRA_TEXT, mensagem)
-                // Se quiser forçar WhatsApp:
-                // setPackage("com.whatsapp")
             }
-            startActivity(context, Intent.createChooser(intent, "Enviar relatório"), null)
+            context.startActivity(Intent.createChooser(intent, "Compartilhar relatório"))
         } catch (e: Exception) {
-            Toast.makeText(context, "Não foi possível abrir o WhatsApp.", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Não foi possível abrir o compartilhamento.", Toast.LENGTH_LONG).show()
         }
     }
 }

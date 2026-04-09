@@ -3,35 +3,33 @@ package com.soutech.relatoriotecnico.ui.maquina
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.soutech.relatoriotecnico.data.MaquinaEntity
 import com.soutech.relatoriotecnico.databinding.ItemMaquinaBinding
 
-data class MaquinaDto(
-    val id: Int,
-    val clientId: Int,
-    val brand: String,
-    val model: String,
-    val serialNumber: String,
-    val clientName: String? = null
-)
-
 class MaquinaAdapter(
-    private val itens: List<MaquinaDto>
+    private val itens: List<MaquinaEntity>,
+    private val mapaClientes: Map<Long, String> = emptyMap(),
+    private val onExcluir: ((MaquinaEntity) -> Unit)? = null
 ) : RecyclerView.Adapter<MaquinaAdapter.MaquinaViewHolder>() {
 
     inner class MaquinaViewHolder(val binding: ItemMaquinaBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MaquinaViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemMaquinaBinding.inflate(inflater, parent, false)
+        val binding = ItemMaquinaBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MaquinaViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MaquinaViewHolder, position: Int) {
         val item = itens[position]
-        holder.binding.tvLinha1.text = "${item.brand} / ${item.model}"
-        holder.binding.tvLinha2.text = "Nº de série: ${item.serialNumber}"
-        holder.binding.tvLinha3.text = "Cliente: ${item.clientName ?: "-"}"
+        holder.binding.tvLinha1.text = "${item.marca} / ${item.modelo}"
+        holder.binding.tvLinha2.text = "Nº de série: ${item.numeroSerie}"
+        holder.binding.tvLinha3.text = "Cliente: ${mapaClientes[item.clienteId] ?: "-"}"
+
+        holder.itemView.setOnLongClickListener {
+            onExcluir?.invoke(item)
+            true
+        }
     }
 
     override fun getItemCount(): Int = itens.size

@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "clientes")
 data class ClienteEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val razaoSocial: String,
+    val razaoSocial: String = "",
     val nomeFantasia: String,
     val documento: String?,
     val endereco: String?,
@@ -15,18 +15,43 @@ data class ClienteEntity(
     val whatsapp: String?
 )
 
+@Entity(tableName = "maquinas")
+data class MaquinaEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val clienteId: Long,
+    val marca: String,
+    val modelo: String,
+    val modeloIhm: String?,
+    val numeroSerie: String,
+    val fotoPlaquetaUri: String?,
+    val fotoCompressorUri: String?
+)
+
+@Entity(tableName = "tecnicos")
+data class TecnicoEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val nome: String,
+    val funcao: String?
+)
+
 @Entity(tableName = "relatorios")
 data class RelatorioEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val clienteId: Long,
+    val tecnicoId: Long? = null,
     val dataEntrada: Long,
     val dataSaida: Long,
     val modeloMaquina: String,
     val tipoManutencao: String,
-    val ocorrencia: String,
-    val solucaoProposta: String,
-    val pecasTexto: String?,
-    val pdfPath: String?
+    val tipoRelatorio: String = "geral",
+    // Campos do relatório geral
+    val ocorrencia: String = "",
+    val solucaoProposta: String = "",
+    val pecasTexto: String? = null,
+    // Campos do relatório de compressor
+    val observacoes: String? = null,
+    val checklistResumo: String? = null,
+    val pdfPath: String? = null
 )
 
 @Entity(tableName = "imagens_relatorio")
