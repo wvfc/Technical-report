@@ -7,6 +7,7 @@ on:
       - master
       - develop
       - feature/**
+      - claude/**
   pull_request:
     branches:
       - main
@@ -34,12 +35,12 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/*.kt') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
 
       - name: Build Debug APK
-        run: .\gradlew.bat assembleDebug
+        run: .\gradlew.bat assembleDebug --no-build-cache
 
       - name: Publicar APK
         uses: actions/upload-artifact@v4
