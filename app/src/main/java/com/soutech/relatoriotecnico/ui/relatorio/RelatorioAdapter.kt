@@ -2,10 +2,13 @@ package com.soutech.relatoriotecnico.ui.relatorio
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.soutech.relatoriotecnico.R
 import com.soutech.relatoriotecnico.databinding.ItemRelatorioBinding
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -40,9 +43,29 @@ class RelatorioAdapter(
     override fun onBindViewHolder(holder: RelatorioViewHolder, position: Int) {
         val item = itens[position]
 
-        val tipoLabel = if (item.tipo == "compressor") "Compressor" else "Geral"
+        val isCompressor = item.tipo == "compressor"
+        val tipoLabel = if (isCompressor) "Compressor" else "Geral"
 
+        // Barra lateral colorida por tipo
+        val barColor = if (isCompressor)
+            ContextCompat.getColor(context, R.color.colorAccent)
+        else
+            ContextCompat.getColor(context, R.color.colorPrimary)
+        holder.binding.barraLateral.setBackgroundColor(barColor)
+
+        // Chip
         holder.binding.chipTipo.text = tipoLabel
+        if (isCompressor) {
+            holder.binding.chipTipo.setTextColor(Color.parseColor("#E65100"))
+            holder.binding.chipTipo.chipBackgroundColor =
+                android.content.res.ColorStateList.valueOf(Color.parseColor("#FFF3E0"))
+        } else {
+            holder.binding.chipTipo.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
+            holder.binding.chipTipo.chipBackgroundColor =
+                android.content.res.ColorStateList.valueOf(
+                    ContextCompat.getColor(context, R.color.colorPrimaryContainer))
+        }
+
         holder.binding.tvTituloRelatorio.text = item.modeloMaquina.ifEmpty { "Relatório $tipoLabel" }
         holder.binding.tvLinha2Relatorio.text = "${item.tipoManutencao} • ${sdf.format(Date(item.dataEntrada))}"
         holder.binding.tvLinha3Relatorio.text = item.clienteNome

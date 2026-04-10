@@ -1,37 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Cores principais -->
-    <color name="colorPrimary">#546E7A</color>
-    <color name="colorPrimaryDark">#37474F</color>
-    <color name="colorAccent">#0097A7</color>
+    <!-- Cores principais — azul corporativo vibrante -->
+    <color name="colorPrimary">#1565C0</color>       <!-- Azul sólido, profissional e chamativo -->
+    <color name="colorPrimaryDark">#0D47A1</color>   <!-- Status bar / variações escuras -->
+    <color name="colorAccent">#FF8F00</color>         <!-- Âmbar: destaques e FABs -->
 
     <!-- Material 3 containers -->
-    <color name="colorPrimaryContainer">#CFE4EC</color>
-    <color name="colorOnPrimaryContainer">#002D3B</color>
+    <color name="colorPrimaryContainer">#BBDEFB</color>
+    <color name="colorOnPrimaryContainer">#002171</color>
 
     <!-- Fundos -->
-    <color name="backgroundApp">#F5F7F8</color>
-    <color name="backgroundLight">#F5F7F8</color>
+    <color name="backgroundApp">#F0F4F8</color>
+    <color name="backgroundLight">#F0F4F8</color>
     <color name="surfaceCard">#FFFFFF</color>
 
     <!-- Textos -->
-    <color name="textPrimary">#1A1C1E</color>
-    <color name="textSecondary">#44474A</color>
-    <color name="hintGray">#6E7275</color>
+    <color name="textPrimary">#0D1B2A</color>
+    <color name="textSecondary">#37474F</color>
+    <color name="hintGray">#607D8B</color>
     <color name="textDark">#000000</color>
 
     <!-- Superfície e divisores -->
     <color name="white">#FFFFFF</color>
-    <color name="divider">#E0E0E0</color>
+    <color name="divider">#CFD8DC</color>
 
     <!-- Botões -->
-    <color name="buttonPrimary">#546E7A</color>
-    <color name="buttonSecondary">#B0BEC5</color>
-    <color name="colorError">#BA1A1A</color>
+    <color name="buttonPrimary">#1565C0</color>
+    <color name="buttonSecondary">#90A4AE</color>
+    <color name="colorError">#C62828</color>
+
+    <!-- Chip de tipo de relatório -->
+    <color name="chipGeral">#E3F2FD</color>
+    <color name="chipCompressor">#FFF3E0</color>
 
     <!-- Bottom nav selector -->
-    <color name="nav_item_selected">#546E7A</color>
-    <color name="nav_item_unselected">#6E7275</color>
+    <color name="nav_item_selected">#1565C0</color>
+    <color name="nav_item_unselected">#78909C</color>
 
-    <color name="ic_launcher_background_relatorio">#0D47A1</color>
+    <color name="ic_launcher_background_relatorio">#1565C0</color>
 </resources>

@@ -1,47 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="@color/backgroundLight">
 
-    <TextView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Search bar -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            app:startIconDrawable="@android:drawable/ic_menu_search"
+            app:startIconTint="@color/colorPrimary"
+            android:hint="Buscar por modelo, marca ou nº de série">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etBusca"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:imeOptions="actionSearch"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Hidden legacy button kept for binding compat -->
+        <Button
+            android:id="@+id/btnBuscar"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+
+        <!-- Loading -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+
+        <!-- Empty state -->
+        <TextView
+            android:id="@+id/tvVazio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nenhuma máquina encontrada.\nToque em + para adicionar."
+            android:gravity="center"
+            android:padding="32dp"
+            android:textColor="@color/hintGray"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMaquinas"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingBottom="80dp"
+            android:clipToPadding="false" />
+    </LinearLayout>
+
+    <!-- FAB -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabNovaMaquina"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Máquinas cadastradas"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:layout_marginBottom="12dp" />
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="Nova máquina"
+        android:src="@drawable/ic_fab_add"
+        app:backgroundTint="@color/colorAccent"
+        app:tint="@color/white" />
 
-    <TextView
-       android:id="@+id/tvVazio"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:text="Nenhum registro encontrado."
-       android:gravity="center"
-       android:padding="16dp"
-       android:textColor="@android:color/black"
-       android:visibility="gone" />
-
-
-    <EditText
-        android:id="@+id/etBusca"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Buscar por nº de série, modelo ou cliente"
-        android:layout_marginBottom="8dp" />
-
-    <Button
-        android:id="@+id/btnBuscar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Buscar"
-        android:layout_marginBottom="12dp" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvMaquinas"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

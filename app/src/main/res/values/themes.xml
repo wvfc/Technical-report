@@ -14,8 +14,10 @@
         <item name="android:windowBackground">@color/backgroundLight</item>
     </style>
 
-    <style name="Widget.App.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
-        <item name="itemIconTint">@color/nav_item_color</item>
-        <item name="itemTextColor">@color/nav_item_color</item>
+    <!-- Estilo da toolbar no ActionBar padrão -->
+    <style name="Widget.App.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="titleTextColor">@color/white</item>
+        <item name="subtitleTextColor">#CCFFFFFF</item>
     </style>
 </resources>

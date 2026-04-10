@@ -11,18 +11,18 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Info card -->
+        <!-- Cabeçalho colorido -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            app:cardElevation="2dp"
+            app:cardElevation="4dp"
             app:cardCornerRadius="12dp"
-            app:cardBackgroundColor="@color/white">
+            app:cardBackgroundColor="@color/colorPrimary">
 
             <LinearLayout
                 android:orientation="vertical"
-                android:padding="16dp"
+                android:padding="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -32,23 +32,53 @@
                     android:layout_height="wrap_content"
                     android:text="Cliente"
                     android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:textColor="@color/textPrimary"
-                    android:layout_marginBottom="12dp" />
+                    android:textSize="20sp"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="4dp" />
 
-                <View
+                <TextView
+                    android:id="@+id/tvModelo"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/divider"
+                    android:layout_height="wrap_content"
+                    android:text="Equipamento"
+                    android:textColor="#CCFFFFFF"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Detalhes do relatório -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardElevation="2dp"
+            app:cardCornerRadius="10dp"
+            app:cardBackgroundColor="@color/white"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/divider">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DETALHES DO ATENDIMENTO"
+                    android:textSize="11sp"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.08"
                     android:layout_marginBottom="12dp" />
 
+                <!-- Tipo -->
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:gravity="center_vertical">
-
+                    android:layout_marginBottom="10dp">
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -56,7 +86,6 @@
                         android:text="Tipo de relatório"
                         android:textColor="@color/hintGray"
                         android:textSize="13sp" />
-
                     <TextView
                         android:id="@+id/tvTipo"
                         android:layout_width="wrap_content"
@@ -67,30 +96,12 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:orientation="horizontal"
+                <!-- Datas -->
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Equipamento"
-                        android:textColor="@color/hintGray"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:id="@+id/tvModelo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="—"
-                        android:textColor="@color/textPrimary"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                    android:layout_height="1dp"
+                    android:background="@color/divider"
+                    android:layout_marginBottom="10dp" />
 
                 <TextView
                     android:id="@+id/tvDatas"
@@ -99,44 +110,31 @@
                     android:text="Entrada / Saída"
                     android:textColor="@color/textSecondary"
                     android:textSize="13sp"
-                    android:layout_marginTop="4dp" />
+                    android:lineSpacingExtra="4dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Actions card -->
-        <com.google.android.material.card.MaterialCardView
+        <!-- Ações: Abrir PDF em destaque -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAbrirPdf"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="8dp"
+            android:text="Abrir PDF"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/white" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnExcluirRelatorio"
+            style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardElevation="2dp"
-            app:cardCornerRadius="12dp"
-            app:cardBackgroundColor="@color/white">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnAbrirPdf"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="Abrir PDF"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:textColor="@color/white" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnExcluirRelatorio"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Excluir relatório"
-                    app:strokeColor="@color/colorError"
-                    android:textColor="@color/colorError" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+            android:layout_marginBottom="16dp"
+            android:text="Excluir relatório"
+            app:strokeColor="@color/colorError"
+            android:textColor="@color/colorError" />
 
         <!-- Hidden back button kept for compatibility -->
         <Button
