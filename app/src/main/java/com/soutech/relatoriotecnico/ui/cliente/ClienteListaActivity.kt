@@ -1,50 +1,52 @@
 package com.soutech.relatoriotecnico.ui.cliente
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ArrayAdapter
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.soutech.relatoriotecnico.data.AppDatabase
 import com.soutech.relatoriotecnico.data.ClienteEntity
 import com.soutech.relatoriotecnico.databinding.ActivityClienteListaBinding
-import com.soutech.relatoriotecnico.R
+import com.soutech.relatoriotecnico.ui.relatorio.RelatorioListaActivity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ClienteListaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityClienteListaBinding
-    private lateinit var adapter: ArrayAdapter<String>
-    private var clientes: List<ClienteEntity> = emptyList()
+    private lateinit var adapter: ClienteAdapter
+    private var todosClientes: List<ClienteEntity> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClienteListaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = "Clientes cadastrados"
+        supportActionBar?.title = "Clientes"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        // Adapter usando layout customizado com texto preto
-        adapter = ArrayAdapter(
-            this,
-            R.layout.item_cliente,      // layout do item da lista
-            R.id.txtNomeCliente,        // TextView dentro do layout
-            mutableListOf<String>()
-        )
-        binding.listClientes.adapter = adapter
+        adapter = ClienteAdapter(emptyList()) { cliente -> mostrarOpcoes(cliente) }
+        binding.rvClientes.layoutManager = LinearLayoutManager(this)
+        binding.rvClientes.adapter = adapter
 
-        binding.listClientes.setOnItemClickListener { _, _, position, _ ->
-            val cliente = clientes[position]
-            mostrarOpcoes(cliente)
+        binding.fabNovoCliente.setOnClickListener {
+            startActivity(Intent(this, ClienteFormActivity::class.java))
         }
 
-        binding.btnVoltar.setOnClickListener {
-            finish()
-        }
+        binding.etBusca.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filtrar(s.toString())
+            }
+            override fun afterTextChanged(s: Editable?) = Unit
+        })
     }
 
     override fun onResume() {
@@ -58,24 +60,40 @@ class ClienteListaActivity : AppCompatActivity() {
     }
 
     private fun carregarClientes() {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.tvVazio.visibility = View.GONE
         val db = AppDatabase.getInstance(this)
         lifecycleScope.launch {
-            clientes = db.clienteDao().listarTodos()
-            val nomes = clientes.map { it.nomeFantasia }
-            adapter.clear()
-            adapter.addAll(nomes)
-            adapter.notifyDataSetChanged()
+            todosClientes = withContext(Dispatchers.IO) { db.clienteDao().listarTodos() }
+            binding.progressBar.visibility = View.GONE
+            filtrar(binding.etBusca.text.toString())
         }
     }
 
+    private fun filtrar(termo: String) {
+        val filtrados = if (termo.isBlank()) {
+            todosClientes
+        } else {
+            todosClientes.filter {
+                it.nomeFantasia.contains(termo, ignoreCase = true) ||
+                it.razaoSocial.contains(termo, ignoreCase = true) ||
+                it.documento?.contains(termo, ignoreCase = true) == true
+            }
+        }
+        adapter.atualizar(filtrados)
+        binding.tvVazio.visibility = if (filtrados.isEmpty()) View.VISIBLE else View.GONE
+        binding.rvClientes.visibility = if (filtrados.isEmpty()) View.GONE else View.VISIBLE
+    }
+
     private fun mostrarOpcoes(cliente: ClienteEntity) {
-        val opcoes = arrayOf("Editar", "Excluir")
+        val opcoes = arrayOf("Editar", "Ver relatórios", "Excluir")
         AlertDialog.Builder(this)
             .setTitle(cliente.nomeFantasia)
-            .setItems(opcoes) { _: DialogInterface, which: Int ->
+            .setItems(opcoes) { _, which ->
                 when (which) {
                     0 -> editar(cliente)
-                    1 -> confirmarExclusao(cliente)
+                    1 -> verRelatorios(cliente)
+                    2 -> confirmarExclusao(cliente)
                 }
             }
             .show()
@@ -87,10 +105,16 @@ class ClienteListaActivity : AppCompatActivity() {
         startActivity(i)
     }
 
+    private fun verRelatorios(cliente: ClienteEntity) {
+        val i = Intent(this, RelatorioListaActivity::class.java)
+        i.putExtra("clienteId", cliente.id)
+        startActivity(i)
+    }
+
     private fun confirmarExclusao(cliente: ClienteEntity) {
         AlertDialog.Builder(this)
             .setTitle("Excluir cliente")
-            .setMessage("Tem certeza que deseja excluir este cliente? Se houver relatórios associados, eles não serão excluídos automaticamente.")
+            .setMessage("Excluir \"${cliente.nomeFantasia}\"? Os relatórios associados não serão removidos automaticamente.")
             .setPositiveButton("Excluir") { _, _ -> excluir(cliente) }
             .setNegativeButton("Cancelar", null)
             .show()
@@ -99,7 +123,7 @@ class ClienteListaActivity : AppCompatActivity() {
     private fun excluir(cliente: ClienteEntity) {
         val db = AppDatabase.getInstance(this)
         lifecycleScope.launch {
-            db.clienteDao().deletar(cliente)
+            withContext(Dispatchers.IO) { db.clienteDao().deletar(cliente) }
             Toast.makeText(this@ClienteListaActivity, "Cliente excluído.", Toast.LENGTH_SHORT).show()
             carregarClientes()
         }

@@ -1,78 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="16dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/backgroundLight">
 
+    <!-- Search + filter card -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardElevation="2dp"
+        app:cardCornerRadius="12dp"
+        app:cardBackgroundColor="@color/white">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Busca por texto -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:hint="Buscar por máquina ou cliente"
+                app:startIconDrawable="@android:drawable/ic_menu_search"
+                app:startIconTint="@color/colorPrimary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etNumeroSerieFiltro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionSearch"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Filtro por data -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:hint="De (dd/MM/aaaa)">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etDataDe"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="date"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Até (dd/MM/aaaa)">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etDataAte"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="date"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <!-- Filtro por cliente -->
+            <Spinner
+                android:id="@+id/spinnerClienteFiltro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAplicarFiltro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Aplicar filtros"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Loading -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone" />
+
+    <!-- Empty state -->
     <TextView
+        android:id="@+id/tvVazio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Histórico de Relatórios"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:layout_marginBottom="12dp" />
-
-    <TextView
-       android:id="@+id/tvVazio"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:text="Nenhum registro encontrado."
-       android:gravity="center"
-       android:padding="16dp"
-       android:textColor="@android:color/black"
-       android:visibility="gone" />
-  
-
-    <!-- Filtro por data -->
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp">
-
-        <EditText
-            android:id="@+id/etDataDe"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Data de (AAAA-MM-DD)" />
-
-        <EditText
-            android:id="@+id/etDataAte"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Data até (AAAA-MM-DD)"
-            android:layout_marginStart="8dp" />
-    </LinearLayout>
-
-    <!-- Filtro por cliente -->
-    <Spinner
-        android:id="@+id/spinnerClienteFiltro"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp" />
-
-    <!-- Filtro por nº de série -->
-    <EditText
-        android:id="@+id/etNumeroSerieFiltro"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nº de série da máquina (opcional)"
-        android:layout_marginBottom="8dp" />
-
-    <Button
-        android:id="@+id/btnAplicarFiltro"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Aplicar filtros"
-        android:layout_marginBottom="12dp" />
+        android:text="Nenhum relatório encontrado."
+        android:gravity="center"
+        android:padding="32dp"
+        android:textColor="@color/hintGray"
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRelatorios"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:paddingBottom="8dp"
+        android:clipToPadding="false" />
 
 </LinearLayout>

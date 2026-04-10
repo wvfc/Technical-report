@@ -1,11 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/txtNomeCliente"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:textSize="16sp"
-    android:textColor="@color/textPrimary"
-    android:background="@color/white"
-    android:singleLine="true"
-    android:ellipsize="end" />
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="4dp"
+    app:cardElevation="2dp"
+    app:cardCornerRadius="12dp"
+    app:cardBackgroundColor="@color/white">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tvNomeCliente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nome fantasia"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/textPrimary"
+                android:singleLine="true"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/tvDocumentoCliente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CNPJ/CPF"
+                android:textSize="12sp"
+                android:textColor="@color/hintGray"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_nav_reports"
+            android:tint="@color/hintGray"
+            android:contentDescription="Opções"
+            android:rotation="90"
+            android:layout_marginStart="8dp" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

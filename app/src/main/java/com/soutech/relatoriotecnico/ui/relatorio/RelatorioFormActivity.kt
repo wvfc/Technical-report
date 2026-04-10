@@ -2,12 +2,15 @@ package com.soutech.relatoriotecnico.ui.relatorio
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 
@@ -15,27 +18,25 @@ import com.soutech.relatoriotecnico.R
 import com.soutech.relatoriotecnico.data.AppDatabase
 import com.soutech.relatoriotecnico.data.ClienteEntity
 import com.soutech.relatoriotecnico.data.ImagemRelatorioEntity
+import com.soutech.relatoriotecnico.data.MaquinaEntity
 import com.soutech.relatoriotecnico.data.RelatorioEntity
-import com.soutech.relatoriotecnico.data.PdfGenerator // se ainda estiver usando
-import com.soutech.relatoriotecnico.util.PdfUtils      // <-- IMPORTANTE
+import com.soutech.relatoriotecnico.util.PdfUtils
 
 import com.soutech.relatoriotecnico.databinding.ActivityRelatorioFormBinding
 
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.Dispatchers              // <-- IMPORTANTE
-import kotlinx.coroutines.withContext             // <-- IMPORTANTE
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
-
-
 
 class RelatorioFormActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRelatorioFormBinding
     private var clientes: List<ClienteEntity> = emptyList()
+    private var maquinas: List<MaquinaEntity> = emptyList()
     private var imagensUris: MutableList<Uri> = mutableListOf()
     private var relatorioId: Long? = null
 
@@ -45,7 +46,6 @@ class RelatorioFormActivity : AppCompatActivity() {
         ActivityResultContracts.OpenMultipleDocuments()
     ) { uris ->
         if (!uris.isNullOrEmpty()) {
-            // Persistir permissão de leitura para as URIs selecionadas
             uris.forEach { uri ->
                 try {
                     contentResolver.takePersistableUriPermission(
@@ -56,11 +56,7 @@ class RelatorioFormActivity : AppCompatActivity() {
             }
             imagensUris.clear()
             imagensUris.addAll(uris)
-            Toast.makeText(
-                this,
-                "${uris.size} imagem(ns) selecionada(s).",
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(this, "${uris.size} imagem(ns) selecionada(s).", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -69,17 +65,10 @@ class RelatorioFormActivity : AppCompatActivity() {
         binding = ActivityRelatorioFormBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // TIPOS DE MANUTENÇÃO (Preventiva, Preditiva, etc.)
-    val tipos = resources.getStringArray(R.array.tipos_manutencao).toList()
-    val tipoAdapter = ArrayAdapter(
-        this,
-        R.layout.spinner_item,
-        tipos
-    )
-    tipoAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
-    binding.spTipoManutencao.adapter = tipoAdapter
-
-        
+        val tipos = resources.getStringArray(R.array.tipos_manutencao).toList()
+        val tipoAdapter = ArrayAdapter(this, R.layout.spinner_item, tipos)
+        tipoAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+        binding.spTipoManutencao.adapter = tipoAdapter
 
         supportActionBar?.title = "Novo relatório"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -87,53 +76,94 @@ class RelatorioFormActivity : AppCompatActivity() {
         relatorioId = intent.getLongExtra("relatorioId", -1L).takeIf { it > 0 }
 
         carregarClientes()
+        configurarBackPress()
 
         binding.edDataEntrada.setOnClickListener { escolherDataHora(binding.edDataEntrada) }
         binding.edDataSaida.setOnClickListener { escolherDataHora(binding.edDataSaida) }
-
-        binding.btnSelecionarImagens.setOnClickListener {
-            pickerImagens.launch(arrayOf("image/*"))
-        }
-
-        binding.btnSalvarRelatorio.setOnClickListener {
-            salvarRelatorio()
-        }
-
-        binding.btnVoltar.setOnClickListener {
-            finish()
-        }
+        binding.btnSelecionarImagens.setOnClickListener { pickerImagens.launch(arrayOf("image/*")) }
+        binding.btnSalvarRelatorio.setOnClickListener { salvarRelatorio() }
+        binding.btnVoltar.setOnClickListener { finish() }
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        finish()
+        onBackPressedDispatcher.onBackPressed()
         return true
     }
 
-   private fun carregarClientes() {
-    val db = AppDatabase.getInstance(this)
-    lifecycleScope.launch {
-        clientes = db.clienteDao().listarTodos()
-        val nomes = clientes.map { it.nomeFantasia }
+    private fun configurarBackPress() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (formTemDados()) {
+                    AlertDialog.Builder(this@RelatorioFormActivity)
+                        .setTitle("Descartar dados?")
+                        .setMessage("Os dados preenchidos serão perdidos. Deseja sair mesmo assim?")
+                        .setPositiveButton("Sair") { _, _ ->
+                            isEnabled = false
+                            onBackPressedDispatcher.onBackPressed()
+                        }
+                        .setNegativeButton("Continuar editando", null)
+                        .show()
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
+    }
 
-        val adapter = ArrayAdapter(
-            this@RelatorioFormActivity,
-            R.layout.spinner_item,        // layout com texto preto
-            nomes
-        )
-        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+    private fun formTemDados(): Boolean =
+        binding.edOcorrencia.text.isNotEmpty() ||
+        binding.edSolucao.text.isNotEmpty() ||
+        binding.edDataEntrada.text.isNotEmpty() ||
+        binding.edModeloMaquina.text.isNotEmpty()
 
-        binding.spCliente.adapter = adapter
+    private fun carregarClientes() {
+        val db = AppDatabase.getInstance(this)
+        lifecycleScope.launch {
+            clientes = withContext(Dispatchers.IO) { db.clienteDao().listarTodos() }
 
-        if (clientes.isEmpty()) {
-            Toast.makeText(
-                this@RelatorioFormActivity,
-                "Cadastre um cliente antes de criar relatórios.",
-                Toast.LENGTH_LONG
-            ).show()
+            val nomes = clientes.map { it.nomeFantasia }
+            val adapter = ArrayAdapter(this@RelatorioFormActivity, R.layout.spinner_item, nomes)
+            adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+            binding.spCliente.adapter = adapter
+
+            if (clientes.isEmpty()) {
+                Toast.makeText(this@RelatorioFormActivity,
+                    "Cadastre um cliente antes de criar relatórios.", Toast.LENGTH_LONG).show()
+            }
+
+            // Atualizar spinner de máquinas quando cliente mudar
+            binding.spCliente.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(p: AdapterView<*>?, v: android.view.View?, pos: Int, id: Long) {
+                    val cliente = clientes.getOrNull(pos)
+                    if (cliente != null) atualizarMaquinas(cliente.id)
+                }
+                override fun onNothingSelected(p: AdapterView<*>?) = Unit
+            }
         }
     }
-}
 
+    private fun atualizarMaquinas(clienteId: Long) {
+        val db = AppDatabase.getInstance(this)
+        lifecycleScope.launch {
+            maquinas = withContext(Dispatchers.IO) { db.maquinaDao().listarPorCliente(clienteId) }
+            val nomes = mutableListOf("Nenhuma (digitar manualmente)")
+            nomes.addAll(maquinas.map { "${it.marca} ${it.modelo} — S/N: ${it.numeroSerie}" })
+            val adapter = ArrayAdapter(this@RelatorioFormActivity, R.layout.spinner_item, nomes)
+            adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+            binding.spMaquina.adapter = adapter
+
+            binding.spMaquina.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(p: AdapterView<*>?, v: android.view.View?, pos: Int, id: Long) {
+                    if (pos > 0) {
+                        val maquina = maquinas[pos - 1]
+                        binding.edModeloMaquina.setText("${maquina.marca} ${maquina.modelo}")
+                    }
+                }
+                override fun onNothingSelected(p: AdapterView<*>?) = Unit
+            }
+        }
+    }
 
     private fun escolherDataHora(campo: android.widget.EditText) {
         val cal = Calendar.getInstance()
@@ -182,17 +212,12 @@ class RelatorioFormActivity : AppCompatActivity() {
         val solucao = binding.edSolucao.text.toString().trim()
         val pecas = binding.edPecas.text.toString().trim().ifEmpty { null }
 
-        if (dataEntradaStr.isEmpty() ||
-            dataSaidaStr.isEmpty() ||
-            modelo.isEmpty() ||
-            ocorrencia.isEmpty() ||
-            solucao.isEmpty()
-        ) {
-            Toast.makeText(this, "Preencha todos os campos obrigatórios.", Toast.LENGTH_SHORT).show()
+        if (dataEntradaStr.isEmpty() || dataSaidaStr.isEmpty() || modelo.isEmpty() ||
+            ocorrencia.isEmpty() || solucao.isEmpty()) {
+            Toast.makeText(this, "Preencha todos os campos obrigatórios (*).", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Validação explícita das datas para evitar uso silencioso de data atual
         val dataEntrada = sdfDataHora.parse(dataEntradaStr)?.time
         val dataSaida = sdfDataHora.parse(dataSaidaStr)?.time
 
@@ -201,15 +226,19 @@ class RelatorioFormActivity : AppCompatActivity() {
             return
         }
 
+        val idxMaquina = binding.spMaquina.selectedItemPosition
+        val maquinaId = if (idxMaquina > 0) maquinas.getOrNull(idxMaquina - 1)?.id else null
+
         val db = AppDatabase.getInstance(this)
 
-        // Faz tudo em IO e volta para Main só para o Toast/finish
-        lifecycleScope.launch(Dispatchers.IO) {
+        binding.btnSalvarRelatorio.isEnabled = false
+        binding.progressSalvar.visibility = View.VISIBLE
 
-            // 1) salvar o relatório (sem caminho de PDF ainda)
+        lifecycleScope.launch(Dispatchers.IO) {
             val relEntity = RelatorioEntity(
                 id = 0,
                 clienteId = cliente.id,
+                maquinaId = maquinaId,
                 dataEntrada = dataEntrada,
                 dataSaida = dataSaida,
                 modeloMaquina = modelo,
@@ -221,52 +250,36 @@ class RelatorioFormActivity : AppCompatActivity() {
             )
             val relId = db.relatorioDao().inserir(relEntity)
 
-            // 2) salvar as imagens associadas (URIs)
             val imagens = imagensUris.mapIndexed { idx, uri ->
-                ImagemRelatorioEntity(
-                    relatorioId = relId,
-                    uri = uri.toString(),
-                    ordem = idx
-                )
+                ImagemRelatorioEntity(relatorioId = relId, uri = uri.toString(), ordem = idx)
             }
-            if (imagens.isNotEmpty()) {
-                db.imagemDao().inserirLista(imagens)
-            }
+            if (imagens.isNotEmpty()) db.imagemDao().inserirLista(imagens)
 
-            // 3) buscar o "relatório completo" (relatório + cliente + imagens)
+            val logoUri = db.configLogoDao().obterConfig()?.logoUri
             val completo = db.relatorioDao().buscarComCliente(relId)
 
             if (completo != null) {
-                // ATENÇÃO:
-                // No PdfUtils, use completo.imagens[x].uri para carregar as imagens
-                // via contentResolver.openInputStream(Uri.parse(uriString)).
-
                 val pdfFile = PdfUtils.gerarPdfRelatorio(
                     context = this@RelatorioFormActivity,
                     relatorio = completo.relatorio,
                     cliente = completo.cliente,
-                    imagens = completo.imagens
+                    imagens = completo.imagens,
+                    logoUri = logoUri
                 )
-
-                // 4) atualizar o caminho do PDF no banco
-                val atualizado = completo.relatorio.copy(pdfPath = pdfFile.absolutePath)
-                db.relatorioDao().atualizar(atualizado)
+                db.relatorioDao().atualizar(completo.relatorio.copy(pdfPath = pdfFile.absolutePath))
 
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(
-                        this@RelatorioFormActivity,
-                        "Relatório salvo e PDF gerado.",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    binding.progressSalvar.visibility = View.GONE
+                    Toast.makeText(this@RelatorioFormActivity,
+                        "Relatório salvo e PDF gerado.", Toast.LENGTH_LONG).show()
                     finish()
                 }
             } else {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(
-                        this@RelatorioFormActivity,
-                        "Relatório salvo, mas não foi possível gerar o PDF (dados incompletos).",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    binding.progressSalvar.visibility = View.GONE
+                    binding.btnSalvarRelatorio.isEnabled = true
+                    Toast.makeText(this@RelatorioFormActivity,
+                        "Relatório salvo, mas PDF não pôde ser gerado.", Toast.LENGTH_LONG).show()
                     finish()
                 }
             }

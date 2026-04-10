@@ -38,6 +38,7 @@ data class TecnicoEntity(
 data class RelatorioEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val clienteId: Long,
+    val maquinaId: Long? = null,
     val tecnicoId: Long? = null,
     val dataEntrada: Long,
     val dataSaida: Long,

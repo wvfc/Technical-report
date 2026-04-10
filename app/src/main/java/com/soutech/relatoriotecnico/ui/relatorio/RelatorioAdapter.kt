@@ -42,9 +42,10 @@ class RelatorioAdapter(
 
         val tipoLabel = if (item.tipo == "compressor") "Compressor" else "Geral"
 
+        holder.binding.chipTipo.text = tipoLabel
         holder.binding.tvTituloRelatorio.text = item.modeloMaquina.ifEmpty { "Relatório $tipoLabel" }
-        holder.binding.tvLinha2Relatorio.text = "$tipoLabel • ${sdf.format(Date(item.dataEntrada))}"
-        holder.binding.tvLinha3Relatorio.text = "Cliente: ${item.clienteNome}"
+        holder.binding.tvLinha2Relatorio.text = "${item.tipoManutencao} • ${sdf.format(Date(item.dataEntrada))}"
+        holder.binding.tvLinha3Relatorio.text = item.clienteNome
 
         holder.itemView.setOnClickListener {
             onItemClick?.invoke(item)

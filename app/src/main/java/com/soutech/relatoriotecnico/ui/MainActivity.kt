@@ -1,127 +1,107 @@
 package com.soutech.relatoriotecnico.ui
 
-import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.soutech.relatoriotecnico.R
+import com.soutech.relatoriotecnico.core.SessionManager
+import com.soutech.relatoriotecnico.data.AppDatabase
 import com.soutech.relatoriotecnico.databinding.ActivityMainBinding
-import com.soutech.relatoriotecnico.ui.cliente.ClienteFormActivity
 import com.soutech.relatoriotecnico.ui.cliente.ClienteListaActivity
-import com.soutech.relatoriotecnico.ui.maquina.CadastroMaquinaActivity
 import com.soutech.relatoriotecnico.ui.maquina.MaquinasCadastradasActivity
 import com.soutech.relatoriotecnico.ui.relatorio.RelatorioCompressorFormActivity
 import com.soutech.relatoriotecnico.ui.relatorio.RelatorioFormActivity
 import com.soutech.relatoriotecnico.ui.relatorio.RelatorioListaActivity
-import com.soutech.relatoriotecnico.ui.tecnico.CadastroTecnicoActivity
 import com.soutech.relatoriotecnico.ui.tecnico.TecnicosCadastradosActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val session by lazy { SessionManager(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Oculta a ActionBar padrão
-        supportActionBar?.hide()
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        // ================== EXPANDIR / RECOLHER GRUPOS ==================
+        configurarSaudacao()
+        configurarBotoes()
+        configurarBottomNav()
+    }
 
-        binding.btnGrupoAjuda.setOnClickListener {
-            binding.layoutAjuda.visibility =
-                if (binding.layoutAjuda.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+    override fun onResume() {
+        super.onResume()
+        carregarEstatisticas()
+        binding.bottomNav.selectedItemId = R.id.nav_home
+    }
+
+    private fun configurarSaudacao() {
+        val hora = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+        val saudacao = when {
+            hora < 12 -> "Bom dia"
+            hora < 18 -> "Boa tarde"
+            else -> "Boa noite"
         }
+        val nome = session.getNome()?.takeIf { it.isNotBlank() } ?: "Técnico"
+        binding.tvSaudacao.text = "$saudacao, $nome!"
+        binding.tvNomeUsuario.text = session.getEmail() ?: "SOUTECH Automação"
+    }
 
-        binding.btnGrupoRelatorios.setOnClickListener {
-            binding.layoutRelatorios.visibility =
-                if (binding.layoutRelatorios.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+    private fun carregarEstatisticas() {
+        val db = AppDatabase.getInstance(this)
+        lifecycleScope.launch {
+            val numClientes = withContext(Dispatchers.IO) { db.clienteDao().contarTodos() }
+            val numRelatorios = withContext(Dispatchers.IO) { db.relatorioDao().contarTodos() }
+            val numTecnicos = withContext(Dispatchers.IO) { db.tecnicoDao().contarTodos() }
+            binding.tvNumClientes.text = numClientes.toString()
+            binding.tvNumRelatorios.text = numRelatorios.toString()
+            binding.tvNumTecnicos.text = numTecnicos.toString()
         }
+    }
 
-        binding.btnGrupoCadastros.setOnClickListener {
-            binding.layoutCadastros.visibility =
-                if (binding.layoutCadastros.visibility == View.VISIBLE) View.GONE else View.VISIBLE
-        }
-
-        // ================== AJUDA TÉCNICO (abre PDFs) ==================
-
-        binding.btnSenhasIhms.setOnClickListener {
-            abrirPdf("https://login.soutechautomacao.com/static/pdfs/senhas_ihm.pdf")
-        }
-
-        binding.btnPdfsMaquinas.setOnClickListener {
-            abrirPdf("https://login.soutechautomacao.com/static/pdfs/pdfs_maquinas.pdf")
-        }
-
-        binding.btnDuvidasComuns.setOnClickListener {
-            abrirPdf("https://login.soutechautomacao.com/static/pdfs/duvidas_comuns.pdf")
-        }
-
-        // ================== RELATÓRIOS ==================
-
-        // Relatório de compressor
-        binding.btnNovoRelatorioCompressor.setOnClickListener {
-            startActivity(Intent(this, RelatorioCompressorFormActivity::class.java))
-        }
-
-        // Relatório geral
+    private fun configurarBotoes() {
         binding.btnNovoRelatorioGeral.setOnClickListener {
             startActivity(Intent(this, RelatorioFormActivity::class.java))
         }
-
-        // Histórico de relatórios
+        binding.btnNovoRelatorioCompressor.setOnClickListener {
+            startActivity(Intent(this, RelatorioCompressorFormActivity::class.java))
+        }
         binding.btnHistoricoRelatorios.setOnClickListener {
             startActivity(Intent(this, RelatorioListaActivity::class.java))
         }
-
-        // ================== CADASTROS ==================
-
-        // Cliente
-        binding.btnCadastroCliente.setOnClickListener {
-            startActivity(Intent(this, ClienteFormActivity::class.java))
-        }
-
-        binding.btnClientesCadastrados.setOnClickListener {
+        binding.cardClientes.setOnClickListener {
             startActivity(Intent(this, ClienteListaActivity::class.java))
         }
-
-        // Máquina
-        binding.btnCadastroMaquina.setOnClickListener {
-            startActivity(Intent(this, CadastroMaquinaActivity::class.java))
-        }
-
-        binding.btnMaquinasCadastradas.setOnClickListener {
+        binding.cardMaquinas.setOnClickListener {
             startActivity(Intent(this, MaquinasCadastradasActivity::class.java))
         }
-
-        // Técnico
-        binding.btnCadastroTecnico.setOnClickListener {
-            startActivity(Intent(this, CadastroTecnicoActivity::class.java))
-        }
-
-        binding.btnTecnicosCadastrados.setOnClickListener {
+        binding.cardTecnicos.setOnClickListener {
             startActivity(Intent(this, TecnicosCadastradosActivity::class.java))
         }
     }
 
-    // Abre PDF via Intent padrão do Android
-    private fun abrirPdf(url: String) {
-        try {
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                setDataAndType(Uri.parse(url), "application/pdf")
-                flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+    private fun configurarBottomNav() {
+        binding.bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> true
+                R.id.nav_relatorios -> {
+                    startActivity(Intent(this, RelatorioListaActivity::class.java))
+                    false
+                }
+                R.id.nav_cadastros -> {
+                    startActivity(Intent(this, ClienteListaActivity::class.java))
+                    false
+                }
+                else -> false
             }
-            startActivity(intent)
-        } catch (e: ActivityNotFoundException) {
-            Toast.makeText(
-                this,
-                "Nenhum aplicativo de PDF encontrado no dispositivo.",
-                Toast.LENGTH_LONG
-            ).show()
         }
     }
 }

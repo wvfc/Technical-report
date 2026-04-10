@@ -1,70 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/backgroundLight"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/backgroundLight">
 
-    <TextView
-        android:id="@+id/tvCliente"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cliente"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:textColor="@color/textDark"
-        android:layout_marginBottom="8dp"/>
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tvTipo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Tipo de manutenção"
-        android:textColor="@color/textDark"
-        android:layout_marginBottom="4dp"/>
+        <!-- Info card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardElevation="2dp"
+            app:cardCornerRadius="12dp"
+            app:cardBackgroundColor="@color/white">
 
-    <TextView
-        android:id="@+id/tvModelo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Modelo da máquina"
-        android:textColor="@color/textDark"
-        android:layout_marginBottom="4dp"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tvDatas"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Datas"
-        android:textColor="@color/textDark"
-        android:layout_marginBottom="16dp"/>
+                <TextView
+                    android:id="@+id/tvCliente"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cliente"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="@color/textPrimary"
+                    android:layout_marginBottom="12dp" />
 
-    <Button
-        android:id="@+id/btnAbrirPdf"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Abrir PDF"
-        android:backgroundTint="@color/colorPrimary"
-        android:textColor="@color/white"
-        android:layout_marginBottom="8dp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider"
+                    android:layout_marginBottom="12dp" />
 
-    <Button
-        android:id="@+id/btnExcluirRelatorio"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Excluir relatório"
-        android:backgroundTint="@android:color/holo_red_dark"
-        android:textColor="@color/white"
-        android:layout_marginBottom="12dp"/>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="center_vertical">
 
-    <!-- VOLTAR -->
-    <Button
-        android:id="@+id/btnVoltar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Voltar"
-        android:backgroundTint="@android:color/darker_gray"
-        android:textColor="@color/white"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Tipo de relatório"
+                        android:textColor="@color/hintGray"
+                        android:textSize="13sp" />
 
-</LinearLayout>
+                    <TextView
+                        android:id="@+id/tvTipo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="—"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Equipamento"
+                        android:textColor="@color/hintGray"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tvModelo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="—"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvDatas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Entrada / Saída"
+                    android:textColor="@color/textSecondary"
+                    android:textSize="13sp"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Actions card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardElevation="2dp"
+            app:cardCornerRadius="12dp"
+            app:cardBackgroundColor="@color/white">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAbrirPdf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Abrir PDF"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="@color/white" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnExcluirRelatorio"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Excluir relatório"
+                    app:strokeColor="@color/colorError"
+                    android:textColor="@color/colorError" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Hidden back button kept for compatibility -->
+        <Button
+            android:id="@+id/btnVoltar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Voltar"
+            android:backgroundTint="@color/buttonSecondary"
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</ScrollView>

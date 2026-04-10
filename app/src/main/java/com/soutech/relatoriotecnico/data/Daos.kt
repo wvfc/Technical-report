@@ -18,6 +18,9 @@ interface ClienteDao {
 
     @Delete
     suspend fun deletar(cliente: ClienteEntity)
+
+    @Query("SELECT COUNT(*) FROM clientes")
+    suspend fun contarTodos(): Int
 }
 
 @Dao
@@ -69,6 +72,9 @@ interface TecnicoDao {
 
     @Delete
     suspend fun deletar(tecnico: TecnicoEntity)
+
+    @Query("SELECT COUNT(*) FROM tecnicos")
+    suspend fun contarTodos(): Int
 }
 
 data class RelatorioComCliente(
@@ -110,6 +116,9 @@ interface RelatorioDao {
 
     @Query("SELECT * FROM relatorios WHERE id = :id LIMIT 1")
     suspend fun buscarPorIdSimples(id: Long): RelatorioEntity?
+
+    @Query("SELECT COUNT(*) FROM relatorios")
+    suspend fun contarTodos(): Int
 }
 
 @Dao

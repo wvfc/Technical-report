@@ -2,9 +2,10 @@ package com.soutech.relatoriotecnico.ui.relatorio
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,19 +26,27 @@ class RelatorioListaActivity : AppCompatActivity() {
 
     private val listaClientes = mutableListOf<ClienteEntity?>()
     private var todosRelatorios: List<RelatorioComCliente> = emptyList()
+    private var filtroClienteId: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRelatorioListaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = "Histórico de Relatórios"
+        supportActionBar?.title = "Relatórios"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        filtroClienteId = intent.getLongExtra("clienteId", -1L).takeIf { it > 0 }
 
         binding.rvRelatorios.layoutManager = LinearLayoutManager(this)
 
-        binding.btnAplicarFiltro.setOnClickListener {
-            aplicarFiltros()
-        }
+        binding.btnAplicarFiltro.setOnClickListener { aplicarFiltros() }
+
+        binding.etNumeroSerieFiltro.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = aplicarFiltros()
+            override fun afterTextChanged(s: Editable?) = Unit
+        })
 
         carregarDados()
     }
@@ -47,28 +56,47 @@ class RelatorioListaActivity : AppCompatActivity() {
         carregarDados()
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
+    }
+
     private fun carregarDados() {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.tvVazio.visibility = View.GONE
+        binding.rvRelatorios.visibility = View.GONE
+
         lifecycleScope.launch {
             val db = AppDatabase.getInstance(this@RelatorioListaActivity)
 
-            // Carrega clientes e relatórios em paralelo
             val clientes = withContext(Dispatchers.IO) { db.clienteDao().listarTodos() }
-            todosRelatorios = withContext(Dispatchers.IO) { db.relatorioDao().listarComCliente() }
+            todosRelatorios = withContext(Dispatchers.IO) {
+                if (filtroClienteId != null)
+                    db.relatorioDao().listarPorCliente(filtroClienteId!!)
+                else
+                    db.relatorioDao().listarComCliente()
+            }
 
-            // Popula spinner de clientes (null = "Todos")
             listaClientes.clear()
             listaClientes.add(null)
             listaClientes.addAll(clientes)
 
             val nomes = listaClientes.map { it?.nomeFantasia ?: "Todos os clientes" }
-            val adapter = ArrayAdapter(
+            val spinnerAdapter = ArrayAdapter(
                 this@RelatorioListaActivity,
                 android.R.layout.simple_spinner_item,
                 nomes
             )
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.spinnerClienteFiltro.adapter = adapter
+            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.spinnerClienteFiltro.adapter = spinnerAdapter
 
+            // Pre-select client if coming from ClienteListaActivity
+            if (filtroClienteId != null) {
+                val idx = listaClientes.indexOfFirst { it?.id == filtroClienteId }
+                if (idx >= 0) binding.spinnerClienteFiltro.setSelection(idx)
+            }
+
+            binding.progressBar.visibility = View.GONE
             aplicarFiltros()
         }
     }
@@ -87,7 +115,7 @@ class RelatorioListaActivity : AppCompatActivity() {
         val tsFim: Long? = if (dataAte.isNotEmpty()) {
             try {
                 val d = sdf.parse(dataAte)
-                if (d != null) d.time + 86_399_999L else null // até o final do dia
+                if (d != null) d.time + 86_399_999L else null
             } catch (_: Exception) { null }
         } else null
 

@@ -1,28 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Azul cinzento como cor principal do app -->
-    <color name="colorPrimary">#546E7A</color>        <!-- barra superior, detalhes -->
-    <color name="colorPrimaryDark">#37474F</color>    <!-- status bar / variações escuras -->
-    <color name="colorAccent">#0097A7</color>         <!-- se precisar de destaque secundário -->
+    <!-- Cores principais -->
+    <color name="colorPrimary">#546E7A</color>
+    <color name="colorPrimaryDark">#37474F</color>
+    <color name="colorAccent">#0097A7</color>
 
-    <!-- Fundos SEMPRE brancos -->
-    <color name="backgroundApp">#FFFFFF</color>
-    <color name="backgroundLight">#FFFFFF</color>
+    <!-- Material 3 containers -->
+    <color name="colorPrimaryContainer">#CFE4EC</color>
+    <color name="colorOnPrimaryContainer">#002D3B</color>
+
+    <!-- Fundos -->
+    <color name="backgroundApp">#F5F7F8</color>
+    <color name="backgroundLight">#F5F7F8</color>
     <color name="surfaceCard">#FFFFFF</color>
 
-    <!-- Textos SEMPRE pretos -->
-    <color name="textPrimary">#000000</color>         <!-- textos principais -->
-    <color name="textSecondary">#000000</color>       <!-- textos secundários -->
-    <color name="hintGray">#666666</color>            <!-- hint de EditText (um cinza mais fraco) -->
-    <color name="textDark">#000000</color>            <!-- alias usado em layouts antigos -->
+    <!-- Textos -->
+    <color name="textPrimary">#1A1C1E</color>
+    <color name="textSecondary">#44474A</color>
+    <color name="hintGray">#6E7275</color>
+    <color name="textDark">#000000</color>
 
-    <!-- Branco / divisores -->
+    <!-- Superfície e divisores -->
     <color name="white">#FFFFFF</color>
-    <color name="divider">#CCCCCC</color>
+    <color name="divider">#E0E0E0</color>
 
-    <!-- Botões em azul cinzento -->
-    <color name="buttonPrimary">#546E7A</color>       <!-- botões principais -->
-    <color name="buttonSecondary">#B0BEC5</color>     <!-- botões secundários (ex.: VOLTAR) -->
+    <!-- Botões -->
+    <color name="buttonPrimary">#546E7A</color>
+    <color name="buttonSecondary">#B0BEC5</color>
+    <color name="colorError">#BA1A1A</color>
+
+    <!-- Bottom nav selector -->
+    <color name="nav_item_selected">#546E7A</color>
+    <color name="nav_item_unselected">#6E7275</color>
 
     <color name="ic_launcher_background_relatorio">#0D47A1</color>
 </resources>

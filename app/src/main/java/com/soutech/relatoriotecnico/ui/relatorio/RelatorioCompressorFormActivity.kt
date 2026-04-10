@@ -10,7 +10,9 @@ import android.widget.Spinner
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.soutech.relatoriotecnico.R
@@ -70,6 +72,7 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
         configurarSpinnersFixos()
         carregarClientes()
         carregarTecnicos()
+        configurarBackPress()
 
         binding.edDataEntrada.setOnClickListener { escolherDataHora(binding.edDataEntrada) }
         binding.edDataSaida.setOnClickListener { escolherDataHora(binding.edDataSaida) }
@@ -88,8 +91,31 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        finish()
+        onBackPressedDispatcher.onBackPressed()
         return true
+    }
+
+    private fun configurarBackPress() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val temDados = binding.edDataEntrada.text.isNotEmpty() ||
+                    binding.edModeloMaquina.text.isNotEmpty()
+                if (temDados) {
+                    AlertDialog.Builder(this@RelatorioCompressorFormActivity)
+                        .setTitle("Descartar dados?")
+                        .setMessage("Os dados preenchidos serão perdidos. Deseja sair mesmo assim?")
+                        .setPositiveButton("Sair") { _, _ ->
+                            isEnabled = false
+                            onBackPressedDispatcher.onBackPressed()
+                        }
+                        .setNegativeButton("Continuar editando", null)
+                        .show()
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
     }
 
     // =========================================================================
@@ -313,12 +339,14 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
             val completo = db.relatorioDao().buscarComCliente(relId)
 
             if (completo != null) {
+                val logoUri = db.configLogoDao().obterConfig()?.logoUri
                 val pdfFile = try {
                     PdfUtils.gerarPdfRelatorioCompressor(
                         context = this@RelatorioCompressorFormActivity,
                         relatorio = completo.relatorio,
                         cliente = completo.cliente,
-                        imagens = completo.imagens
+                        imagens = completo.imagens,
+                        logoUri = logoUri
                     )
                 } catch (e: Exception) {
                     null

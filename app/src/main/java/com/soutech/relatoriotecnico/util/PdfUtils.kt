@@ -27,7 +27,8 @@ object PdfUtils {
         context: Context,
         relatorio: RelatorioEntity,
         cliente: ClienteEntity,
-        imagens: List<ImagemRelatorioEntity>
+        imagens: List<ImagemRelatorioEntity>,
+        logoUri: String? = null
     ): File {
         val pdf = android.graphics.pdf.PdfDocument()
         val pageWidth = 595
@@ -44,7 +45,7 @@ object PdfUtils {
         val bottomLimit = pageHeight - 60f
         var y = 0f
 
-        y = drawHeader(canvas, pageWidth.toFloat(), margin)
+        y = drawHeader(canvas, pageWidth.toFloat(), margin, context, logoUri)
 
         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
 
@@ -55,7 +56,7 @@ object PdfUtils {
                 .Builder(pageWidth, pageHeight, pageNumber).create()
             page = pdf.startPage(pageInfo)
             canvas = page.canvas
-            y = drawHeader(canvas, pageWidth.toFloat(), margin)
+            y = drawHeader(canvas, pageWidth.toFloat(), margin, context, logoUri)
             if (!tituloExtra.isNullOrBlank()) {
                 y = drawSectionTitle(canvas, tituloExtra, margin, y)
             }
@@ -157,7 +158,8 @@ object PdfUtils {
         context: Context,
         relatorio: RelatorioEntity,
         cliente: ClienteEntity,
-        imagens: List<ImagemRelatorioEntity>
+        imagens: List<ImagemRelatorioEntity>,
+        logoUri: String? = null
     ): File {
         val pdf = android.graphics.pdf.PdfDocument()
         val pageWidth = 595
@@ -181,13 +183,13 @@ object PdfUtils {
                 .Builder(pageWidth, pageHeight, pageNumber).create()
             page = pdf.startPage(pageInfo)
             canvas = page.canvas
-            y = drawHeader(canvas, pageWidth.toFloat(), margin)
+            y = drawHeader(canvas, pageWidth.toFloat(), margin, context, logoUri)
             if (!tituloExtra.isNullOrBlank()) {
                 y = drawSectionTitle(canvas, tituloExtra, margin, y)
             }
         }
 
-        y = drawHeader(canvas, pageWidth.toFloat(), margin)
+        y = drawHeader(canvas, pageWidth.toFloat(), margin, context, logoUri)
         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
 
         // Cliente
@@ -293,19 +295,43 @@ object PdfUtils {
         return file
     }
 
-    private fun drawHeader(canvas: Canvas, pageWidth: Float, margin: Float): Float {
+    private fun drawHeader(
+        canvas: Canvas,
+        pageWidth: Float,
+        margin: Float,
+        context: Context? = null,
+        logoUri: String? = null
+    ): Float {
         val headerHeight = 70f
         canvas.drawRect(
             0f, 0f, pageWidth, headerHeight,
-            Paint().apply { color = Color.parseColor("#45132D") }
+            Paint().apply { color = Color.parseColor("#546E7A") }
         )
+
+        // Tentar desenhar logo à esquerda
+        var textStartX = margin
+        if (context != null && !logoUri.isNullOrBlank()) {
+            val logoBitmap = carregarBitmapSegura(context, logoUri)
+            if (logoBitmap != null) {
+                val logoSize = headerHeight - 16f
+                val scale = minOf(logoSize / logoBitmap.width, logoSize / logoBitmap.height)
+                val lw = logoBitmap.width * scale
+                val lh = logoBitmap.height * scale
+                val top = (headerHeight - lh) / 2f
+                val dest = RectF(margin, top, margin + lw, top + lh)
+                canvas.drawBitmap(logoBitmap, null, dest, null)
+                logoBitmap.recycle()
+                textStartX = margin + lw + 12f
+            }
+        }
+
         canvas.drawText(
             "RELATÓRIO TÉCNICO DE MANUTENÇÃO",
-            margin,
+            textStartX,
             headerHeight / 2f + 6f,
             TextPaint().apply {
                 color = Color.WHITE
-                textSize = 20f
+                textSize = 18f
                 isFakeBoldText = true
             }
         )
