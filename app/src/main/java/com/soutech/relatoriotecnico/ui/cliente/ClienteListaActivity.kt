@@ -6,6 +6,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +15,7 @@ import com.soutech.relatoriotecnico.data.AppDatabase
 import com.soutech.relatoriotecnico.data.ClienteEntity
 import com.soutech.relatoriotecnico.databinding.ActivityClienteListaBinding
 import com.soutech.relatoriotecnico.ui.relatorio.RelatorioListaActivity
+import com.soutech.relatoriotecnico.util.ImportadorClientes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,6 +25,20 @@ class ClienteListaActivity : AppCompatActivity() {
     private lateinit var binding: ActivityClienteListaBinding
     private lateinit var adapter: ClienteAdapter
     private var todosClientes: List<ClienteEntity> = emptyList()
+
+    private val importadorArquivo = registerForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        if (uri != null) {
+            try {
+                contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+            } catch (_: Exception) {}
+            importarClientes(uri)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +54,16 @@ class ClienteListaActivity : AppCompatActivity() {
 
         binding.fabNovoCliente.setOnClickListener {
             startActivity(Intent(this, ClienteFormActivity::class.java))
+        }
+
+        binding.fabImportarClientes.setOnClickListener {
+            importadorArquivo.launch(arrayOf(
+                "text/csv",
+                "text/comma-separated-values",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "application/vnd.ms-excel",
+                "*/*"
+            ))
         }
 
         binding.etBusca.addTextChangedListener(object : TextWatcher {
@@ -83,6 +109,41 @@ class ClienteListaActivity : AppCompatActivity() {
         adapter.atualizar(filtrados)
         binding.tvVazio.visibility = if (filtrados.isEmpty()) View.VISIBLE else View.GONE
         binding.rvClientes.visibility = if (filtrados.isEmpty()) View.GONE else View.VISIBLE
+    }
+
+    private fun importarClientes(uri: android.net.Uri) {
+        binding.progressBar.visibility = View.VISIBLE
+        lifecycleScope.launch {
+            val novos = withContext(Dispatchers.IO) {
+                ImportadorClientes.importar(this@ClienteListaActivity, uri)
+            }
+            if (novos.isEmpty()) {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(this@ClienteListaActivity,
+                    "Nenhum cliente encontrado no arquivo.", Toast.LENGTH_LONG).show()
+                return@launch
+            }
+
+            AlertDialog.Builder(this@ClienteListaActivity)
+                .setTitle("Importar clientes")
+                .setMessage("${novos.size} cliente(s) encontrado(s). Deseja importar?")
+                .setPositiveButton("Importar") { _, _ ->
+                    lifecycleScope.launch {
+                        val db = AppDatabase.getInstance(this@ClienteListaActivity)
+                        withContext(Dispatchers.IO) {
+                            novos.forEach { db.clienteDao().inserir(it) }
+                        }
+                        binding.progressBar.visibility = View.GONE
+                        Toast.makeText(this@ClienteListaActivity,
+                            "${novos.size} cliente(s) importado(s).", Toast.LENGTH_LONG).show()
+                        carregarClientes()
+                    }
+                }
+                .setNegativeButton("Cancelar") { _, _ ->
+                    binding.progressBar.visibility = View.GONE
+                }
+                .show()
+        }
     }
 
     private fun mostrarOpcoes(cliente: ClienteEntity) {

@@ -59,16 +59,37 @@
             android:clipToPadding="false" />
     </LinearLayout>
 
-    <!-- FAB -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabNovoCliente"
+    <!-- FABs stacked -->
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:contentDescription="Novo cliente"
-        android:src="@drawable/ic_fab_add"
-        app:backgroundTint="@color/colorPrimary"
-        app:tint="@color/white" />
+        android:orientation="vertical"
+        android:gravity="end">
+
+        <!-- Import CSV/XLSX -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabImportarClientes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:contentDescription="Importar clientes"
+            android:src="@android:drawable/ic_menu_upload"
+            app:backgroundTint="@color/colorAccent"
+            app:tint="@color/white"
+            app:fabSize="mini" />
+
+        <!-- New client -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabNovoCliente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Novo cliente"
+            android:src="@drawable/ic_fab_add"
+            app:backgroundTint="@color/colorPrimary"
+            app:tint="@color/white" />
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

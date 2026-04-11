@@ -19,6 +19,7 @@ import com.soutech.relatoriotecnico.R
 import com.soutech.relatoriotecnico.data.AppDatabase
 import com.soutech.relatoriotecnico.data.ClienteEntity
 import com.soutech.relatoriotecnico.data.ImagemRelatorioEntity
+import com.soutech.relatoriotecnico.data.MaquinaEntity
 import com.soutech.relatoriotecnico.data.RelatorioEntity
 import com.soutech.relatoriotecnico.data.TecnicoEntity
 import com.soutech.relatoriotecnico.databinding.ActivityRelatorioCompressorFormBinding
@@ -37,6 +38,7 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
     private val sdfDataHora = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
 
     private var clientes: List<ClienteEntity> = emptyList()
+    private var maquinas: List<MaquinaEntity> = emptyList()
     private var tecnicos: List<TecnicoEntity> = emptyList()
     private var tecnicoSelecionadoId: Long? = null
 
@@ -46,7 +48,6 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
         ActivityResultContracts.OpenMultipleDocuments()
     ) { uris ->
         if (!uris.isNullOrEmpty()) {
-            // Persistir permissão de leitura para as URIs selecionadas
             uris.forEach { uri ->
                 try {
                     contentResolver.takePersistableUriPermission(
@@ -186,6 +187,45 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
                 adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_dark)
                 binding.spCliente.adapter = adapter
                 binding.spCliente.isEnabled = true
+
+                binding.spCliente.setOnItemSelectedListener { _, _, position, _ ->
+                    if (position > 0) {
+                        val cliente = clientes[position - 1]
+                        carregarMaquinasPorCliente(cliente.id)
+                    } else {
+                        atualizarSpinnerMaquinas(emptyList())
+                    }
+                }
+            }
+        }
+    }
+
+    private fun carregarMaquinasPorCliente(clienteId: Long) {
+        lifecycleScope.launch {
+            maquinas = withContext(Dispatchers.IO) {
+                AppDatabase.getInstance(this@RelatorioCompressorFormActivity)
+                    .maquinaDao()
+                    .listarPorCliente(clienteId)
+            }
+            atualizarSpinnerMaquinas(maquinas)
+        }
+    }
+
+    private fun atualizarSpinnerMaquinas(lista: List<MaquinaEntity>) {
+        val opcoes = mutableListOf("Nenhuma / informar manualmente")
+        opcoes.addAll(lista.map { "${it.marca} ${it.modelo} (S/N: ${it.numeroSerie})" })
+        val adapter = ArrayAdapter(
+            this,
+            R.layout.spinner_item_dark,
+            opcoes
+        )
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_dark)
+        binding.spMaquina.adapter = adapter
+
+        binding.spMaquina.setOnItemSelectedListener { _, _, position, _ ->
+            if (position > 0) {
+                val maquina = lista[position - 1]
+                binding.edModeloMaquina.setText("${maquina.marca} ${maquina.modelo}")
             }
         }
     }
@@ -221,7 +261,6 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
         }
     }
 
-    // Helper para Spinner listener simplificado
     private fun Spinner.setOnItemSelectedListener(
         onItemSelected: (parent: AdapterView<*>, view: View?, position: Int, id: Long) -> Unit
     ) {
@@ -264,7 +303,7 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
     }
 
     // =========================================================================
-    //  SALVAR RELATÓRIO (LOCAL – Room DB + PDF)
+    //  SALVAR RELATÓRIO
     // =========================================================================
 
     private fun salvarRelatorio() {
@@ -279,6 +318,9 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
             return
         }
         val cliente = clientes[idxSpinner - 1]
+
+        val idxMaquina = binding.spMaquina.selectedItemPosition
+        val maquinaId: Long? = if (idxMaquina > 0 && maquinas.isNotEmpty()) maquinas[idxMaquina - 1].id else null
 
         val dataEntradaStr = binding.edDataEntrada.text.toString().trim()
         val dataSaidaStr = binding.edDataSaida.text.toString().trim()
@@ -310,9 +352,9 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             val db = AppDatabase.getInstance(this@RelatorioCompressorFormActivity)
 
-            // 1) Salva o relatório (sem PDF ainda)
             val relEntity = RelatorioEntity(
                 clienteId = cliente.id,
+                maquinaId = maquinaId,
                 tecnicoId = tecnicoSelecionadoId,
                 dataEntrada = dataEntrada,
                 dataSaida = dataSaida,
@@ -327,7 +369,6 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
             )
             val relId = db.relatorioDao().inserir(relEntity)
 
-            // 2) Salva as imagens
             if (imagensUris.isNotEmpty()) {
                 val imagens = imagensUris.mapIndexed { idx, uri ->
                     ImagemRelatorioEntity(relatorioId = relId, uri = uri.toString(), ordem = idx)
@@ -335,7 +376,6 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
                 db.imagemDao().inserirLista(imagens)
             }
 
-            // 3) Carrega o relatório completo e gera PDF
             val completo = db.relatorioDao().buscarComCliente(relId)
 
             if (completo != null) {
@@ -352,7 +392,6 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
                     null
                 }
 
-                // 4) Atualiza o caminho do PDF
                 if (pdfFile != null) {
                     db.relatorioDao().atualizar(completo.relatorio.copy(pdfPath = pdfFile.absolutePath))
                 }
@@ -370,7 +409,7 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
     }
 
     // =========================================================================
-    //  CHECKLIST 1–42
+    //  CHECKLIST 1–42 (com grupos no resumo)
     // =========================================================================
 
     private data class ChecklistItem(
@@ -381,7 +420,7 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
     )
 
     private fun montarResumoChecklist(): String {
-        val itens = listOf(
+        val mecanica = listOf(
             ChecklistItem(1, "Total de horas de funcionamento / em carga", binding.spItem1Status, listOf(binding.edItem1Valor)),
             ChecklistItem(2, "Pressão de descarga do pacote (carga/alívio)", binding.spItem2Status, listOf(binding.edItem2Valor)),
             ChecklistItem(3, "Temp. de descarga do pacote a plena carga (°F / °C)", binding.spItem3Status, listOf(binding.edItem3Valor)),
@@ -410,7 +449,9 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
             ChecklistItem(26, "Última lubrificação do motor do ventilador (Data / Horas)", binding.spItem26Status, listOf(binding.edItem26Data, binding.edItem26Horas)),
             ChecklistItem(27, "Válvula de segurança instalada e operacional", binding.spItem27Status, listOf(binding.edItem27Obs)),
             ChecklistItem(28, "Tipo de óleo refrigerante", binding.spItem28Status, listOf(binding.edItem28Tipo)),
-            ChecklistItem(29, "Última troca do óleo refrigerante (Data / Horas)", binding.spItem29Status, listOf(binding.edItem29Data, binding.edItem29Horas)),
+            ChecklistItem(29, "Última troca do óleo refrigerante (Data / Horas)", binding.spItem29Status, listOf(binding.edItem29Data, binding.edItem29Horas))
+        )
+        val eletrica = listOf(
             ChecklistItem(30, "Tensão (plena carga) L1 / L2 / L3", binding.spItem30Status, listOf(binding.edItem30L1, binding.edItem30L2, binding.edItem30L3)),
             ChecklistItem(31, "Tensão (sem carga) L1 / L2 / L3", binding.spItem31Status, listOf(binding.edItem31L1, binding.edItem31L2, binding.edItem31L3)),
             ChecklistItem(32, "Corrente do motor (plena carga) T1 / T2 / T3", binding.spItem32Status, listOf(binding.edItem32T1, binding.edItem32T2, binding.edItem32T3)),
@@ -420,20 +461,31 @@ class RelatorioCompressorFormActivity : AppCompatActivity() {
             ChecklistItem(36, "Dados da placa de identificação do motor (HP/kW, RPM, V, A)", binding.spItem36Status, listOf(binding.edItem36HpKw, binding.edItem36Rpm, binding.edItem36V, binding.edItem36A)),
             ChecklistItem(37, "Inspecionar os contatores", binding.spItem37Status, listOf(binding.edItem37Obs)),
             ChecklistItem(38, "Verificar as conexões elétricas", binding.spItem38Status, listOf(binding.edItem38Obs)),
-            ChecklistItem(39, "Temp. operacional HAT (°C) (corte de alta temperatura)", binding.spItem39Status, listOf(binding.edItem39Valor)),
+            ChecklistItem(39, "Temp. operacional HAT (°C) (corte de alta temperatura)", binding.spItem39Status, listOf(binding.edItem39Valor))
+        )
+        val secador = listOf(
             ChecklistItem(40, "Ponto de orvalho (°C)", binding.spItem40Status, listOf(binding.edItem40PontoOrvalho)),
             ChecklistItem(41, "Pré-filtro (Ref.)", binding.spItem41Status, listOf(binding.edItem41Ref)),
             ChecklistItem(42, "Pós-filtro (Ref.)", binding.spItem42Status, listOf(binding.edItem42Ref))
         )
 
         return buildString {
-            for (item in itens) {
-                val status = item.statusSpinner.selectedItem?.toString()?.takeIf { it.isNotBlank() } ?: "-"
-                val valores = item.campos.map { it.text.toString().trim() }.filter { it.isNotEmpty() }
-                append("${item.numero}. ${item.titulo} | Status: $status")
-                if (valores.isNotEmpty()) append(" | Valores/Obs: ${valores.joinToString(" ; ")}")
-                append("\n")
-            }
+            appendLine("=== INSPEÇÃO MECÂNICA ===")
+            for (item in mecanica) appendItem(item)
+            appendLine()
+            appendLine("=== INSPEÇÃO ELÉTRICA ===")
+            for (item in eletrica) appendItem(item)
+            appendLine()
+            appendLine("=== SECADOR FRIGORÍFICO ===")
+            for (item in secador) appendItem(item)
         }
+    }
+
+    private fun StringBuilder.appendItem(item: ChecklistItem) {
+        val status = item.statusSpinner.selectedItem?.toString()?.takeIf { it.isNotBlank() } ?: "-"
+        val valores = item.campos.map { it.text.toString().trim() }.filter { it.isNotEmpty() }
+        append("${item.numero}. ${item.titulo} | Status: $status")
+        if (valores.isNotEmpty()) append(" | ${valores.joinToString(" ; ")}")
+        appendLine()
     }
 }

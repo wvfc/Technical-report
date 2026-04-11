@@ -36,6 +36,20 @@
             android:id="@+id/spCliente"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp" />
+
+        <!-- MÁQUINA -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Máquina cadastrada"
+            android:textColor="@color/textPrimary"
+            android:textSize="14sp" />
+
+        <Spinner
+            android:id="@+id/spMaquina"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="12dp" />
 
         <!-- DATA / HORA ENTRADA -->
@@ -102,10 +116,14 @@
             android:id="@+id/tvChecklistTituloGerais"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Checklist – Inspeções gerais"
+            android:text="  INSPEÇÃO MECÂNICA"
             android:textStyle="bold"
-            android:textColor="@color/textPrimary"
-            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:letterSpacing="0.08"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="@color/colorPrimary"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp" />
 
@@ -1112,10 +1130,14 @@
             android:id="@+id/tvChecklistTituloEletrico"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Inspeções elétricas (Verificar e registrar, se for o caso)"
+            android:text="  INSPEÇÃO ELÉTRICA"
             android:textStyle="bold"
-            android:textColor="@color/textPrimary"
-            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:letterSpacing="0.08"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="@color/colorPrimary"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp" />
 
@@ -1594,10 +1616,14 @@
             android:id="@+id/tvChecklistTituloSecador"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Secador de refrigeração"
+            android:text="  SECADOR FRIGORÍFICO"
             android:textStyle="bold"
-            android:textColor="@color/textPrimary"
-            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:letterSpacing="0.08"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="@color/colorPrimary"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp" />
 
